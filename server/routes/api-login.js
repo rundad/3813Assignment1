@@ -29,7 +29,8 @@ module.exports = function(app, path){
         customer.groups = []
         customer.role = ""
         customer.valid = false
-        
+        //customer.channel = []
+
         for(i = 0; i <data.users.length; i++){
             if(req.body.email === data.users[i].email){
                 customer.username = data.users[i].username
@@ -41,6 +42,12 @@ module.exports = function(app, path){
                 //res.send(customer);
             }
         }
+        // for(i = 0; i <data.Groups.length; i++){
+        //     if(customer.groups[i] === data.Groups[i].name){
+        //         customer.channel.push({"name:": data.Groups[i].name, "channels": data.Groups[i].channels})
+        //         //res.send(customer);
+        //     }
+        // }
         res.send(customer);
     })
 }

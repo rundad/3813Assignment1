@@ -1,1 +1,19 @@
-<p>profile works!</p>
+<!DOCTYPE html>
+<html>
+    <head>
+
+    </head>
+    <body>
+        <h2>{{userData.username}}'s Profile</h2>
+        <br>
+        <h3>Email: {{userData.email}}</h3>
+        <h3>Groups: {{test[0].channels[0]}}</h3>
+        <ul>
+            <p *ngFor="let group of userData.groups">{{group.name}}
+                <li *ngFor="let channel of group.channels">{{channel}}</li>
+            </p>
+            
+        </ul>
+        <h3>Role: {{userData.role}}</h3>
+    </body>
+</html>

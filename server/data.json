@@ -5,7 +5,7 @@
             "email": "super@com.au",
             "password": "abc",
             "role": "Super",
-            "groups": [],
+            "groups": [{"name":"Group 1", "channels": ["Channel 1", "Channel 2"]}, {"name":"Group 2", "channels": ["Channel 3", "Channel 4"]}],
             "valid": false
         }
     ],
@@ -13,7 +13,9 @@
     "Groups" : [
         {
             "name": "Group 1",
-            "channels": []
+            "channels": ["Channel 1"],
+            "Group Admin": [],
+            "Group Assis": []
         }
     ]
 }
