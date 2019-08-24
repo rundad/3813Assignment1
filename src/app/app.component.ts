@@ -22,7 +22,7 @@ export class AppComponent {
   }
 
   goProfile(){
-    if(JSON.parse(sessionStorage.getItem("currentUsername")) === null){
+    if(JSON.parse(localStorage.getItem("currentUsername")) === null){
       this.router.navigateByUrl("/login")
     }else{
       this.router.navigateByUrl("/profile")
@@ -34,4 +34,13 @@ export class AppComponent {
     this.router.navigateByUrl("/login")
   }
 
+  goManage(){
+    if(JSON.parse(localStorage.getItem("userData")) === null){
+      this.router.navigateByUrl("/login")
+    }else if((JSON.parse(localStorage.getItem("userData")).role === "Super") || (JSON.parse(localStorage.getItem("userData")).role === "Group Admin")){
+      this.router.navigateByUrl("/management")
+    }else{
+      alert("You don't have permission to manage")
+    }
+  }
 }
