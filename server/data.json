@@ -1,0 +1,19 @@
+{
+    "users" : [
+        {
+            "username": "Super",
+            "email": "super@com.au",
+            "password": "abc",
+            "role": "Super",
+            "groups": [],
+            "valid": false
+        }
+    ],
+
+    "Groups" : [
+        {
+            "name": "Group 1",
+            "channels": []
+        }
+    ]
+}
