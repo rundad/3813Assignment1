@@ -24,7 +24,9 @@ users = [
     {
         username: "Runda",
         email: "Runda@com.au",
+        password: "abc",
         role: "Super",
+        groups: [],
         valid: false
     }
 ]

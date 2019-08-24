@@ -9,6 +9,8 @@ module.exports = function(app, path){
         var customer = {}
         customer.username = ""
         customer.email = ""
+        customer.password = ""
+        customer.groups = []
         customer.role = ""
         customer.valid = false
         
@@ -16,6 +18,8 @@ module.exports = function(app, path){
             if(req.body.email === server.users[i].email){
                 customer.username = server.users[i].username
                 customer.email = server.users[i].email
+                customer.password = server.users[i].password
+                customer.groups = server.users[i].groups
                 customer.role = server.users[i].role
                 customer.valid = true
                 //res.send(customer);
