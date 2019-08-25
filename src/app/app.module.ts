@@ -9,13 +9,15 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { ProfileComponent } from './profile/profile.component';
 import { ManagementComponent } from './management/management.component';
+import { UsersComponent } from './users/users.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     ProfileComponent,
-    ManagementComponent
+    ManagementComponent,
+    UsersComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+    </head>
+    <body>
+        <h2>Users</h2>
+        <br>
+        <h4 *ngFor = "let user of users">Username: {{user.username}}
+            <br> Email: {{user.email}}
+            <br> Role: {{user.role}}
+            <br>Groups: <div><p *ngFor = "let group of user.groups">{{group.name}}</p></div>
+        </h4>
+
+        
+        <form>
+            Username: <input type="text" id="username" name="username" [(ngModel)] = "username">
+            Email Address: <input type="text" id="email" name="email" [(ngModel)] = "email">
+            <input type="submit" value="Create" (click)="createUser()">
+        </form>
+    </body>
+</html>

@@ -8,23 +8,24 @@
             <h2>Group Management</h2>
             <form>
                 <input type="text" id="group" name="group" placeholder="Group Name" [(ngModel)] = "group">
-                <input type="submit" class="fadeIn fourth" value="Create Group" (click)="createGroup()">
+                <input type="submit" value="Create Group" (click)="createGroup()">
             </form>
         </div>
         <br>
         <div>
             <h2>User Management</h2>
             <form>
-                <input type="text" id="group" name="group" placeholder="Group Name" [(ngModel)] = "group">
-                <input type="submit" class="fadeIn fourth" value="Create User" (click)="createGroup()">
+                <input type="text" id="username" name="username" placeholder="Username" [(ngModel)] = "username">
+                <input type="text" id="email" name="email" placeholder="Email Address" [(ngModel)] = "email">
+                <input type="submit" value="Create User" (click)="createUser()">
             </form>
         </div>
         <br>
         <div>
             <h2>Channel Management</h2>
             <form>
-                <input type="text" id="group" name="group" placeholder="Group Name" [(ngModel)] = "group">
-                <input type="submit" class="fadeIn fourth" value="Create Channel" (click)="createGroup()">
+                <input type="text" id="channel_name" name="channel_name" placeholder="Channel Name" [(ngModel)] = "channel_name">
+                <input type="submit" value="Create Channel" (click)="createChannel()">
             </form>
         </div>
 

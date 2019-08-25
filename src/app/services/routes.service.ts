@@ -22,5 +22,12 @@ export class RoutesService {
     return this.http.post<user>(this.url + '/api/auth', {email: email});
   }
 
+  getUsers(){
+    return this.http.get(this.url + "/getUsers")
+  }
+
+  createUser(username: string, email: string){
+    return this.http.post(this.url + "/createUser", {username: username, email: email});
+  }
 
 }
