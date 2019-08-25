@@ -31,4 +31,15 @@ export class UsersComponent implements OnInit {
       }
     })
   }
+
+  removeUser(username:string){
+
+    if(confirm("Are you sure to remove User: " + username + "?")) {
+      this.routeService.removeUser(username).subscribe(data =>{
+        if(data === true){
+          location.reload();
+        }
+      })
+    }
+  }
 }

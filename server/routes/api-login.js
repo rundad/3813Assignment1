@@ -112,4 +112,38 @@ module.exports = function(app, path){
 
     })
 
+    app.post('/removeUser', function(req, res){
+        if(!req.body){
+            return res.sendStatus(400)
+        }
+
+        var dat = fs.readFileSync("data.json", 'utf8')
+        var data = JSON.parse(dat)
+        var usernames = []
+        var emails = []
+
+        for(i = 0; i <data.users.length; i++){
+            usernames.push(data.users[i].username)
+            emails.push(data.users[i].email)
+        }
+
+        for(i = 0; i <data.users.length; i++){
+            if(req.body.username === data.users[i].username){
+                data.users.splice(i, 1)
+                res.send(true)
+            }
+
+        }
+        var JSON_data = JSON.stringify(data)
+        fs.writeFile("data.json", JSON_data, function(err){
+            if(err)
+                console.log(err);
+            else
+                console.log("Removed User")
+        });
+
+
+
+    })
+
 }

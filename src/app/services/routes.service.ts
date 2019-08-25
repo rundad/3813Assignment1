@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 export interface user{
   email:string;
@@ -30,4 +30,7 @@ export class RoutesService {
     return this.http.post(this.url + "/createUser", {username: username, email: email});
   }
 
+  removeUser(username: string){
+    return this.http.post(this.url + "/removeUser", {username:username});
+  }
 }
