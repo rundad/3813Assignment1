@@ -13,6 +13,9 @@ export class GroupsComponent implements OnInit {
   group_name:string = ""
   group_channel:string = ""
   channel_name:string = ""
+  remove_group:string = ""
+  remove_channel:string = ""
+  channels;
   constructor(private routeService: RoutesService, private router:Router) { }
 
   ngOnInit() {
@@ -69,4 +72,21 @@ export class GroupsComponent implements OnInit {
     
   }
 
+  getChannel(){
+    this.routeService.getChannel(this.remove_group).subscribe(data =>{
+      this.channels = data
+    })
+  }
+
+  removeChannel(){
+    if(confirm("Are you sure to Group: " + name + "?")) {
+      this.routeService.removeChannel(this.remove_group, this.remove_channel).subscribe(data =>{
+        console.log(data)
+        if(data === true){
+          this.ngOnInit();
+          alert("Removed Channel: " + this.remove_channel + " from " + "Group: " + this.remove_group)
+        }
+      })
+    }
+  }
 }

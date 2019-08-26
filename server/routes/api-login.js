@@ -279,4 +279,60 @@ module.exports = function(app, path){
 
     })
 
+    app.post("/getChannel", function(req, res){
+        if(!req.body){
+            return res.sendStatus(400)
+        }
+        var dat = fs.readFileSync("data.json", 'utf8')
+        var data = JSON.parse(dat)
+        var channels = []
+
+        for(i = 0; i <data.Groups.length; i++){
+            if(req.body.group === data.Groups[i].name){
+                for(j = 0; j<data.Groups[i].channels.length; j++){
+                    channels.push(data.Groups[i].channels[j])
+                }
+            }
+        }
+    
+        res.send(channels)
+        
+    })
+
+    app.post("/removeChannel", function(req, res){
+        if(!req.body){
+            return res.sendStatus(400)
+        }
+        var dat = fs.readFileSync("data.json", 'utf8')
+        var data = JSON.parse(dat)
+        var channels = []
+        var selected_group = ""
+        var group_index = 0
+        var channel_index = 0
+
+        for(i = 0; i <data.Groups.length; i++){
+            if(req.body.group === data.Groups[i].name){
+                selected_group = data.Groups[i].name
+                group_index = i
+                for(j = 0; j<data.Groups[i].channels.length; j++){
+                    if(req.body.channel === data.Groups[i].channels[j]){
+                        channel_index = j
+                    }
+                }
+            }
+        }
+
+        data.Groups[group_index].channels.splice(channel_index, 1)
+    
+        var JSON_data = JSON.stringify(data)
+        fs.writeFile("data.json", JSON_data, function(err){
+            if(err)
+                console.log(err);
+            else
+                console.log("Created a channel")
+        });
+
+        res.send(true)
+    })
+
 }

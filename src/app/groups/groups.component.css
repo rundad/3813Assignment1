@@ -22,3 +22,9 @@ form{
     border-color: black;
     padding: 2%;
 }
+
+.remove_channel_form{
+    border-style: solid;
+    border-color: black;
+    padding: 2%;
+}

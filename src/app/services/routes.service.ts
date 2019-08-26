@@ -49,4 +49,12 @@ export class RoutesService {
   createChannel(group:string, channel:string){
     return this.http.post(this.url + "/createChannel", {group: group, channel: channel})
   }
+
+  getChannel(group: string){
+    return this.http.post(this.url + "/getChannel", {group: group})
+  }
+
+  removeChannel(group:string, channel: string){
+    return this.http.post(this.url + "/removeChannel", {group:group, channel:channel})
+  }
 }
