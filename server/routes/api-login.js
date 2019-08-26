@@ -239,9 +239,11 @@ module.exports = function(app, path){
         var selected_group_channels = []
         var selected_group = ""
         var valid = false
+        var index = 0
         for(i = 0; i <data.Groups.length; i++){
             if(req.body.group === data.Groups[i].name){
                 selected_group = req.body.group
+                index = i
                 for(j = 0; j<data.Groups[i].channels.length; j++){
                     selected_group_channels.push(data.Groups[i].channels[j])
                 }
@@ -249,13 +251,21 @@ module.exports = function(app, path){
         }
 
         console.log(selected_group_channels)
-        for(i = 0; i <data.Groups.length; i++){
-            if(selected_group === data.Groups[i].name && selected_group_channels.indexOf(req.body.channel) == -1){
-                data.Groups[i].channels.push(req.body.channel)
-                valid = true
-            }else{
-                valid = false
-            }
+        console.log(selected_group)
+        // for(i = 0; i <data.Groups.length; i++){
+        //     if(selected_group === data.Groups[i].name && selected_group_channels.indexOf(req.body.channel) == -1){
+        //         console.log(selected_group_channels)
+        //         data.Groups[i].channels.push(req.body.channel)
+        //         valid = true
+        //     }else{
+        //         valid = false
+        //     }
+        // }
+        if(selected_group_channels.indexOf(req.body.channel) == -1){
+            data.Groups[index].channels.push(req.body.channel)
+            valid=true
+        }else{
+            valid = false
         }
 
         res.send(valid)
