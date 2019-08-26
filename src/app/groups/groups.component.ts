@@ -79,7 +79,7 @@ export class GroupsComponent implements OnInit {
   }
 
   removeChannel(){
-    if(confirm("Are you sure to Group: " + name + "?")) {
+    if(confirm("Are you sure to remove Channel: " + this.remove_channel +  " from " + "Group: " + this.remove_group + "?")) {
       this.routeService.removeChannel(this.remove_group, this.remove_channel).subscribe(data =>{
         console.log(data)
         if(data === true){
