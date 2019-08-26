@@ -17,11 +17,26 @@
         </h4>
 
         
-        <div>
+        <div class="group_form">
             <h2>Create Group</h2>
             <form>
                 Group Name: <input type="text" id="group_name" name="group_name" [(ngModel)] = "group_name">
                 <input type="submit" value="Create Group" (click)="createGroup()">
+            </form>
+        </div>
+        <br><br>
+        <div class="channel_form">
+            <h2>Create Channel</h2>
+            <form>
+                Group: 
+                <select [(ngModel)] = "group_channel" name="group_channel">
+                    <option [ngValue] ="null">Select Group</option>
+                    <option *ngFor="let group of groups">
+                        {{group.name}}
+                    </option>
+                </select>
+                Channel Name: <input type="text" id="channel_name" name="channel_name" [(ngModel)] = "channel_name">
+                <input type="submit" value="Create Channel" (click)="createChannel()">
             </form>
         </div>
     </body>

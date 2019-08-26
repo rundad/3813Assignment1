@@ -10,3 +10,15 @@ body{
 form{
     text-align: center;
 }
+
+.group_form{
+    border-style: solid;
+    border-color: black;
+    padding: 2%;
+}
+
+.channel_form{
+    border-style: solid;
+    border-color: black;
+    padding: 2%;
+}

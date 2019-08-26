@@ -203,7 +203,7 @@ module.exports = function(app, path){
         var data = JSON.parse(dat)
         
         for(i = 0; i <data.Groups.length; i++){
-            if(req.body.name === data.Groups[i].hame){
+            if(req.body.name === data.Groups[i].name){
                 data.Groups.splice(i, 1)
                 
             }
@@ -213,7 +213,7 @@ module.exports = function(app, path){
             for(j = 0; j<data.users[i].groups.length; j++){
                 if(req.body.name === data.users[i].groups[j].name){
                     data.users[i].groups.splice(j, 1)
-                    res.send(true)
+                    
                 }
             }
 
@@ -224,7 +224,43 @@ module.exports = function(app, path){
             if(err)
                 console.log(err);
             else
-                console.log("Created new group")
+                console.log("Removed a group")
+        });
+        res.send(true)
+
+    })
+
+    app.post("/createChannel", function(req, res){
+        if(!req.body){
+            return res.sendStatus(400)
+        }
+        var dat = fs.readFileSync("data.json", 'utf8')
+        var data = JSON.parse(dat)
+        var selected_group_channels = []
+
+        for(i = 0; i <data.Groups.length; i++){
+            if(req.body.group === data.Groups[i].name){
+                for(j = 0; j<data.Groups[i].channels.length; j++){
+                    selected_group_channels.push(data.Groups[i].channels[j])
+                }
+            }
+        }
+
+        for(i = 0; i <data.Groups.length; i++){
+            if(req.body.group === data.Groups[i].name && selected_group_channels.indexOf(req.body.channel) == -1){
+                data.Groups[i].channels.push(req.body.channel)
+                res.send(true)
+            }else{
+                res.send(false)
+            }
+        }
+
+        var JSON_data = JSON.stringify(data)
+        fs.writeFile("data.json", JSON_data, function(err){
+            if(err)
+                console.log(err);
+            else
+                console.log("Created a channel")
         });
 
     })

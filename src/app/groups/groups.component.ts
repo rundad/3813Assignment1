@@ -11,6 +11,8 @@ export class GroupsComponent implements OnInit {
 
   groups;
   group_name:string = ""
+  group_channel:string = ""
+  channel_name:string = ""
   constructor(private routeService: RoutesService, private router:Router) { }
 
   ngOnInit() {
@@ -26,9 +28,11 @@ export class GroupsComponent implements OnInit {
         console.log(data)
         if(data === true){
           this.ngOnInit();
+          
         }else{
           alert("Error: This group is already exist")
         }
+        this.group_name = ""
       })
     }else{
       alert("Missing group details!")
@@ -40,15 +44,28 @@ export class GroupsComponent implements OnInit {
       this.routeService.removeGroup(name).subscribe(data =>{
         console.log(data)
         if(data === true){
-          alert("Removed Group: " + name)
           this.ngOnInit();
+          alert("Removed Group: " + name)
         }
       })
     }
-    this.routeService.removeGroup(name).subscribe(data =>{
-      console.log(data)
+  }
 
-    })
+  createChannel(){
+    if(this.group_channel !== "" && this.channel_name !== ""){
+      this.routeService.createChannel(this.group_channel, this.channel_name).subscribe(data =>{
+        console.log(data)
+        if(data === true){
+          this.ngOnInit();
+          alert("Created Channel: " + this.channel_name)
+        }else{
+          alert("Error: This channel is already exist in Group: " + this.group_channel)
+        }
+      })
+    }else{
+      alert("Missing group or channel details!")
+    }
+    
   }
 
 }
