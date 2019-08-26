@@ -11,6 +11,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { ManagementComponent } from './management/management.component';
 import { UsersComponent } from './users/users.component';
 import { GroupsComponent } from './groups/groups.component';
+import { DataSharingService } from "./services/data-sharing.service";
 
 @NgModule({
   declarations: [
@@ -28,7 +29,7 @@ import { GroupsComponent } from './groups/groups.component';
     CommonModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [DataSharingService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

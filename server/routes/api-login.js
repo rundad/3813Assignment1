@@ -87,7 +87,7 @@ module.exports = function(app, path){
         customer.role = ""
         customer.valid = false
 
-        if(usernames.indexOf(req.body.username) == -1 && emails.indexOf(req.body.email) == -1 && req.body.username !== "" && req.body.email !== ""){
+        if(usernames.indexOf(req.body.username) == -1 && emails.indexOf(req.body.email) == -1){
             customer.username = req.body.username
             customer.email = req.body.email
             customer.password = ""

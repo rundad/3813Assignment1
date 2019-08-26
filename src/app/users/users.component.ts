@@ -10,8 +10,8 @@ import { Router } from '@angular/router';
 export class UsersComponent implements OnInit {
 
   users;
-  username:string;
-  email:string;
+  username:string = ""
+  email:string = ""
   constructor(private routeService: RoutesService, private router: Router) { }
 
   ngOnInit() {
@@ -22,14 +22,19 @@ export class UsersComponent implements OnInit {
   }
 
   createUser(){
-    this.routeService.createUser(this.username, this.email).subscribe(data=>{
-      console.log(data)
-      if(data === true){
-        location.reload();
-      }else{
-        alert("Error: User already exists or missing details for creating user")
-      }
-    })
+    if(this.username !== "" && this.email !== ""){
+      this.routeService.createUser(this.username, this.email).subscribe(data=>{
+        console.log(data)
+        if(data === true){
+          this.ngOnInit();
+        }else{
+          alert("Error: User already exists")
+        }
+      })
+    }else{
+      alert("Missing user details!")
+    }
+  
   }
 
   removeUser(username:string){
@@ -37,7 +42,7 @@ export class UsersComponent implements OnInit {
     if(confirm("Are you sure to remove User: " + username + "?")) {
       this.routeService.removeUser(username).subscribe(data =>{
         if(data === true){
-          location.reload();
+          this.ngOnInit();
         }
       })
     }

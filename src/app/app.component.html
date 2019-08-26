@@ -10,9 +10,6 @@
         <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="/login">Login</a>
-      </li>
-      <li class="nav-item">
         <a class="nav-link" (click)="goProfile()">Profile</a>
       </li>
       <li class="nav-item">
@@ -26,7 +23,8 @@
       </li>
     </ul>
     <span class="navbar-text">
-      <button class="nav-link" (click)="logout()">Logout</button>
+      <button class="nav-link" *ngIf="!isUserLoggedIn" routerLink="/login">Login</button> 
+      <button class="nav-link" *ngIf="isUserLoggedIn" (click)="logout()">Sign Out</button>
     </span>
   </div>
 </nav>

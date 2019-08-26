@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { DataSharingService } from "./services/data-sharing.service";
 
 @Component({
   selector: 'app-root',
@@ -9,8 +10,11 @@ import { Router } from '@angular/router';
 export class AppComponent {
   title = 'Assignment1';
 
-  constructor(private router: Router){
-
+  isUserLoggedIn: boolean
+  constructor(private router: Router, private dataSharingService:DataSharingService){
+    this.dataSharingService.isUserLoggedIn.subscribe( value => {
+      this.isUserLoggedIn = value;
+  });
   }
 
   ngOnInit() {
@@ -31,6 +35,7 @@ export class AppComponent {
 
   logout(){
     localStorage.clear();
+    this.dataSharingService.isUserLoggedIn.next(false);
     this.router.navigateByUrl("/login")
   }
 
