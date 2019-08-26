@@ -237,24 +237,28 @@ module.exports = function(app, path){
         var dat = fs.readFileSync("data.json", 'utf8')
         var data = JSON.parse(dat)
         var selected_group_channels = []
-
+        var selected_group = ""
+        var valid = false
         for(i = 0; i <data.Groups.length; i++){
             if(req.body.group === data.Groups[i].name){
+                selected_group = req.body.group
                 for(j = 0; j<data.Groups[i].channels.length; j++){
                     selected_group_channels.push(data.Groups[i].channels[j])
                 }
             }
         }
 
+        console.log(selected_group_channels)
         for(i = 0; i <data.Groups.length; i++){
-            if(req.body.group === data.Groups[i].name && selected_group_channels.indexOf(req.body.channel) == -1){
+            if(selected_group === data.Groups[i].name && selected_group_channels.indexOf(req.body.channel) == -1){
                 data.Groups[i].channels.push(req.body.channel)
-                res.send(true)
+                valid = true
             }else{
-                res.send(false)
+                valid = false
             }
         }
 
+        res.send(valid)
         var JSON_data = JSON.stringify(data)
         fs.writeFile("data.json", JSON_data, function(err){
             if(err)

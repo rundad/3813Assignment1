@@ -10,7 +10,7 @@
             <br>
             Channels:
             <div style="display: inline-block;">
-                <p *ngFor = "let channel of group.channels">{{channel}}, </p>
+                <p *ngFor = "let channel of group.channels" style="display: inline;">{{channel}}, </p>
             </div>
             <br>
             <button (click)="removeGroup(group.name)" type="button" class="btn btn-primary">Remove Group</button>
@@ -25,6 +25,7 @@
             </form>
         </div>
         <br><br>
+
         <div class="channel_form">
             <h2>Create Channel</h2>
             <form>
@@ -39,5 +40,6 @@
                 <input type="submit" value="Create Channel" (click)="createChannel()">
             </form>
         </div>
+
     </body>
 </html>

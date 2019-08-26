@@ -52,7 +52,8 @@ export class GroupsComponent implements OnInit {
   }
 
   createChannel(){
-    if(this.group_channel !== "" && this.channel_name !== ""){
+    console.log(this.group_channel)
+    if(this.group_channel !== "null" && this.channel_name !== ""){
       this.routeService.createChannel(this.group_channel, this.channel_name).subscribe(data =>{
         console.log(data)
         if(data === true){
