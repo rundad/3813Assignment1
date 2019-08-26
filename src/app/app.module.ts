@@ -10,6 +10,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ProfileComponent } from './profile/profile.component';
 import { ManagementComponent } from './management/management.component';
 import { UsersComponent } from './users/users.component';
+import { GroupsComponent } from './groups/groups.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { UsersComponent } from './users/users.component';
     LoginComponent,
     ProfileComponent,
     ManagementComponent,
-    UsersComponent
+    UsersComponent,
+    GroupsComponent
   ],
   imports: [
     BrowserModule,

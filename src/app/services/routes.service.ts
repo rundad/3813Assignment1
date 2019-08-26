@@ -33,4 +33,12 @@ export class RoutesService {
   removeUser(username: string){
     return this.http.post(this.url + "/removeUser", {username:username});
   }
+
+  getGroups(){
+    return this.http.get(this.url + "/getGroups")
+  }
+
+  createGroup(name: string){
+    return this.http.post(this.url + "/createGroup", {name: name})
+  }
 }

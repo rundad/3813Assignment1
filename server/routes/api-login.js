@@ -146,4 +146,53 @@ module.exports = function(app, path){
 
     })
 
+    app.get('/getGroups', function(req, res){
+        if(!req.body){
+            return res.sendStatus(400)
+        }
+        var dat = fs.readFileSync("data.json", 'utf8')
+        var data = JSON.parse(dat)
+        
+        res.send(data.Groups);
+    })
+
+    app.post('/createGroup', function(req, res){
+        if(!req.body){
+            return res.sendStatus(400)
+        }
+        var dat = fs.readFileSync("data.json", 'utf8')
+        var data = JSON.parse(dat)
+        var group_names = []
+
+        for(i = 0; i <data.Groups.length; i++){
+            group_names.push(data.Groups[i].name)
+        }
+
+        group = {}
+        group.name = ""
+        group.channels = []
+        group.group_admin = []
+        group.group_assis = []
+
+        if(group_names.indexOf(req.body.name) == -1){
+            group.name = req.body.name
+            group.channels = []
+            group.group_admin = []
+            group.group_assis = []
+            data.Groups.push(group)
+            res.send(true)
+        }else{
+            res.send(false)
+        }
+
+        var JSON_data = JSON.stringify(data)
+        fs.writeFile("data.json", JSON_data, function(err){
+            if(err)
+                console.log(err);
+            else
+                console.log("Created new group")
+        });
+        //res.send(data.Groups);
+    })
+
 }
