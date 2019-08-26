@@ -35,4 +35,20 @@ export class GroupsComponent implements OnInit {
     }
   }
 
+  removeGroup(name:string){
+    if(confirm("Are you sure to Group: " + name + "?")) {
+      this.routeService.removeGroup(name).subscribe(data =>{
+        console.log(data)
+        if(data === true){
+          alert("Removed Group: " + name)
+          this.ngOnInit();
+        }
+      })
+    }
+    this.routeService.removeGroup(name).subscribe(data =>{
+      console.log(data)
+
+    })
+  }
+
 }

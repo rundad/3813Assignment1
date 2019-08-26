@@ -195,4 +195,38 @@ module.exports = function(app, path){
         //res.send(data.Groups);
     })
 
+    app.post('/removeGroup', function(req, res){
+        if(!req.body){
+            return res.sendStatus(400)
+        }
+        var dat = fs.readFileSync("data.json", 'utf8')
+        var data = JSON.parse(dat)
+        
+        for(i = 0; i <data.Groups.length; i++){
+            if(req.body.name === data.Groups[i].hame){
+                data.Groups.splice(i, 1)
+                
+            }
+        }
+
+        for(i = 0; i <data.users.length; i++){
+            for(j = 0; j<data.users[i].groups.length; j++){
+                if(req.body.name === data.users[i].groups[j].name){
+                    data.users[i].groups.splice(j, 1)
+                    res.send(true)
+                }
+            }
+
+        }
+
+        var JSON_data = JSON.stringify(data)
+        fs.writeFile("data.json", JSON_data, function(err){
+            if(err)
+                console.log(err);
+            else
+                console.log("Created new group")
+        });
+
+    })
+
 }

@@ -41,4 +41,8 @@ export class RoutesService {
   createGroup(name: string){
     return this.http.post(this.url + "/createGroup", {name: name})
   }
+
+  removeGroup(name: string){
+    return this.http.post(this.url + "/removeGroup", {name: name})
+  }
 }
