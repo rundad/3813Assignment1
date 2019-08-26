@@ -15,7 +15,7 @@ module.exports = function(app, path){
     // }
 
     console.log("hello")
-    
+    var user = ""
     app.post('/api/auth', function(req, res){
         if(!req.body){
             return res.sendStatus(400)
@@ -41,6 +41,7 @@ module.exports = function(app, path){
                 customer.groups = data.users[i].groups
                 customer.role = data.users[i].role
                 customer.valid = true
+                user = data.users[i].username
                 //res.send(customer);
             }
         }
@@ -309,7 +310,7 @@ module.exports = function(app, path){
         var selected_group = ""
         var group_index = 0
         var channel_index = 0
-
+        var selected_user_group_index = ""
         for(i = 0; i <data.Groups.length; i++){
             if(req.body.group === data.Groups[i].name){
                 selected_group = data.Groups[i].name
@@ -322,6 +323,21 @@ module.exports = function(app, path){
             }
         }
 
+        for(i = 0; i <data.users.length; i++){
+            for(j = 0; j<data.users[i].groups.length; j++){
+                if(selected_group === data.users[i].groups[j].name){
+                    selected_user_group_index = j
+                    for(k = 0; k<data.users[i].groups[j].channels.length; k++){
+                        if(req.body.channel === data.users[i].groups[j].channels[k]){
+                            data.users[i].groups[j].channels.splice(k, 1)
+                        }
+                    }
+                    
+                }
+            }
+
+        }
+
         data.Groups[group_index].channels.splice(channel_index, 1)
     
         var JSON_data = JSON.stringify(data)
@@ -329,10 +345,27 @@ module.exports = function(app, path){
             if(err)
                 console.log(err);
             else
-                console.log("Created a channel")
+                console.log("Removed a channel")
         });
 
         res.send(true)
+    })
+
+    app.get("/getCurrentUser", function(req, res){
+        if(!req.body){
+            return res.sendStatus(400)
+        }
+        var dat = fs.readFileSync("data.json", 'utf8')
+        var data = JSON.parse(dat)
+        var user_index = 0
+
+        for(i = 0; i<data.users.length; i++){
+            if(user === data.users[i].name){
+                user_index = i
+            }
+        }
+
+        res.send(data.users[user_index])
     })
 
 }

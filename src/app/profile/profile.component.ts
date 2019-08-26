@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { RoutesService } from '../services/routes.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -8,16 +9,26 @@ import { Router } from '@angular/router';
 })
 export class ProfileComponent implements OnInit {
 
-  userData;
-  constructor(private router:Router) { }
+  userData:Object = {
+    username: "",
+    email: "",
+    password: "",
+    role: "",
+    groups: [],
+    valid: false,
+
+  }
+  username;
+  test;
+  constructor(private router:Router, private routeService: RoutesService) { }
 
   ngOnInit() {
-    if(typeof(Storage) !== "undefined"){
-      console.log("Storage ready");
-      this.userData = JSON.parse(localStorage.getItem("userData"))
-    }else{
-      console.log("No storage supoort")
-    }
+    this.routeService.getCurrentUser().subscribe(data =>{
+      this.userData = data
+      console.log(this.userData)
+    })
+    // this.userData = JSON.parse(localStorage.getItem("userData"))
+    // console.log(this.userData)
   }
 
 

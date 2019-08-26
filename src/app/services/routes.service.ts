@@ -57,4 +57,8 @@ export class RoutesService {
   removeChannel(group:string, channel: string){
     return this.http.post(this.url + "/removeChannel", {group:group, channel:channel})
   }
+
+  getCurrentUser(){
+    return this.http.get(this.url + "/getCurrentUser")
+  }
 }
