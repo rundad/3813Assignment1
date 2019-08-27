@@ -160,7 +160,26 @@ module.exports = function(app, path){
         var dat = fs.readFileSync("data.json", 'utf8')
         var data = JSON.parse(dat)
         
-        res.send(data.Groups);
+        var current_user_group = []
+        var group_details = []
+        for(i =0; i<data.users.length; i++){
+            if(user === data.users[i].username){
+
+                for(j=0; j<data.users[i].adminGroupList.length; j++){
+                    current_user_group.push(data.users[i].adminGroupList[j])
+                }
+            }
+        }
+
+        for(i=0; i<data.Groups.length; i++){
+            for(j=0; j<current_user_group.length; j++){
+                if(data.Groups[i].name === current_user_group[j]){
+                    group_details.push(data.Groups[i])
+                }
+            }
+        }
+  
+        res.send(group_details);
     })
 
     app.post('/createGroup', function(req, res){
@@ -184,19 +203,10 @@ module.exports = function(app, path){
 
         for(i = 0; i <data.users.length; i++){
             if(req.body.username === data.users[i].username){
-                console.log(req.body.username)
-                console.log(data.users[i].username)
                 data.users[i].adminGroupList.push(req.body.name)
             }
         }
 
-        for(i = 0; i <data.users.length; i++){
-            if(data.users[i].role === "Super"){
-                if(data.users[i].adminGroupList.indexOf(req.body.name) == -1){
-                    data.users[i].adminGroupList.push(req.body.name)
-                }
-            }
-        }
 
         if(group_names.indexOf(req.body.name) == -1){
             group.name = req.body.name
@@ -209,6 +219,17 @@ module.exports = function(app, path){
             res.send(false)
         }
 
+        for(i = 0; i <data.users.length; i++){
+            if(data.users[i].role === "Super"){
+                // if(data.users[i].adminGroupList.indexOf(req.body.name) == -1){
+                //     data.users[i].adminGroupList.push(req.body.name)
+                // }
+                data.users[i].adminGroupList = []
+                for(j =0; j<data.Groups.length; j++){
+                    data.users[i].adminGroupList.push(data.Groups[j].name)
+                }
+            }
+        }
         
 
         var JSON_data = JSON.stringify(data)
@@ -239,6 +260,15 @@ module.exports = function(app, path){
             for(j = 0; j<data.users[i].groups.length; j++){
                 if(req.body.name === data.users[i].groups[j].name){
                     data.users[i].groups.splice(j, 1)
+                    
+                }
+            }
+
+        }
+        for(i = 0; i <data.users.length; i++){
+            for(j = 0; j<data.users[i].adminGroupList.length; j++){
+                if(req.body.name === data.users[i].adminGroupList[j]){
+                    data.users[i].adminGroupList.splice(j, 1)
                     
                 }
             }
