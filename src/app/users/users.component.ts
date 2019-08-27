@@ -12,12 +12,19 @@ export class UsersComponent implements OnInit {
   users;
   username:string = ""
   email:string = ""
+  groups
+  add_group:string = ""
+  add_username:string = ""
   constructor(private routeService: RoutesService, private router: Router) { }
 
   ngOnInit() {
     this.routeService.getUsers().subscribe(data =>{
       this.users = data
       console.log(this.users)
+    })
+    this.routeService.getGroups().subscribe(data =>{
+      this.groups = data
+      console.log(this.groups)
     })
   }
 
@@ -46,5 +53,15 @@ export class UsersComponent implements OnInit {
         }
       })
     }
+  }
+
+  inviteUser(){
+    this.routeService.inviteUser(this.add_group, this.add_username).subscribe(data=>{
+      if(data === true){
+        this.ngOnInit();
+      }else{
+        alert(this.add_username + " already in Group: " + this.add_group)
+      }
+    })
   }
 }

@@ -189,7 +189,7 @@ module.exports = function(app, path){
         var dat = fs.readFileSync("data.json", 'utf8')
         var data = JSON.parse(dat)
         var group_names = []
-
+        var currentUser_index;
         for(i = 0; i <data.Groups.length; i++){
             group_names.push(data.Groups[i].name)
         }
@@ -199,11 +199,13 @@ module.exports = function(app, path){
         group.channels = []
         group.group_admin = []
         group.group_assis = []
-
+        group.users = []
 
         for(i = 0; i <data.users.length; i++){
             if(req.body.username === data.users[i].username){
+                currentUser_index = i
                 data.users[i].adminGroupList.push(req.body.name)
+                data.users[i].groups.push({name: req.body.name, channels: []})
             }
         }
 
@@ -211,8 +213,9 @@ module.exports = function(app, path){
         if(group_names.indexOf(req.body.name) == -1){
             group.name = req.body.name
             group.channels = []
-            group.group_admin = []
+            group.group_admin.push(data.users[currentUser_index].username)
             group.group_assis = []
+            group.users.push(data.users[currentUser_index].username)
             data.Groups.push(group)
             res.send(true)
         }else{
@@ -424,4 +427,45 @@ module.exports = function(app, path){
 
     })
 
+    app.post("/inviteUser", function(req, res){
+        if(!req.body){
+            return res.sendStatus(400)
+        }
+        var dat = fs.readFileSync("data.json", 'utf8')
+        var data = JSON.parse(dat)
+        var users_in_group;
+        var selected_group_index;
+        console.log()
+        for(i=0; i<data.Groups.length; i++){
+            if(req.body.group === data.Groups[i].name){
+                selected_group_index = i
+                users_in_group = data.Groups[i].users
+                console.log(data.Groups[i].users)
+            }
+        }
+
+        console.log(users_in_group)
+        if(users_in_group.indexOf(req.body.username) == -1){
+            
+            data.Groups[selected_group_index].users.push(req.body.username)
+            res.send(true)
+        }else{
+            res.send(false)
+        }
+
+        for(i=0; i<data.users.length; i++){
+            if(req.body.username === data.users[i].username){
+                data.users[i].groups.push({name: req.body.group, channels:[]})
+            }
+        }
+
+        var JSON_data = JSON.stringify(data)
+        fs.writeFile("data.json", JSON_data, function(err){
+            if(err)
+                console.log(err);
+            else
+                console.log("Invited a user")
+        });
+
+    })
 }

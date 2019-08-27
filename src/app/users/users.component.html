@@ -22,6 +22,29 @@
                 <input type="submit" value="Create" (click)="createUser()">
             </form>
         </div>
+        <br><br>
+        <div class="add_user_group_form">
+            <h2>Invite User</h2>
+            <form>
+                Groups: 
+                <select [(ngModel)] = "add_group" name="add_group">
+                    <option [ngValue] ="null">Select Group</option>
+                    <option *ngFor="let group of groups">
+                        {{group.name}}
+                    </option>
+                </select>
+
+                Users: 
+                <select [(ngModel)] = "add_username" name="add_username">
+                    <option [ngValue] ="null">Select User</option>
+                    <option *ngFor="let user of users">
+                        {{user.username}}
+                    </option>
+                </select>
+
+                <input type="submit" value="Invite User" (click)="inviteUser()">
+            </form>
+        </div>
 
     </body>
 </html>

@@ -43,27 +43,27 @@
         <br><br>
 
         <div class="remove_channel_form">
-                <h2>Remove Channel</h2>
-                <form>
-                    Group: 
-                    <select [(ngModel)] = "remove_group" name="remove_group" (change)="getChannel()">
-                        <option [ngValue] ="null">Select Group</option>
-                        <option *ngFor="let group of groups">
-                            {{group.name}}
-                        </option>
-                    </select>
+            <h2>Remove Channel</h2>
+            <form>
+                Group: 
+                <select [(ngModel)] = "remove_group" name="remove_group" (change)="getChannel()">
+                    <option [ngValue] ="null">Select Group</option>
+                    <option *ngFor="let group of groups">
+                        {{group.name}}
+                    </option>
+                </select>
 
-                    Channel: 
-                    <select [(ngModel)] = "remove_channel" name="remove_channel">
-                        <option [ngValue] ="null">Select Channel</option>
-                        <option *ngFor="let channel of channels">
-                            {{channel}}
-                        </option>
-                    </select>
+                Channel: 
+                <select [(ngModel)] = "remove_channel" name="remove_channel">
+                    <option [ngValue] ="null">Select Channel</option>
+                    <option *ngFor="let channel of channels">
+                        {{channel}}
+                    </option>
+                </select>
 
-                    <input type="submit" value="Remove Channel" (click)="removeChannel()">
-                </form>
-            </div>
+                <input type="submit" value="Remove Channel" (click)="removeChannel()">
+            </form>
+        </div>
 
     </body>
 </html>

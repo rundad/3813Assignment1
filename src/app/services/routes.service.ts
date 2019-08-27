@@ -61,4 +61,8 @@ export class RoutesService {
   getCurrentUser(){
     return this.http.get(this.url + "/getCurrentUser")
   }
+
+  inviteUser(group:string, username:string){
+    return this.http.post(this.url + "/inviteUser", {group: group, username: username})
+  }
 }
