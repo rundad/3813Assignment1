@@ -30,6 +30,7 @@ module.exports = function(app, path){
         customer.password = ""
         customer.groups = []
         customer.role = ""
+        customer.adminGroupList = []
         customer.valid = false
         //customer.channel = []
 
@@ -40,8 +41,11 @@ module.exports = function(app, path){
                 customer.password = data.users[i].password
                 customer.groups = data.users[i].groups
                 customer.role = data.users[i].role
+                customer.adminGroupList = data.users[i].adminGroupList
                 customer.valid = true
+                
                 user = data.users[i].username
+                console.log(user)
                 //res.send(customer);
             }
         }
@@ -86,6 +90,7 @@ module.exports = function(app, path){
         customer.password = ""
         customer.groups = []
         customer.role = ""
+        customer.adminGroupList = []
         customer.valid = false
 
         if(usernames.indexOf(req.body.username) == -1 && emails.indexOf(req.body.email) == -1){
@@ -94,6 +99,7 @@ module.exports = function(app, path){
             customer.password = ""
             customer.groups = []
             customer.role = "user"
+            customer.adminGroupList = []
             customer.valid = false
             data.users.push(customer)
             res.send(true)
@@ -175,6 +181,23 @@ module.exports = function(app, path){
         group.group_admin = []
         group.group_assis = []
 
+
+        for(i = 0; i <data.users.length; i++){
+            if(req.body.username === data.users[i].username){
+                console.log(req.body.username)
+                console.log(data.users[i].username)
+                data.users[i].adminGroupList.push(req.body.name)
+            }
+        }
+
+        for(i = 0; i <data.users.length; i++){
+            if(data.users[i].role === "Super"){
+                if(data.users[i].adminGroupList.indexOf(req.body.name) == -1){
+                    data.users[i].adminGroupList.push(req.body.name)
+                }
+            }
+        }
+
         if(group_names.indexOf(req.body.name) == -1){
             group.name = req.body.name
             group.channels = []
@@ -185,6 +208,8 @@ module.exports = function(app, path){
         }else{
             res.send(false)
         }
+
+        
 
         var JSON_data = JSON.stringify(data)
         fs.writeFile("data.json", JSON_data, function(err){
@@ -360,12 +385,13 @@ module.exports = function(app, path){
         var user_index = 0
 
         for(i = 0; i<data.users.length; i++){
-            if(user === data.users[i].name){
+            if(user === data.users[i].username){
                 user_index = i
             }
         }
 
         res.send(data.users[user_index])
+
     })
 
 }

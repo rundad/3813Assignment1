@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RoutesService } from '../services/routes.service';
 import { Router } from '@angular/router';
+import { parse } from 'url';
 
 @Component({
   selector: 'app-groups',
@@ -27,7 +28,7 @@ export class GroupsComponent implements OnInit {
 
   createGroup(){
     if(this.group_name !== ""){
-      this.routeService.createGroup(this.group_name).subscribe(data =>{
+      this.routeService.createGroup(this.group_name, JSON.parse(localStorage.getItem("currentUsername"))).subscribe(data =>{
         console.log(data)
         if(data === true){
           this.ngOnInit();

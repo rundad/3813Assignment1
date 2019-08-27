@@ -38,8 +38,8 @@ export class RoutesService {
     return this.http.get(this.url + "/getGroups")
   }
 
-  createGroup(name: string){
-    return this.http.post(this.url + "/createGroup", {name: name})
+  createGroup(name: string, username:string){
+    return this.http.post(this.url + "/createGroup", {name: name, username:username})
   }
 
   removeGroup(name: string){

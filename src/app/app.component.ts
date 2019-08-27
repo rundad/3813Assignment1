@@ -23,6 +23,9 @@ export class AppComponent {
     }else{
       console.log("No Storage Support");
     }
+    if(JSON.parse(localStorage.getItem("currentUsername")) !== null){
+      this.dataSharingService.isUserLoggedIn.next(true);
+    }
   }
 
   goProfile(){
