@@ -448,16 +448,17 @@ module.exports = function(app, path){
         if(users_in_group.indexOf(req.body.username) == -1){
             
             data.Groups[selected_group_index].users.push(req.body.username)
+            for(i=0; i<data.users.length; i++){
+                if(req.body.username === data.users[i].username){
+                    data.users[i].groups.push({name: req.body.group, channels:[]})
+                }
+            }
             res.send(true)
         }else{
             res.send(false)
         }
 
-        for(i=0; i<data.users.length; i++){
-            if(req.body.username === data.users[i].username){
-                data.users[i].groups.push({name: req.body.group, channels:[]})
-            }
-        }
+
 
         var JSON_data = JSON.stringify(data)
         fs.writeFile("data.json", JSON_data, function(err){
@@ -467,5 +468,21 @@ module.exports = function(app, path){
                 console.log("Invited a user")
         });
 
+    })
+
+    app.post("/getGroupUsers", function(req, res){
+        if(!req.body){
+            return res.sendStatus(400)
+        }
+        var dat = fs.readFileSync("data.json", 'utf8')
+        var data = JSON.parse(dat)
+        var current_group_users;
+        for(i=0; i<data.Groups.length; i++){
+            if(req.body.group === data.Groups[i].name){
+                current_group_users = data.Groups[i].users
+            }
+        }
+
+        res.send(current_group_users)
     })
 }

@@ -45,6 +45,29 @@
                 <input type="submit" value="Invite User" (click)="inviteUser()">
             </form>
         </div>
+        <br><br>
+        <div class="remove_user_group_form">
+            <h2>Remove User From Group</h2>
+            <form>
+                Groups: 
+                <select [(ngModel)] = "remove_group" name="remove_group" (change)="getGroupUsers()">
+                    <option [ngValue] ="null">Select Group</option>
+                    <option *ngFor="let group of groups">
+                        {{group.name}}
+                    </option>
+                </select>
+
+                Users: 
+                <select [(ngModel)] = "remove_username" name="remove_username">
+                    <option [ngValue] ="null">Select User</option>
+                    <option *ngFor="let user of group_users">
+                        {{user}}
+                    </option>
+                </select>
+
+                <input type="submit" value="Remove user from group" (click)="removeUserFromGroup()">
+            </form>
+        </div>
 
     </body>
 </html>

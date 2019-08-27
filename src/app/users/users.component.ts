@@ -15,6 +15,9 @@ export class UsersComponent implements OnInit {
   groups
   add_group:string = ""
   add_username:string = ""
+  remove_group:string = ""
+  remove_username:string = ""
+  group_users;
   constructor(private routeService: RoutesService, private router: Router) { }
 
   ngOnInit() {
@@ -62,6 +65,18 @@ export class UsersComponent implements OnInit {
       }else{
         alert(this.add_username + " already in Group: " + this.add_group)
       }
+    })
+  }
+
+  getGroupUsers(){
+    this.routeService.getGroupUsers(this.remove_group).subscribe(data=>{
+      this.group_users = data
+    })
+  }
+
+  removeUserFromGroup(){
+    this.routeService.kickUser(this.remove_group, this.remove_username).subscribe(data=>{
+      console.log(data)
     })
   }
 }

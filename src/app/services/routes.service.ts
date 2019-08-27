@@ -65,4 +65,12 @@ export class RoutesService {
   inviteUser(group:string, username:string){
     return this.http.post(this.url + "/inviteUser", {group: group, username: username})
   }
+
+  getGroupUsers(group:string){
+    return this.http.post(this.url + "/getGroupUsers", {group:group})
+  }
+
+  kickUser(group: string, username:string){
+    return this.http.post(this.url + "/kickUser", {group: group, username:username})
+  }
 }
