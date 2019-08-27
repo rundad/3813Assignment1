@@ -485,4 +485,63 @@ module.exports = function(app, path){
 
         res.send(current_group_users)
     })
+
+    app.post("/kickUser", function(req, res){
+        if(!req.body){
+            return res.sendStatus(400)
+        }
+        var dat = fs.readFileSync("data.json", 'utf8')
+        var data = JSON.parse(dat)
+
+        for(i=0; i<data.users.length; i++){
+            if(req.body.username === data.users[i].username){
+                for(j = 0; j<data.users[i].groups.length; j++){
+                    if(req.body.group === data.users[i].groups[j].name){
+                        data.users[i].groups.splice(j, 1)
+                    }
+                }
+            }
+        }
+
+        for(i=0; i<data.Groups.length; i++){
+            if(req.body.group === data.Groups[i].name){
+                for(j=0; j<data.Groups[i].users.length; j ++){
+                    if(req.body.username === data.Groups[i].users[j]){
+                        data.Groups[i].users.splice(j, 1)
+                    }
+                }
+            }
+        }
+
+        for(i=0; i<data.users.length; i++){
+            if(req.body.username === data.users[i].username){
+                for(j = 0; j<data.users[i].adminGroupList.length; j++){
+                    if(req.body.group === data.users[i].adminGroupList[j]){
+                        data.users[i].adminGroupList.splice(j, 1)
+                    }
+                }
+            }
+        }
+
+        for(i=0; i<data.Groups.length; i++){
+            if(req.body.group === data.Groups[i].name){
+                for(j = 0; j<data.Groups[i].group_admin.length; j++){
+                    if(req.body.username === data.Groups[i].group_admin[j]){
+                        data.Groups[i].group_admin.splice(j, 1)
+                    }
+                }
+            }
+        }
+
+        var JSON_data = JSON.stringify(data)
+        fs.writeFile("data.json", JSON_data, function(err){
+            if(err)
+                console.log(err);
+            else
+                console.log("Invited a user")
+        });
+
+        res.send(true);
+
+    })
 }

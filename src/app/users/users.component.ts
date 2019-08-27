@@ -76,7 +76,9 @@ export class UsersComponent implements OnInit {
 
   removeUserFromGroup(){
     this.routeService.kickUser(this.remove_group, this.remove_username).subscribe(data=>{
-      console.log(data)
+      if(data === true){
+        this.ngOnInit();
+      }
     })
   }
 }
