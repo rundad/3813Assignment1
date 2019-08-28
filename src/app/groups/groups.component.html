@@ -24,16 +24,16 @@
 
         
         <div class="group_form">
-            <h2>Create Group</h2>
+            <h4>Create Group</h4>
             <form>
                 Group Name: <input type="text" id="group_name" name="group_name" [(ngModel)] = "group_name">
                 <input type="submit" value="Create Group" (click)="createGroup()">
             </form>
         </div>
-        <br><br>
+        
 
         <div class="channel_form">
-            <h2>Create Channel</h2>
+            <h4>Create Channel</h4>
             <form>
                 Group: 
                 <select [(ngModel)] = "group_channel" name="group_channel">
@@ -46,10 +46,10 @@
                 <input type="submit" value="Create Channel" (click)="createChannel()">
             </form>
         </div>
-        <br><br>
+        
 
         <div class="remove_channel_form">
-            <h2>Remove Channel</h2>
+            <h4>Remove Channel</h4>
             <form>
                 Group: 
                 <select [(ngModel)] = "remove_group" name="remove_group" (change)="getChannel()">

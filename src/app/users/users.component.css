@@ -1,11 +1,42 @@
-body h2{
-    text-align: center;
-}
+
 
 body h4{
     padding-left: 2.5%;
 }
 
 form{
+    font-size: 15px;
+    padding-left: 2.0%;
+}
+
+body h5{
+    padding-left: 2.5%;
+}
+
+body h2{
     text-align: center;
+}
+.create_user_form{
+    border-bottom: solid;
+    border-color: lightgrey;
+    padding:2%;
+
+}
+
+.add_user_group_form{
+    border-bottom: solid;
+    border-color: lightgrey;
+    padding:2%;
+}
+
+.add_user_channel_form{
+    border-bottom: solid;
+    border-color: lightgrey;
+    padding:2%;
+}
+
+.rm_user_channel_form{
+    border-bottom: solid;
+    border-color: lightgrey;
+    padding:2%;
 }

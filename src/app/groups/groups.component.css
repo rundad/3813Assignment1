@@ -4,29 +4,26 @@ body h2{
 
 body{
     font-family: sans-serif;
-    padding-left: 2.5%;
-    padding-right: 2.5%;
+    padding-left: 2%;
+    padding-right: 2%;
 }
 
-form{
-    text-align: center;
-}
 
 .group_form{
-    border-style: solid;
-    border-color: black;
+    border-bottom: solid;
+    border-color: lightgray;
     padding: 2%;
 }
 
 .channel_form{
-    border-style: solid;
-    border-color: black;
+    border-bottom: solid;
+    border-color: lightgray;
     padding: 2%;
 }
 
 .remove_channel_form{
-    border-style: solid;
-    border-color: black;
+    border-bottom: solid;
+    border-color: lightgray;
     padding: 2%;
 }
 

@@ -6,13 +6,16 @@
     <body>
         <h2>{{userData.username}}'s Profile</h2>
         <br>
-        <h3>Email: {{userData.email}}</h3>
-        <h3>Groups:</h3>
-        <ul>
-            <p *ngFor="let group of userData.groups">{{group.name}}
-                <li *ngFor="let channel of group.channels">{{channel}}</li>
-            </p>
-        </ul>
-        <h3>Role: {{userData.role}}</h3>
+        <h5>Email: {{userData.email}}</h5>
+        <h5>Groups: </h5>
+        <div style="display: inline-block;">
+            <ul>
+                <p *ngFor="let group of userData.groups">{{group.name}}
+                    <br>
+                    <li *ngFor="let channel of group.channels" style="display: inline;">~{{channel}}</li>
+                </p>
+            </ul>
+        </div>
+        <h5 class="role">Role: {{userData.role}}</h5>
     </body>
 </html>

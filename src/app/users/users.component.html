@@ -6,25 +6,26 @@
     <body>
         <h2>Users</h2>
         <br>
-        <h4 *ngFor = "let user of users">Username: {{user.username}}
+        <h5 *ngFor = "let user of users">Username: {{user.username}}
             <br> Email: {{user.email}}
             <br> Role: {{user.role}}
             <br>Groups: <div style="display: inline-block;"><p *ngFor = "let group of user.groups" style="display: inline;">{{group.name}}, </p></div>
             <br>
             <button (click)="removeUser(user.username)" type="button" class="btn btn-primary">Remove User</button>
-        </h4>
+        </h5>
 
-        <div>
-            <h2>Create User</h2>
+        <br><br>
+        <div class="create_user_form">
+            <h4>Create User</h4>
             <form>
                 Username: <input type="text" id="username" name="username" [(ngModel)] = "username">
                 Email Address: <input type="text" id="email" name="email" [(ngModel)] = "email">
                 <input type="submit" value="Create" (click)="createUser()">
             </form>
         </div>
-        <br><br>
+  
         <div class="add_user_group_form">
-            <h2>Invite User</h2>
+            <h4>Invite User</h4>
             <form>
                 Groups: 
                 <select [(ngModel)] = "add_group" name="add_group">
@@ -45,32 +46,9 @@
                 <input type="submit" value="Invite User" (click)="inviteUser()">
             </form>
         </div>
-        <br><br>
-        <div class="remove_user_group_form">
-            <h2>Remove User From Group</h2>
-            <form>
-                Groups: 
-                <select [(ngModel)] = "remove_group" name="remove_group" (change)="getGroupUsers()">
-                    <option [ngValue] ="null">Select Group</option>
-                    <option *ngFor="let group of groups">
-                        {{group.name}}
-                    </option>
-                </select>
-
-                Users: 
-                <select [(ngModel)] = "remove_username" name="remove_username">
-                    <option [ngValue] ="null">Select User</option>
-                    <option *ngFor="let user of group_users">
-                        {{user}}
-                    </option>
-                </select>
-
-                <input type="submit" value="Remove user from group" (click)="removeUserFromGroup()">
-            </form>
-        </div>
-        <br><br>
+ 
         <div class="add_user_channel_form">
-            <h2>Add User To Channel</h2>
+            <h4>Add User To Channel</h4>
             <form>
                 Groups: 
                 <select [(ngModel)] = "channel_group" name="channel_group" (change)="gGroupUsers()">
@@ -100,8 +78,8 @@
             </form>
         </div>
 
-        <div class="add_user_channel_form">
-            <h2>Remove User From Channel</h2>
+        <div class="rm_user_channel_form">
+            <h4>Remove User From Channel</h4>
             <form>
                 Groups: 
                 <select [(ngModel)] = "rm_channel_group" name="rm_channel_group" (change)="groupChannel()">
@@ -128,7 +106,9 @@
                 </select>
 
                 <input type="submit" value="Remove user from channel" (click)="rmUserFromChannel()">
+                
             </form>
+    
         </div>
 
     </body>
