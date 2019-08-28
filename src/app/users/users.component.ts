@@ -23,7 +23,11 @@ export class UsersComponent implements OnInit {
   channel_group_users;
   channel_name:string = ""
   group_channels;
-
+  rm_channel_group:string = ""
+  rm_channel_username:string = ""
+  rm_channel_name:string = ""
+  rm_group_channels;
+  channel_users;
   constructor(private routeService: RoutesService, private router: Router) { }
 
   ngOnInit() {
@@ -108,6 +112,18 @@ export class UsersComponent implements OnInit {
       }else{
         alert(this.channel_username + " already in " + this.channel_name + " in " + this.channel_group)
       }
+    })
+  }
+
+  channelUsers(){
+    this.routeService.getChannelUsers(this.rm_channel_group, this.rm_channel_name).subscribe(data =>{
+      this.channel_users = data
+    })
+  }
+
+  groupChannel(){
+    this.routeService.getGroupChannel(this.rm_channel_group).subscribe(data=>{
+      this.rm_group_channels = data
     })
   }
 }

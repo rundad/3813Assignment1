@@ -85,4 +85,9 @@ export class RoutesService {
   addUserChannel(group:string, username:string, channel:string){
     return this.http.post(this.url + '/addUserChannel', {group:group, username:username, channel:channel})
   }
+
+  getChannelUsers(group:string, channel:string){
+    return this.http.post(this.url + "/getChannelUsers", {group:group, channel:channel})
+  }
+
 }

@@ -618,4 +618,27 @@ module.exports = function(app, path){
         });
 
     })
+
+    app.post("/getChannelUsers", function(req, res){
+        if(!req.body){
+            return res.sendStatus(400)
+        }
+        var dat = fs.readFileSync("data.json", 'utf8')
+        var data = JSON.parse(dat)
+        var channel_users = []
+
+        for(i =0; i<data.users.length; i++){
+            for(j=0; j<data.users[i].groups.length; j++){
+                if(req.body.group === data.users[i].groups[j].name){
+                    for(k=0; k<data.users[i].groups[j].channels.length; k++){
+                        if(req.body.channel === data.users[i].groups[j].channels[k]){
+                            channel_users.push(data.users[i].username)
+                        }
+                    }
+                }
+            }
+        }
+
+        res.send(channel_users)
+    })
 }
