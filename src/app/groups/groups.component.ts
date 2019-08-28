@@ -17,6 +17,7 @@ export class GroupsComponent implements OnInit {
   remove_group:string = ""
   remove_channel:string = ""
   channels;
+  
   constructor(private routeService: RoutesService, private router:Router) { }
 
   ngOnInit() {
@@ -90,4 +91,5 @@ export class GroupsComponent implements OnInit {
       })
     }
   }
+
 }

@@ -68,6 +68,37 @@
                 <input type="submit" value="Remove user from group" (click)="removeUserFromGroup()">
             </form>
         </div>
+        <br><br>
+        <div class="add_user_channel_form">
+            <h2>Add User To Channel</h2>
+            <form>
+                Groups: 
+                <select [(ngModel)] = "channel_group" name="channel_group" (change)="gGroupUsers()">
+                    <option [ngValue] ="null">Select Group</option>
+                    <option *ngFor="let group of groups">
+                        {{group.name}}
+                    </option>
+                </select>
+
+                Users: 
+                <select [(ngModel)] = "channel_username" name="channel_username">
+                    <option [ngValue] ="null">Select User</option>
+                    <option *ngFor="let user of channel_group_users">
+                        {{user}}
+                    </option>
+                </select>
+
+                Channels: 
+                <select [(ngModel)] = "channel_name" name="channel_name">
+                    <option [ngValue] ="null">Select Channel</option>
+                    <option *ngFor="let channel of group_channels">
+                        {{channel}}
+                    </option>
+                </select>
+
+                <input type="submit" value="Add User" (click)="addUserToChannel()">
+            </form>
+        </div>
 
     </body>
 </html>

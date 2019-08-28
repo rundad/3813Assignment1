@@ -73,4 +73,16 @@ export class RoutesService {
   kickUser(group: string, username:string){
     return this.http.post(this.url + "/kickUser", {group: group, username:username})
   }
+
+  gGroupUsers(group:string){
+    return this.http.post(this.url + "/gGroupUsers", {group:group})
+  }
+
+  getGroupChannel(group:string){
+    return this.http.post(this.url + "/getGroupChannel", {group:group})
+  }
+
+  addUserChannel(group:string, username:string, channel:string){
+    return this.http.post(this.url + '/addUserChannel', {group:group, username:username, channel:channel})
+  }
 }

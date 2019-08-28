@@ -544,4 +544,78 @@ module.exports = function(app, path){
         res.send(true);
 
     })
+
+    app.post("/gGroupUsers", function(req, res){
+        if(!req.body){
+            return res.sendStatus(400)
+        }
+        var dat = fs.readFileSync("data.json", 'utf8')
+        var data = JSON.parse(dat)
+        var current_group_users;
+        for(i=0; i<data.Groups.length; i++){
+            if(req.body.group === data.Groups[i].name){
+                current_group_users = data.Groups[i].users
+            }
+        }
+
+        res.send(current_group_users)
+    })
+
+    app.post("/getGroupChannel", function(req, res){
+        if(!req.body){
+            return res.sendStatus(400)
+        }
+        var dat = fs.readFileSync("data.json", 'utf8')
+        var data = JSON.parse(dat)
+
+        var current_group_channels;
+        for(i=0; i<data.Groups.length; i++){
+            if(req.body.group === data.Groups[i].name){
+                current_group_channels = data.Groups[i].channels
+            }
+        }
+
+        res.send(current_group_channels)
+    })
+
+    app.post("/addUserChannel", function(req, res){
+        if(!req.body){
+            return res.sendStatus(400)
+        }
+        var dat = fs.readFileSync("data.json", 'utf8')
+        var data = JSON.parse(dat)
+
+        var user_group_channels = []
+        var user_index;
+        var group_index;
+        for(i=0; i<data.users.length; i++){
+            if(req.body.username === data.users[i].username){
+                user_index = i
+                for(j=0; j<data.users[i].groups.length; j++){
+                    if(req.body.group === data.users[i].groups[j].name){
+                        group_index = j
+                        for(k=0; k<data.users[i].groups[j].channels.length; k++){
+                            user_group_channels.push(data.users[i].groups[j].channels[k])
+                        }
+                    }
+                }
+            }
+        }
+        console.log(user_group_channels)
+        if(user_group_channels.indexOf(req.body.channel) == -1){
+            data.users[user_index].groups[group_index].channels.push(req.body.channel)
+            res.send(true)
+        }else{
+            res.send(false)
+        }
+
+        var JSON_data = JSON.stringify(data)
+        fs.writeFile("data.json", JSON_data, function(err){
+            if(err)
+                console.log(err);
+            else
+                console.log("Added a user to channel" + req.body.channel)
+        });
+
+    })
 }
