@@ -11,10 +11,14 @@ export class AppComponent {
   title = 'Assignment1';
 
   isUserLoggedIn: boolean
+  isNormalUser: boolean
   constructor(private router: Router, private dataSharingService:DataSharingService){
     this.dataSharingService.isUserLoggedIn.subscribe( value => {
       this.isUserLoggedIn = value;
   });
+    this.dataSharingService.isNormalUser.subscribe(value =>{
+      this.isNormalUser = value
+    })
   }
 
   ngOnInit() {
@@ -39,6 +43,7 @@ export class AppComponent {
   logout(){
     localStorage.clear();
     this.dataSharingService.isUserLoggedIn.next(false);
+    this.dataSharingService.isNormalUser.next(false);
     this.router.navigateByUrl("/login")
   }
 

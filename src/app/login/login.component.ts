@@ -23,6 +23,11 @@ export class LoginComponent implements OnInit {
     this.routeService.login(this.email).subscribe(data=>{
       if(data.valid === true){
         this.dataSharingService.isUserLoggedIn.next(true);
+        if(data.role !== "user"){
+          this.dataSharingService.isNormalUser.next(false);
+        }else{
+          this.dataSharingService.isNormalUser.next(true);
+        }
         localStorage.setItem("currentUsername", JSON.stringify(data.username));
         localStorage.setItem("userData", JSON.stringify(data));
         this.router.navigateByUrl("/profile")

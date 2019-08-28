@@ -538,7 +538,7 @@ module.exports = function(app, path){
             if(err)
                 console.log(err);
             else
-                console.log("Invited a user")
+                console.log("Removed a user from a group")
         });
 
         res.send(true);

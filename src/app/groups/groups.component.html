@@ -6,15 +6,21 @@
     <body>
         <h2>Groups & Channels</h2>
         <br>
-        <h4 *ngFor = "let group of groups">Group Name: {{group.name}}
+        <h5 *ngFor = "let group of groups">Group Name: {{group.name}}
             <br>
             Channels:
             <div style="display: inline-block;">
                 <p *ngFor = "let channel of group.channels" style="display: inline;">{{channel}}, </p>
             </div>
             <br>
+            <ul *ngFor = "let user of group.users">
+                <li style="display: inline;">User: {{user}} </li>
+                <button (click)="removeUserFromGroup(group.name, user)">Remove User</button>
+            </ul>
+
             <button (click)="removeGroup(group.name)" type="button" class="btn btn-primary">Remove Group</button>
-        </h4>
+        </h5>
+        
 
         
         <div class="group_form">

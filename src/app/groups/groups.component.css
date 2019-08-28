@@ -29,3 +29,7 @@ form{
     border-color: black;
     padding: 2%;
 }
+
+button{
+    font-size: 10px;
+}
