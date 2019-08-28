@@ -108,6 +108,7 @@ export class UsersComponent implements OnInit {
   addUserToChannel(){
     this.routeService.addUserChannel(this.channel_group, this.channel_username, this.channel_name).subscribe(data=>{
       if(data === true){
+        alert("Added " + this.channel_username + " to channel: " + this.channel_name)
         this.ngOnInit();
       }else{
         alert(this.channel_username + " already in " + this.channel_name + " in " + this.channel_group)
@@ -124,6 +125,15 @@ export class UsersComponent implements OnInit {
   groupChannel(){
     this.routeService.getGroupChannel(this.rm_channel_group).subscribe(data=>{
       this.rm_group_channels = data
+    })
+  }
+
+  rmUserFromChannel(){
+    this.routeService.rmUserFromChannel(this.rm_channel_group, this.rm_channel_username, this.rm_channel_name).subscribe(data =>{
+      if(data === true){
+        alert("Removed user: " + this.rm_channel_username + " from channel: " + this.rm_channel_name + " in group: " + this.rm_channel_group)
+        this.ngOnInit();
+      }
     })
   }
 }

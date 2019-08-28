@@ -90,4 +90,8 @@ export class RoutesService {
     return this.http.post(this.url + "/getChannelUsers", {group:group, channel:channel})
   }
 
+  rmUserFromChannel(group:string, username:string, channel:string){
+    return this.http.post(this.url + "/rmUserFromChannel", {group:group, username:username, channel:channel})
+  }
+
 }

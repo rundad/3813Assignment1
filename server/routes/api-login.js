@@ -641,4 +641,43 @@ module.exports = function(app, path){
 
         res.send(channel_users)
     })
+
+    app.post("/rmUserFromChannel", function(req, res){
+        if(!req.body){
+            return res.sendStatus(400)
+        }
+        var dat = fs.readFileSync("data.json", 'utf8')
+        var data = JSON.parse(dat)
+        var user_index;
+        var group_index;
+        var channel_index;
+
+        for(i=0; i<data.users.length; i ++){
+            if(req.body.username === data.users[i].username){
+                user_index = i
+                for(k=0; k<data.users[i].groups.length; k++){
+                    if(req.body.group === data.users[i].groups[k].name){
+                        group_index = k
+                        for(j = 0; j<data.users[i].groups[k].channels.length; j++){
+                            if(req.body.channel === data.users[i].groups[k].channels[j]){
+                                channel_index = j
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        data.users[user_index].groups[group_index].channels.splice(channel_index, 1)
+
+        var JSON_data = JSON.stringify(data)
+        fs.writeFile("data.json", JSON_data, function(err){
+            if(err)
+                console.log(err);
+            else
+                console.log("Removed a user from channel" + req.body.channel + " in group:" + req.body.group)
+        });
+
+        res.send(true)
+    })
 }
