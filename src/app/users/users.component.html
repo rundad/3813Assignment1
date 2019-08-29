@@ -11,16 +11,32 @@
             <br> Role: {{user.role}}
             <br>Groups: <div style="display: inline-block;"><p *ngFor = "let group of user.groups" style="display: inline;">{{group.name}}, </p></div>
             <br>
-            <button (click)="removeUser(user.username)" type="button" class="btn btn-primary">Remove User</button>
+            <button (click)="removeUser(user.username)" type="button" class="btn btn-primary" *ngIf="isSuperAdmin">Remove User</button>
         </h5>
 
         <br><br>
-        <div class="create_user_form">
+        <div class="create_user_form" *ngIf="isGroupAdmin">
             <h4>Create User</h4>
             <form>
                 Username: <input type="text" id="username" name="username" [(ngModel)] = "username">
                 Email Address: <input type="text" id="email" name="email" [(ngModel)] = "email">
                 <input type="submit" value="Create" (click)="createUser()">
+            </form>
+        </div>
+
+        <div class="create_user_form" *ngIf="isSuperAdmin">
+            <h4>Create User</h4>
+            <form>
+                Username: <input type="text" id="username" name="username" [(ngModel)] = "username">
+                Email Address: <input type="text" id="email" name="email" [(ngModel)] = "email">
+                Role: 
+                <select [(ngModel)] = "create_role" name="create_role">
+                    <option [ngValue] ="null">Select Role</option>
+                    <option>user</option>
+                    <option>Group Admin</option>
+                </select>
+
+                <input type="submit" value="Create" (click)="createWithSuper()">
             </form>
         </div>
   

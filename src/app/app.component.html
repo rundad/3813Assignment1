@@ -16,10 +16,10 @@
         <a class="nav-link" *ngIf="!isNormalUser" (click)="goManage()">Management</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" *ngIf="!isNormalUser" routerLink="/users">Users</a>
+        <a class="nav-link" *ngIf="!isNormalUser" (click)="goUsers()">Users</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" *ngIf="!isNormalUser" routerLink="/groups">Groups</a>
+        <a class="nav-link" *ngIf="!isNormalUser" (click)="goGroups()">Groups</a>
       </li>
     </ul>
     <span class="navbar-text">

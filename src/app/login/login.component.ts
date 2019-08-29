@@ -23,10 +23,13 @@ export class LoginComponent implements OnInit {
     this.routeService.login(this.email).subscribe(data=>{
       if(data.valid === true){
         this.dataSharingService.isUserLoggedIn.next(true);
-        if(data.role !== "user"){
-          this.dataSharingService.isNormalUser.next(false);
-        }else{
+        if(data.role === "user"){
           this.dataSharingService.isNormalUser.next(true);
+        }else if(data.role === "Super"){
+          
+          this.dataSharingService.isSuperAdmin.next(true);
+        }else if(data.role === "Group Admin"){
+          this.dataSharingService.isGroupAdmin.next(true);
         }
         localStorage.setItem("currentUsername", JSON.stringify(data.username));
         localStorage.setItem("userData", JSON.stringify(data));

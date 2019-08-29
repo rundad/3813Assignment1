@@ -94,4 +94,8 @@ export class RoutesService {
     return this.http.post(this.url + "/rmUserFromChannel", {group:group, username:username, channel:channel})
   }
 
+  createWithSuper(username: string, email: string, role:string){
+    return this.http.post(this.url + "/createWithSuper", {username: username, email: email, role: role})
+  }
+
 }

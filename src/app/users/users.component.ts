@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RoutesService } from '../services/routes.service';
 import { Router } from '@angular/router';
+import { DataSharingService } from "../services/data-sharing.service";
 
 @Component({
   selector: 'app-users',
@@ -28,7 +29,10 @@ export class UsersComponent implements OnInit {
   rm_channel_name:string = ""
   rm_group_channels;
   channel_users;
-  constructor(private routeService: RoutesService, private router: Router) { }
+  isSuperAdmin: boolean;
+  create_role:string
+  isGroupAdmin:boolean;
+  constructor(private routeService: RoutesService, private router: Router, private dataSharingService: DataSharingService) { }
 
   ngOnInit() {
     this.routeService.getUsers().subscribe(data =>{
@@ -38,6 +42,12 @@ export class UsersComponent implements OnInit {
     this.routeService.getGroups().subscribe(data =>{
       this.groups = data
       console.log(this.groups)
+    })
+    this.dataSharingService.isSuperAdmin.subscribe(value =>{
+      this.isSuperAdmin = value
+    })
+    this.dataSharingService.isGroupAdmin.subscribe(value =>{
+      this.isGroupAdmin = value
     })
   }
 
@@ -62,7 +72,10 @@ export class UsersComponent implements OnInit {
     if(confirm("Are you sure to remove User: " + username + "?")) {
       this.routeService.removeUser(username).subscribe(data =>{
         if(data === true){
+          alert("Removed User: " + username)
           this.ngOnInit();
+        }else{
+          alert("This user is Super Admin, Super Admin cannot be removed")
         }
       })
     }
@@ -133,6 +146,17 @@ export class UsersComponent implements OnInit {
       if(data === true){
         alert("Removed user: " + this.rm_channel_username + " from channel: " + this.rm_channel_name + " in group: " + this.rm_channel_group)
         this.ngOnInit();
+      }
+    })
+  }
+
+  createWithSuper(){
+    this.routeService.createWithSuper(this.username, this.email, this.create_role).subscribe(data=>{
+      if(data === true){
+        alert("Create user with role: " + this.create_role)
+        this.ngOnInit();
+      }else{
+        alert("This user is already exist!")
       }
     })
   }

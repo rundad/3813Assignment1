@@ -44,6 +44,8 @@ export class AppComponent {
     localStorage.clear();
     this.dataSharingService.isUserLoggedIn.next(false);
     this.dataSharingService.isNormalUser.next(false);
+    this.dataSharingService.isGroupAdmin.next(false);
+    this.dataSharingService.isSuperAdmin.next(false);
     this.router.navigateByUrl("/login")
   }
 
@@ -54,6 +56,22 @@ export class AppComponent {
       this.router.navigateByUrl("/management")
     }else{
       alert("You don't have permission to manage")
+    }
+  }
+
+  goUsers(){
+    if(JSON.parse(localStorage.getItem("currentUsername")) === null){
+      this.router.navigateByUrl("/login")
+    }else{
+      this.router.navigateByUrl("/users")
+    }
+  }
+
+  goGroups(){
+    if(JSON.parse(localStorage.getItem("currentUsername")) === null){
+      this.router.navigateByUrl("/login")
+    }else{
+      this.router.navigateByUrl("/groups")
     }
   }
 }

@@ -136,10 +136,39 @@ module.exports = function(app, path){
 
         for(i = 0; i <data.users.length; i++){
             if(req.body.username === data.users[i].username){
-                data.users.splice(i, 1)
-                res.send(true)
+                if(data.users[i].role === "Super"){
+                    res.send(false)
+                }else{
+                    data.users.splice(i, 1)
+                    res.send(true)
+                }
+ 
             }
 
+        }
+
+        for(i = 0; i<data.Groups.length; i++){
+            for(j = 0; j<data.Groups[i].group_admin.length; j++){
+                if(req.body.username === data.Groups[i].group_admin[j]){
+                    data.Groups[i].group_admin.splice(j, 1)
+                }
+            }
+        }
+
+        for(i = 0; i<data.Groups.length; i++){
+            for(j = 0; j<data.Groups[i].users.length; j++){
+                if(req.body.username === data.Groups[i].users[j]){
+                    data.Groups[i].users.splice(j, 1)
+                }
+            }
+        }
+
+        for(i = 0; i<data.Groups.length; i++){
+            for(j = 0; j<data.Groups[i].group_assis.length; j++){
+                if(req.body.username === data.Groups[i].group_assis[j]){
+                    data.Groups[i].group_assis.splice(j, 1)
+                }
+            }
         }
         var JSON_data = JSON.stringify(data)
         fs.writeFile("data.json", JSON_data, function(err){
@@ -679,5 +708,53 @@ module.exports = function(app, path){
         });
 
         res.send(true)
+    })
+
+    app.post("/createWithSuper", function(req, res){
+        if(!req.body){
+            return res.sendStatus(400)
+        }
+        var dat = fs.readFileSync("data.json", 'utf8')
+        var data = JSON.parse(dat)
+        var usernames = []
+        var emails = []
+        for(i = 0; i <data.users.length; i++){
+            usernames.push(data.users[i].username)
+            emails.push(data.users[i].email)
+        }
+        console.log(usernames)
+
+        var customer = {}
+        customer.username = ""
+        customer.email = ""
+        customer.password = ""
+        customer.groups = []
+        customer.role = ""
+        customer.adminGroupList = []
+        customer.valid = false
+
+        if(usernames.indexOf(req.body.username) == -1 && emails.indexOf(req.body.email) == -1){
+            customer.username = req.body.username
+            customer.email = req.body.email
+            customer.password = ""
+            customer.groups = []
+            customer.role = req.body.role
+            customer.adminGroupList = []
+            customer.valid = false
+            data.users.push(customer)
+            res.send(true)
+        }else{
+            res.send(false)
+        }
+
+
+        var JSON_data = JSON.stringify(data)
+        fs.writeFile("data.json", JSON_data, function(err){
+            if(err)
+                console.log(err);
+            else
+                console.log("Created user with super admin role")
+        });
+        
     })
 }
