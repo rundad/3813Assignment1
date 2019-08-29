@@ -164,4 +164,19 @@ export class UsersComponent implements OnInit {
       }
     })
   }
+
+  giveSuperRole(name:string){
+
+    if(confirm("Are you sure to give this user: " + name + " Super Admin privileges?")) {
+      this.routeService.giveSuper(name).subscribe(data=>{
+        if(data === true){
+          alert("User: " + name + " has became a Super Admin")
+          this.ngOnInit();
+        }else if(data === false){
+          alert("Cannot have more than 2 Super Admins")
+        }
+      })
+    }
+  
+  }
 }

@@ -11,7 +11,8 @@
             <br> Role: {{user.role}}
             <br>Groups: <div style="display: inline-block;"><p *ngFor = "let group of user.groups" style="display: inline;">{{group.name}}, </p></div>
             <br>
-            <button (click)="removeUser(user.username)" type="button" class="btn btn-primary" *ngIf="isSuperAdmin">Remove User</button>
+            <button (click)="removeUser(user.username)" type="button" class="btn btn-primary" *ngIf="isSuperAdmin">Remove User</button> 
+            <button (click)="giveSuperRole(user.username)" type="button" class="btn btn-dark" *ngIf="isSuperAdmin" >Super Admin</button>
         </h5>
 
         <br><br>

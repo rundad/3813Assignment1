@@ -792,4 +792,57 @@ module.exports = function(app, path){
         
 
     })
+
+    app.post("/giveSuper", function(req, res){
+        if(!req.body){
+            return res.sendStatus(400)
+        }
+        var dat = fs.readFileSync("data.json", 'utf8')
+        var data = JSON.parse(dat)
+        var super_admins = []
+        var message;
+        var current_groups = []
+        for(i=0; i<data.users.length; i++){
+            if(data.users[i].role === "Super"){
+                super_admins.push(data.users[i].username)
+            }
+        }
+
+        if(super_admins.length < 2){
+            for(i =0; i<data.users.length; i++){
+                if(req.body.name === data.users[i].username){
+                    if(data.users[i].role !== "Super"){
+                        data.users[i].role = "Super"
+                        message = true
+                        break
+                    }
+                }
+            }
+        }else{
+            message = false
+        }
+
+        if(message === true){
+            for(i = 0; i<data.Groups.length; i++){
+                data.Groups[i].group_admin.push(req.body.name)
+                current_groups.push(data.Groups[i].name)
+            }
+            for(i =0; i<data.users.length; i++){
+                if(req.body.name === data.users[i].username){
+                    for(j =0; j<current_groups.length; j++){
+                        data.users[i].adminGroupList.push(current_groups[j])
+                    }
+                }
+            }
+        }
+        var JSON_data = JSON.stringify(data)
+        fs.writeFile("data.json", JSON_data, function(err){
+            if(err)
+                console.log(err);
+            else
+                console.log("Provided a user with super admin role")
+        });
+
+        res.send(message)
+    })
 }
