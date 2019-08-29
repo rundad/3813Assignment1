@@ -99,6 +99,7 @@ export class GroupsComponent implements OnInit {
   removeUserFromGroup(group:string, username:string){
     this.routeService.kickUser(group, username).subscribe(data=>{
       if(data === true){
+        alert("Kick user: " + username + " out of group: " + group + "?")
         this.ngOnInit();
       }
     })

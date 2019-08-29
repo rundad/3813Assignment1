@@ -233,8 +233,6 @@ module.exports = function(app, path){
         for(i = 0; i <data.users.length; i++){
             if(req.body.username === data.users[i].username){
                 currentUser_index = i
-                data.users[i].adminGroupList.push(req.body.name)
-                data.users[i].groups.push({name: req.body.name, channels: []})
             }
         }
 
@@ -246,6 +244,8 @@ module.exports = function(app, path){
             group.group_assis = []
             group.users.push(data.users[currentUser_index].username)
             data.Groups.push(group)
+            data.users[currentUser_index].adminGroupList.push(req.body.name)
+            data.users[currentUser_index].groups.push({name: req.body.name, channels: []})
             res.send(true)
         }else{
             res.send(false)
