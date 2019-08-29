@@ -23,7 +23,7 @@
 
 
             <button (click)="removeGroup(group.name)" type="button" class="btn btn-primary" *ngIf="!isGroupAssis">Remove Group</button><br>
-            <p><a (click)="viewChannels(group.name)" style="color: blue; text-decoration-line: underline; cursor: pointer;" *ngIf="isGroupAssis">View Channels</a></p>
+            <p><a (click)="viewChannels(group.name)" style="color: blue; text-decoration-line: underline; cursor: pointer;" *ngIf="!isNormalUser">View Channels</a></p>
         </h5>
         
 

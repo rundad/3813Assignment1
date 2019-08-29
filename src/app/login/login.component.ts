@@ -19,6 +19,11 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
   }
 
+  //The function which will be called when a user clicked the login button in login page
+  //Check if the user exist by sending the data and the auth login request to the server side
+  //check the send back data role and update the data status that defined in the data sharing service
+  //Store the data into the local storage
+  //Check the valid property, if true navigate to the profile page, if not pop message
   login(){
     this.routeService.login(this.email).subscribe(data=>{
       if(data.valid === true){

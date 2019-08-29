@@ -626,6 +626,16 @@ module.exports = function(app, path){
             }
         }
 
+        for(i =0 ; i<data.Channels.length; i++){
+            if(req.body.group === data.Channels[i].group){
+                for(j = 0; j<data.Channels[i].users.length; j++){
+                    if(req.body.username === data.Channels[i].users[j]){
+                        data.Channels[i].users.splice(j, 1)
+                    }
+                }
+            }
+        }
+
         var JSON_data = JSON.stringify(data)
         fs.writeFile("data.json", JSON_data, function(err){
             if(err)
