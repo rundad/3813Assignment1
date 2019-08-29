@@ -84,17 +84,17 @@ export class GroupsComponent implements OnInit {
     })
   }
 
-  removeChannel(){
-    if(confirm("Are you sure to remove Channel: " + this.remove_channel +  " from " + "Group: " + this.remove_group + "?")) {
-      this.routeService.removeChannel(this.remove_group, this.remove_channel).subscribe(data =>{
-        console.log(data)
-        if(data === true){
-          this.ngOnInit();
-          alert("Removed Channel: " + this.remove_channel + " from " + "Group: " + this.remove_group)
-        }
-      })
-    }
-  }
+  // removeChannel(){
+  //   if(confirm("Are you sure to remove Channel: " + this.remove_channel +  " from " + "Group: " + this.remove_group + "?")) {
+  //     this.routeService.removeChannel(this.remove_group, this.remove_channel).subscribe(data =>{
+  //       console.log(data)
+  //       if(data === true){
+  //         this.ngOnInit();
+  //         alert("Removed Channel: " + this.remove_channel + " from " + "Group: " + this.remove_group)
+  //       }
+  //     })
+  //   }
+  // }
 
   removeUserFromGroup(group:string, username:string){
     if(confirm("Kick user: " + username + " out of group: " + group + "?")){
@@ -115,5 +115,9 @@ export class GroupsComponent implements OnInit {
         alert("You cannot assign group assis role to Super and Group Admin")
       }
     })
+  }
+
+  viewChannels(group:string){
+    this.router.navigateByUrl("/channels/" + group)
   }
 }

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+    </head>
+    <body>
+        <h2>Channels in {{group_name}}</h2>
+        <h5 *ngFor = "let channel of group_channels">Channel Name: {{channel.name}}
+            <br>
+            Users:
+            <div style="display: inline-block;">
+                <p *ngFor = "let user of channel.users" style="display: inline;">{{user}} 
+                    <button (click) = "rmUserFromChannel(user, channel.name)" type="button" class="btn btn-danger" >Remove User</button>
+                </p>
+                
+            </div>
+            <br>
+
+            <button (click)="removeChannel(channel.name)" type="button" class="btn btn-primary" *ngIf="!isGroupAssis">Remove Channel</button><br>
+
+        </h5>
+    </body>
+</html>

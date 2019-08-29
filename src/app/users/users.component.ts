@@ -133,26 +133,29 @@ export class UsersComponent implements OnInit {
     })
   }
 
-  channelUsers(){
-    this.routeService.getChannelUsers(this.rm_channel_group, this.rm_channel_name).subscribe(data =>{
-      this.channel_users = data
-    })
-  }
+  //Used for remove user from channel
+  // channelUsers(){
+  //   this.routeService.getChannelUsers(this.rm_channel_group, this.rm_channel_name).subscribe(data =>{
+  //     this.channel_users = data
+  //   })
+  // }
 
-  groupChannel(){
-    this.routeService.getGroupChannel(this.rm_channel_group).subscribe(data=>{
-      this.rm_group_channels = data
-    })
-  }
+  //Used for remove user from channel
+  // groupChannel(){
+  //   this.routeService.getGroupChannel(this.rm_channel_group).subscribe(data=>{
+  //     this.rm_group_channels = data
+  //   })
+  // }
 
-  rmUserFromChannel(){
-    this.routeService.rmUserFromChannel(this.rm_channel_group, this.rm_channel_username, this.rm_channel_name).subscribe(data =>{
-      if(data === true){
-        alert("Removed user: " + this.rm_channel_username + " from channel: " + this.rm_channel_name + " in group: " + this.rm_channel_group)
-        this.ngOnInit();
-      }
-    })
-  }
+  //Used for remove user from channel
+  // rmUserFromChannel(){
+  //   this.routeService.rmUserFromChannel(this.rm_channel_group, this.rm_channel_username, this.rm_channel_name).subscribe(data =>{
+  //     if(data === true){
+  //       alert("Removed user: " + this.rm_channel_username + " from channel: " + this.rm_channel_name + " in group: " + this.rm_channel_group)
+  //       this.ngOnInit();
+  //     }
+  //   })
+  // }
 
   createWithSuper(){
     this.routeService.createWithSuper(this.username, this.email, this.create_role).subscribe(data=>{

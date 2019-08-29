@@ -15,15 +15,19 @@ module.exports = function(app, path){
     // }
 
     console.log("hello")
+    //The login user
     var user = ""
+    //request endpoint for checking user is exist or not
     app.post('/api/auth', function(req, res){
         if(!req.body){
             return res.sendStatus(400)
         }
 
+        //read file data
         var dat = fs.readFileSync("data.json", 'utf8')
         var data = JSON.parse(dat)
 
+        //create a customer object and give properties to the object
         var customer = {}
         customer.username = ""
         customer.email = ""
@@ -34,6 +38,7 @@ module.exports = function(app, path){
         customer.valid = false
         //customer.channel = []
 
+        //use for loop to check is the email exist in the data, if exist assign data to customer object and send back to client side
         for(i = 0; i <data.users.length; i++){
             if(req.body.email === data.users[i].email){
                 customer.username = data.users[i].username
@@ -58,32 +63,39 @@ module.exports = function(app, path){
         res.send(customer);
     })
 
+    //request endpoint for getting users
     app.get('/getUsers', function(req, res){
         if(!req.body){
             return res.sendStatus(400)
         }
+        //read file data
         var dat = fs.readFileSync("data.json", 'utf8')
         var data = JSON.parse(dat)
         
+        //send data back to client side
         res.send(data.users);
     })
 
+    //request endpoint for creating user
     app.post('/createUser', function(req, res){
         if(!req.body){
             return res.sendStatus(400)
         }
 
+        //read file data
         var dat = fs.readFileSync("data.json", 'utf8')
         var data = JSON.parse(dat)
         var usernames = []
         var emails = []
 
+        //get the usernames and emails from the data and store them into arrays
         for(i = 0; i <data.users.length; i++){
             usernames.push(data.users[i].username)
             emails.push(data.users[i].email)
         }
         console.log(usernames)
 
+        //create a customer object
         var customer = {}
         customer.username = ""
         customer.email = ""
@@ -93,6 +105,7 @@ module.exports = function(app, path){
         customer.adminGroupList = []
         customer.valid = false
 
+        //if the requested username and email are not exist, create user by pushing the customer object into data, else send false back to client side
         if(usernames.indexOf(req.body.username) == -1 && emails.indexOf(req.body.email) == -1){
             customer.username = req.body.username
             customer.email = req.body.email
@@ -107,7 +120,7 @@ module.exports = function(app, path){
             res.send(false)
         }
 
-
+        //update the data file by writing the data back to the file 
         var JSON_data = JSON.stringify(data)
         fs.writeFile("data.json", JSON_data, function(err){
             if(err)
@@ -119,21 +132,27 @@ module.exports = function(app, path){
 
     })
 
+    //request endpoint for removing user
     app.post('/removeUser', function(req, res){
         if(!req.body){
             return res.sendStatus(400)
         }
-
+        
+        //read file data
         var dat = fs.readFileSync("data.json", 'utf8')
         var data = JSON.parse(dat)
+        //an array for storing usernames
         var usernames = []
+        //an array for storing emails
         var emails = []
 
+        //get usernames and emails from the data
         for(i = 0; i <data.users.length; i++){
             usernames.push(data.users[i].username)
             emails.push(data.users[i].email)
         }
 
+        //use for loop to check if the user is a super admin or not, if the user is super admin send false back to client side and if the user is not a super admin, send true back to client side and remove the user from the data
         for(i = 0; i <data.users.length; i++){
             if(req.body.username === data.users[i].username){
                 if(data.users[i].role === "Super"){
@@ -147,6 +166,7 @@ module.exports = function(app, path){
 
         }
 
+        //remove user from group admin array
         for(i = 0; i<data.Groups.length; i++){
             for(j = 0; j<data.Groups[i].group_admin.length; j++){
                 if(req.body.username === data.Groups[i].group_admin[j]){
@@ -155,6 +175,7 @@ module.exports = function(app, path){
             }
         }
 
+        //remove user from users array in Groups
         for(i = 0; i<data.Groups.length; i++){
             for(j = 0; j<data.Groups[i].users.length; j++){
                 if(req.body.username === data.Groups[i].users[j]){
@@ -163,6 +184,7 @@ module.exports = function(app, path){
             }
         }
 
+        //remove user from group assis array
         for(i = 0; i<data.Groups.length; i++){
             for(j = 0; j<data.Groups[i].group_assis.length; j++){
                 if(req.body.username === data.Groups[i].group_assis[j]){
@@ -170,6 +192,7 @@ module.exports = function(app, path){
                 }
             }
         }
+        //write the data back to the data file
         var JSON_data = JSON.stringify(data)
         fs.writeFile("data.json", JSON_data, function(err){
             if(err)
@@ -182,15 +205,20 @@ module.exports = function(app, path){
 
     })
 
+    //request endpoint for getting groups
     app.get('/getGroups', function(req, res){
         if(!req.body){
             return res.sendStatus(400)
         }
+        //read file data
         var dat = fs.readFileSync("data.json", 'utf8')
         var data = JSON.parse(dat)
         
+        //an array for storing the groups that user belongs to
         var current_user_group = []
+        //an array for storing the group's details 
         var group_details = []
+        //for loop to find out the groups that the user can access
         for(i =0; i<data.users.length; i++){
             if(user === data.users[i].username){
 
@@ -200,6 +228,7 @@ module.exports = function(app, path){
             }
         }
 
+        //for loop to get the details of the group and push them into the array
         for(i=0; i<data.Groups.length; i++){
             for(j=0; j<current_user_group.length; j++){
                 if(data.Groups[i].name === current_user_group[j]){
@@ -208,21 +237,28 @@ module.exports = function(app, path){
             }
         }
   
+        //send the details back to client side
         res.send(group_details);
     })
 
+    //request endpoint for creating group
     app.post('/createGroup', function(req, res){
         if(!req.body){
             return res.sendStatus(400)
         }
+        //read file data
         var dat = fs.readFileSync("data.json", 'utf8')
         var data = JSON.parse(dat)
+        //array for storing the names for groups
         var group_names = []
+        //the current user index
         var currentUser_index;
+        //for loop to push the names of the groups into the array
         for(i = 0; i <data.Groups.length; i++){
             group_names.push(data.Groups[i].name)
         }
 
+        //group object
         group = {}
         group.name = ""
         group.channels = []
@@ -230,6 +266,7 @@ module.exports = function(app, path){
         group.group_assis = []
         group.users = []
 
+        //for loop to get the user index
         for(i = 0; i <data.users.length; i++){
             if(req.body.username === data.users[i].username){
                 currentUser_index = i
@@ -237,6 +274,7 @@ module.exports = function(app, path){
         }
 
 
+        //check if the group is not exist, then push it to the Groups list
         if(group_names.indexOf(req.body.name) == -1){
             group.name = req.body.name
             group.channels = []
@@ -251,6 +289,7 @@ module.exports = function(app, path){
             res.send(false)
         }
 
+        //for loop to push the user who created the group to admin group list
         for(i = 0; i <data.users.length; i++){
             if(data.users[i].role === "Super"){
                 // if(data.users[i].adminGroupList.indexOf(req.body.name) == -1){
@@ -263,7 +302,7 @@ module.exports = function(app, path){
             }
         }
         
-
+        //write the data back to the data file
         var JSON_data = JSON.stringify(data)
         fs.writeFile("data.json", JSON_data, function(err){
             if(err)
@@ -274,13 +313,16 @@ module.exports = function(app, path){
         //res.send(data.Groups);
     })
 
+    //request endpoint for removing group
     app.post('/removeGroup', function(req, res){
         if(!req.body){
             return res.sendStatus(400)
         }
+        //read file data
         var dat = fs.readFileSync("data.json", 'utf8')
         var data = JSON.parse(dat)
         
+        //for loop to remove the group in group array
         for(i = 0; i <data.Groups.length; i++){
             if(req.body.name === data.Groups[i].name){
                 data.Groups.splice(i, 1)
@@ -288,6 +330,7 @@ module.exports = function(app, path){
             }
         }
 
+        //for loop to remove the group in users array
         for(i = 0; i <data.users.length; i++){
             for(j = 0; j<data.users[i].groups.length; j++){
                 if(req.body.name === data.users[i].groups[j].name){
@@ -297,6 +340,7 @@ module.exports = function(app, path){
             }
 
         }
+        //for loop to remove the group in admin group list
         for(i = 0; i <data.users.length; i++){
             for(j = 0; j<data.users[i].adminGroupList.length; j++){
                 if(req.body.name === data.users[i].adminGroupList[j]){
@@ -307,6 +351,7 @@ module.exports = function(app, path){
 
         }
 
+        //write the data back to data file
         var JSON_data = JSON.stringify(data)
         fs.writeFile("data.json", JSON_data, function(err){
             if(err)
@@ -314,6 +359,7 @@ module.exports = function(app, path){
             else
                 console.log("Removed a group")
         });
+        //send data back to client side
         res.send(true)
 
     })
@@ -354,6 +400,18 @@ module.exports = function(app, path){
             valid=true
         }else{
             valid = false
+        }
+
+        var channel = {}
+        channel.name = ""
+        channel.group = ""
+        channel.users = []
+
+        if(selected_group_channels.indexOf(req.body.channel) == -1){
+            channel.name = req.body.channel
+            channel.group = req.body.group
+            channel.users = []
+            data.Channels.push(channel)
         }
 
         res.send(valid)
@@ -423,6 +481,12 @@ module.exports = function(app, path){
                 }
             }
 
+        }
+
+        for(i = 0; i<data.Channels.length; i++){
+            if(req.body.group === data.Channels[i].group && req.body.channel === data.Channels[i].name){
+                data.Channels.splice(i, 1)
+            }
         }
 
         data.Groups[group_index].channels.splice(channel_index, 1)
@@ -630,9 +694,16 @@ module.exports = function(app, path){
                 }
             }
         }
+
+
         console.log(user_group_channels)
         if(user_group_channels.indexOf(req.body.channel) == -1){
             data.users[user_index].groups[group_index].channels.push(req.body.channel)
+            for(i = 0; i<data.Channels.length; i++) {
+                if(req.body.channel === data.Channels[i].name){
+                    data.Channels[i].users.push(req.body.username)
+                }
+            }
             res.send(true)
         }else{
             res.send(false)
@@ -692,6 +763,16 @@ module.exports = function(app, path){
                                 channel_index = j
                             }
                         }
+                    }
+                }
+            }
+        }
+
+        for(i = 0; i<data.Channels.length; i++){
+            if(req.body.group === data.Channels[i].group && req.body.channel === data.Channels[i].name){
+                for(j = 0; j<data.Channels[i].users.length; j++){
+                    if(req.body.username === data.Channels[i].users[j]){
+                        data.Channels[i].users.splice(j, 1)
                     }
                 }
             }
@@ -844,5 +925,22 @@ module.exports = function(app, path){
         });
 
         res.send(message)
+    })
+
+    app.post("/getChannels", function(req, res){
+        if(!req.body){
+            return res.sendStatus(400)
+        }
+        var dat = fs.readFileSync("data.json", 'utf8')
+        var data = JSON.parse(dat)
+        var group_channels = []
+        for(i =0; i<data.Channels.length; i++){
+            if(req.body.group === data.Channels[i].group){
+                group_channels.push(data.Channels[i])
+            }
+        }
+
+        console.log(group_channels)
+        res.send(group_channels)
     })
 }

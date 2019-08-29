@@ -5,13 +5,15 @@ import { ProfileComponent } from './profile/profile.component';
 import { ManagementComponent } from './management/management.component';
 import { UsersComponent } from './users/users.component';
 import { GroupsComponent } from './groups/groups.component';
+import { ChannelsComponent } from './channels/channels.component';
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'profile', component: ProfileComponent},
   {path: 'management', component: ManagementComponent},
   {path: "users", component: UsersComponent},
-  {path: "groups", component: GroupsComponent}
+  {path: "groups", component: GroupsComponent},
+  {path: "channels/:group", component: ChannelsComponent}
 ];
 
 @NgModule({

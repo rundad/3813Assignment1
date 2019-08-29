@@ -95,38 +95,5 @@
             </form>
         </div>
 
-        <div class="rm_user_channel_form">
-            <h4>Remove User From Channel</h4>
-            <form>
-                Groups: 
-                <select [(ngModel)] = "rm_channel_group" name="rm_channel_group" (change)="groupChannel()">
-                    <option [ngValue] ="null">Select Group</option>
-                    <option *ngFor="let group of groups">
-                        {{group.name}}
-                    </option>
-                </select>
-
-                Channels: 
-                <select [(ngModel)] = "rm_channel_name" name="rm_channel_name" (change)="channelUsers()">
-                    <option [ngValue] ="null">Select Channel</option>
-                    <option *ngFor="let channel of rm_group_channels">
-                        {{channel}}
-                    </option>
-                </select>
-
-                Users: 
-                <select [(ngModel)] = "rm_channel_username" name="rm_channel_username">
-                    <option [ngValue] ="null">Select User</option>
-                    <option *ngFor="let user of channel_users">
-                        {{user}}
-                    </option>
-                </select>
-
-                <input type="submit" value="Remove user from channel" (click)="rmUserFromChannel()">
-                
-            </form>
-    
-        </div>
-
     </body>
 </html>

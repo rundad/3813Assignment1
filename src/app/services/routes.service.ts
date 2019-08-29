@@ -105,4 +105,8 @@ export class RoutesService {
   giveSuper(name:string){
     return this.http.post(this.url + "/giveSuper", {name: name})
   }
+
+  getChannels(group: string){
+    return this.http.post(this.url + "/getChannels", {group: group})
+  }
 }

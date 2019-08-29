@@ -21,12 +21,8 @@ body{
     padding: 2%;
 }
 
-.remove_channel_form{
-    border-bottom: solid;
-    border-color: lightgray;
-    padding: 2%;
-}
 
 button{
     font-size: 10px;
 }
+
