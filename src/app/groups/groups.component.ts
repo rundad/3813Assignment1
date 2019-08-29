@@ -97,13 +97,13 @@ export class GroupsComponent implements OnInit {
   }
 
   removeUserFromGroup(group:string, username:string){
-    this.routeService.kickUser(group, username).subscribe(data=>{
-      if(data === true){
-        alert("Kick user: " + username + " out of group: " + group + "?")
-        this.ngOnInit();
-      }
-    })
-    console.log(group, username)
+    if(confirm("Kick user: " + username + " out of group: " + group + "?")){
+      this.routeService.kickUser(group, username).subscribe(data=>{
+        if(data === true){
+          this.ngOnInit();
+        }
+      })
+    }
   }
 
   giveGroupAssis(group:string, username:string){
