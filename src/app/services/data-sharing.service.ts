@@ -9,5 +9,6 @@ export class DataSharingService {
   public isNormalUser: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public isSuperAdmin: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public isGroupAdmin: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public isGroupAssis: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   constructor() { }
 }

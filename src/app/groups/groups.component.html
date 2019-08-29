@@ -13,17 +13,21 @@
                 <p *ngFor = "let channel of group.channels" style="display: inline;">{{channel}}, </p>
             </div>
             <br>
-            <ul *ngFor = "let user of group.users">
-                <li style="display: inline;">User: {{user}} </li>
-                <button (click)="removeUserFromGroup(group.name, user)">Remove User</button>
-            </ul>
+            <div *ngIf="!isGroupAssis">
+                <ul *ngFor = "let user of group.users" >
+                    <li style="display: inline;">User: {{user}} </li>
+                    <button (click)="removeUserFromGroup(group.name, user)">Remove User</button>
+                    <button (click)="giveGroupAssis(group.name, user)">Group Assis</button>
+                </ul>
+            </div>
 
-            <button (click)="removeGroup(group.name)" type="button" class="btn btn-primary">Remove Group</button>
+
+            <button (click)="removeGroup(group.name)" type="button" class="btn btn-primary" *ngIf="!isGroupAssis">Remove Group</button>
         </h5>
         
 
         
-        <div class="group_form">
+        <div class="group_form" *ngIf="!isGroupAssis">
             <h4>Create Group</h4>
             <form>
                 Group Name: <input type="text" id="group_name" name="group_name" [(ngModel)] = "group_name">

@@ -30,6 +30,8 @@ export class LoginComponent implements OnInit {
           this.dataSharingService.isSuperAdmin.next(true);
         }else if(data.role === "Group Admin"){
           this.dataSharingService.isGroupAdmin.next(true);
+        }else if(data.role === "Group Assis"){
+          this.dataSharingService.isGroupAssis.next(true);
         }
         localStorage.setItem("currentUsername", JSON.stringify(data.username));
         localStorage.setItem("userData", JSON.stringify(data));

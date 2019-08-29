@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RoutesService } from '../services/routes.service';
 import { Router } from '@angular/router';
 import { parse } from 'url';
+import { DataSharingService } from "../services/data-sharing.service";
 
 @Component({
   selector: 'app-groups',
@@ -17,13 +18,16 @@ export class GroupsComponent implements OnInit {
   remove_group:string = ""
   remove_channel:string = ""
   channels;
-  
-  constructor(private routeService: RoutesService, private router:Router) { }
+  isGroupAssis:boolean;
+  constructor(private routeService: RoutesService, private router:Router, private dataSharingService: DataSharingService) { }
 
   ngOnInit() {
     this.routeService.getGroups().subscribe(data =>{
       this.groups = data
       console.log(this.groups)
+    })
+    this.dataSharingService.isGroupAssis.subscribe(value =>{
+      this.isGroupAssis = value
     })
   }
 
@@ -99,5 +103,16 @@ export class GroupsComponent implements OnInit {
       }
     })
     console.log(group, username)
+  }
+
+  giveGroupAssis(group:string, username:string){
+    this.routeService.giveAssis(group, username).subscribe(data=>{
+      if(data === true){
+        alert("Provided group assis role to user: " + username)
+        this.ngOnInit();
+      }else{
+        alert("You cannot assign group assis role to Super and Group Admin")
+      }
+    })
   }
 }

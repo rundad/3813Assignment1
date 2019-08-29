@@ -32,6 +32,7 @@ export class UsersComponent implements OnInit {
   isSuperAdmin: boolean;
   create_role:string
   isGroupAdmin:boolean;
+  isGroupAssis:boolean;
   constructor(private routeService: RoutesService, private router: Router, private dataSharingService: DataSharingService) { }
 
   ngOnInit() {
@@ -48,6 +49,9 @@ export class UsersComponent implements OnInit {
     })
     this.dataSharingService.isGroupAdmin.subscribe(value =>{
       this.isGroupAdmin = value
+    })
+    this.dataSharingService.isGroupAssis.subscribe(value =>{
+      this.isGroupAssis = value
     })
   }
 

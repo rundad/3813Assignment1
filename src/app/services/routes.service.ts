@@ -98,4 +98,7 @@ export class RoutesService {
     return this.http.post(this.url + "/createWithSuper", {username: username, email: email, role: role})
   }
 
+  giveAssis(group:string, username:string){
+    return this.http.post(this.url + "/giveAssis", {group:group, username:username})
+  }
 }

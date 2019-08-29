@@ -757,4 +757,39 @@ module.exports = function(app, path){
         });
         
     })
+
+    app.post("/giveAssis", function(req, res){
+        if(!req.body){
+            return res.sendStatus(400)
+        }
+        var dat = fs.readFileSync("data.json", 'utf8')
+        var data = JSON.parse(dat)
+
+        for(i=0; i<data.users.length; i++){
+            if(req.body.username === data.users[i].username){
+                if(data.users[i].role !== "Super" && data.users[i].role !== "Group Admin"){
+                    res.send(true)
+                    data.users[i].role = "Group Assis"
+                    data.users[i].adminGroupList.push(req.body.group)
+                    for(j =0; j<data.Groups.length; j++){
+                        if(req.body.group === data.Groups[j].name){
+                            data.Groups[j].group_assis.push(req.body.username)
+                        }
+                    }
+                }else{
+                    res.send(false)
+                }
+            }
+        }
+
+        var JSON_data = JSON.stringify(data)
+        fs.writeFile("data.json", JSON_data, function(err){
+            if(err)
+                console.log(err);
+            else
+                console.log("Provided a user with group assis role")
+        });
+        
+
+    })
 }

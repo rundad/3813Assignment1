@@ -46,6 +46,7 @@ export class AppComponent {
     this.dataSharingService.isNormalUser.next(false);
     this.dataSharingService.isGroupAdmin.next(false);
     this.dataSharingService.isSuperAdmin.next(false);
+    this.dataSharingService.isGroupAssis.next(false);
     this.router.navigateByUrl("/login")
   }
 
