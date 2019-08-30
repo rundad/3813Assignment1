@@ -351,6 +351,15 @@ module.exports = function(app, path){
 
         }
 
+        for(var k = data.Channels.length; k > 0 ; k -= 1){
+            console.log(k)
+            if(data.Channels[k-1].group === req.body.name){
+                console.log(k)
+                data.Channels.splice(k-1, 1)
+            }
+            
+        }
+
         //write the data back to data file
         var JSON_data = JSON.stringify(data)
         fs.writeFile("data.json", JSON_data, function(err){
