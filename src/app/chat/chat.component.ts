@@ -30,7 +30,7 @@ export class ChatComponent implements OnInit {
   }
 
   joinRoom(){
-
+    this.router.navigateByUrl("/chat-room/" + this.group + "/" + this.channel)
   }
 
 }

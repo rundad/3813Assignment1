@@ -14,6 +14,7 @@ import { GroupsComponent } from './groups/groups.component';
 import { DataSharingService } from "./services/data-sharing.service";
 import { ChannelsComponent } from './channels/channels.component';
 import { ChatComponent } from './chat/chat.component';
+import { ChatRoomComponent } from './chat-room/chat-room.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { ChatComponent } from './chat/chat.component';
     UsersComponent,
     GroupsComponent,
     ChannelsComponent,
-    ChatComponent
+    ChatComponent,
+    ChatRoomComponent
   ],
   imports: [
     BrowserModule,
