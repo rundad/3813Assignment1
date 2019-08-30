@@ -6,6 +6,9 @@
     <body>
         <h2>Users</h2>
         <br>
+        <div class="cbutton">
+            <button type="button" class="btn btn-outline-primary" routerLink="/CreateUser" *ngIf="!isGroupAssis">Create User</button>
+        </div>
         <h5 *ngFor = "let user of users">Username: {{user.username}}
             <br> Email: {{user.email}}
             <br> Role: {{user.role}}
@@ -16,30 +19,6 @@
         </h5>
 
         <br><br>
-        <div class="create_user_form" *ngIf="isGroupAdmin">
-            <h4>Create User</h4>
-            <form>
-                Username: <input type="text" id="username" name="username" [(ngModel)] = "username">
-                Email Address: <input type="text" id="email" name="email" [(ngModel)] = "email">
-                <input type="submit" value="Create" (click)="createUser()">
-            </form>
-        </div>
-
-        <div class="create_user_form" *ngIf="isSuperAdmin">
-            <h4>Create User</h4>
-            <form>
-                Username: <input type="text" id="username" name="username" [(ngModel)] = "username">
-                Email Address: <input type="text" id="email" name="email" [(ngModel)] = "email">
-                Role: 
-                <select [(ngModel)] = "create_role" name="create_role">
-                    <option [ngValue] ="null">Select Role</option>
-                    <option>user</option>
-                    <option>Group Admin</option>
-                </select>
-
-                <input type="submit" value="Create" (click)="createWithSuper()">
-            </form>
-        </div>
   
         <div class="add_user_group_form" *ngIf="!isGroupAssis">
             <h4>Invite User</h4>
@@ -63,37 +42,7 @@
                 <input type="submit" value="Invite User" (click)="inviteUser()">
             </form>
         </div>
- 
-        <div class="add_user_channel_form">
-            <h4>Add User To Channel</h4>
-            <form>
-                Groups: 
-                <select [(ngModel)] = "channel_group" name="channel_group" (change)="gGroupUsers()">
-                    <option [ngValue] ="null">Select Group</option>
-                    <option *ngFor="let group of groups">
-                        {{group.name}}
-                    </option>
-                </select>
-
-                Users: 
-                <select [(ngModel)] = "channel_username" name="channel_username">
-                    <option [ngValue] ="null">Select User</option>
-                    <option *ngFor="let user of channel_group_users">
-                        {{user}}
-                    </option>
-                </select>
-
-                Channels: 
-                <select [(ngModel)] = "channel_name" name="channel_name">
-                    <option [ngValue] ="null">Select Channel</option>
-                    <option *ngFor="let channel of group_channels">
-                        {{channel}}
-                    </option>
-                </select>
-
-                <input type="submit" value="Add User" (click)="addUserToChannel()">
-            </form>
-        </div>
 
     </body>
+    
 </html>

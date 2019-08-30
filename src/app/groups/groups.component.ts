@@ -71,26 +71,6 @@ export class GroupsComponent implements OnInit {
     }
   }
 
-  //The function used to create channel by sending a create channel request to the server
-  //if sent back data is true, reload component and pop message, if is false pop error message
-  //input validation
-  createChannel(){
-    console.log(this.group_channel)
-    if(this.group_channel !== "null" && this.channel_name !== ""){
-      this.routeService.createChannel(this.group_channel, this.channel_name).subscribe(data =>{
-        console.log(data)
-        if(data === true){
-          this.ngOnInit();
-          alert("Created Channel: " + this.channel_name)
-        }else{
-          alert("Error: This channel is already exist in Group: " + this.group_channel)
-        }
-      })
-    }else{
-      alert("Missing group or channel details!")
-    }
-    
-  }
 
   //The function used to get the channels in the group by sending a get channel request to the server with the group name
   getChannel(){
@@ -98,18 +78,6 @@ export class GroupsComponent implements OnInit {
       this.channels = data
     })
   }
-
-  // removeChannel(){
-  //   if(confirm("Are you sure to remove Channel: " + this.remove_channel +  " from " + "Group: " + this.remove_group + "?")) {
-  //     this.routeService.removeChannel(this.remove_group, this.remove_channel).subscribe(data =>{
-  //       console.log(data)
-  //       if(data === true){
-  //         this.ngOnInit();
-  //         alert("Removed Channel: " + this.remove_channel + " from " + "Group: " + this.remove_group)
-  //       }
-  //     })
-  //   }
-  // }
 
   //The function used to remove a user from the group by sending a remove user from group request to the server
   //Parameters: group - the name of the group, username - the name of the user

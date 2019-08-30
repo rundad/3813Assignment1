@@ -967,6 +967,7 @@ module.exports = function(app, path){
                 for(j = 0; j<data.users[i].groups.length; j++){
                     user_groups.push(data.users[i].groups[j].name)
                 }
+
             }
         }
         console.log(user_groups)
@@ -986,13 +987,13 @@ module.exports = function(app, path){
         for(i=0; i<data.users.length; i++){
             if(user === data.users[i].username){
                 for(j = 0; j<data.users[i].groups.length; j++){
-                    if(req.body.group === data.users[i].groups[j].name){
-                        console.log(data.users[i].groups[j].name)
-                        for(k =0; k<data.users[i].groups[j].channels.length; k++){
-                            channels_name.push(data.users[i].groups[j].channels[k])
+                        if(req.body.group === data.users[i].groups[j].name){
+                            console.log(data.users[i].groups[j].name)
+                            for(k =0; k<data.users[i].groups[j].channels.length; k++){
+                                channels_name.push(data.users[i].groups[j].channels[k])
+                            }
                         }
                     }
-                }
             }
         }
         console.log(channels_name)

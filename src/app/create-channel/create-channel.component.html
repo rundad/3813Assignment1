@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+    </head>
+    <body>
+        <h2>Create Channel</h2>
+        <div class="channel_form">
+            <form>
+                Group: 
+                <select [(ngModel)] = "group_channel" name="group_channel">
+                    <option [ngValue] ="null">Select Group</option>
+                    <option *ngFor="let group of groups">
+                        {{group.name}}
+                    </option>
+                </select>
+                Channel Name: <input type="text" id="channel_name" name="channel_name" [(ngModel)] = "channel_name">
+                <input type="submit" value="Create Channel" (click)="createChannel()">
+            </form>
+        </div>
+        
+        <br><br>
+    </body>
+    <footer><button type="button" class="btn btn-outline-primary" routerLink="/groups">Back</button></footer>
+</html>

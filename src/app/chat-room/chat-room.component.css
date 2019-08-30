@@ -222,3 +222,12 @@
 	height: 516px;
 	overflow-y: auto;
 }
+
+h2{
+	text-align: center;
+	text-decoration-line: underline;
+}
+
+footer{
+	text-align: center
+}

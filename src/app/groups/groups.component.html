@@ -6,6 +6,8 @@
     <body>
         <h2>Groups & Channels</h2>
         <br>
+        <button type="button" class="btn btn-outline-primary" routerLink="/CreateChannel">Create Channel</button>
+        <br>
         <h5 *ngFor = "let group of groups">Group Name: {{group.name}}
             <br>
             Channels:
@@ -35,25 +37,6 @@
                 <input type="submit" value="Create Group" (click)="createGroup()">
             </form>
         </div>
-        
-
-        <div class="channel_form">
-            <h4>Create Channel</h4>
-            <form>
-                Group: 
-                <select [(ngModel)] = "group_channel" name="group_channel">
-                    <option [ngValue] ="null">Select Group</option>
-                    <option *ngFor="let group of groups">
-                        {{group.name}}
-                    </option>
-                </select>
-                Channel Name: <input type="text" id="channel_name" name="channel_name" [(ngModel)] = "channel_name">
-                <input type="submit" value="Create Channel" (click)="createChannel()">
-            </form>
-        </div>
-        
-
-        
-
+ 
     </body>
 </html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+    </head>
+    <body>
+        <h2>Create User</h2>
+
+        <br><br>
+        <div class="create_user_form" *ngIf="isGroupAdmin">
+            <form>
+                Username: <input type="text" id="username" name="username" [(ngModel)] = "username">
+                Email Address: <input type="text" id="email" name="email" [(ngModel)] = "email">
+                <input type="submit" value="Create" (click)="createUser()">
+            </form>
+        </div>
+
+        <div class="create_user_form" *ngIf="isSuperAdmin">
+            <h4>Create User</h4>
+            <form>
+                Username: <input type="text" id="username" name="username" [(ngModel)] = "username">
+                Email Address: <input type="text" id="email" name="email" [(ngModel)] = "email">
+                Role: 
+                <select [(ngModel)] = "create_role" name="create_role">
+                    <option [ngValue] ="null">Select Role</option>
+                    <option>user</option>
+                    <option>Group Admin</option>
+                </select>
+
+                <input type="submit" value="Create" (click)="createWithSuper()">
+            </form>
+        </div>
+
+    </body>
+    <footer><button type="button" class="btn btn-outline-primary" routerLink="/users">Back</button></footer>
+</html>
