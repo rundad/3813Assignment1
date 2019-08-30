@@ -953,4 +953,49 @@ module.exports = function(app, path){
         console.log(group_channels)
         res.send(group_channels)
     })
+
+    app.get("/getUserGroups", function(req, res){
+        if(!req.body){
+            return res.sendStatus(400)
+        }
+        var dat = fs.readFileSync("data.json", 'utf8')
+        var data = JSON.parse(dat)
+
+        var user_groups = []
+        for(i=0; i<data.users.length; i++){
+            if(user === data.users[i].username){
+                for(j = 0; j<data.users[i].groups.length; j++){
+                    user_groups.push(data.users[i].groups[j].name)
+                }
+            }
+        }
+        console.log(user_groups)
+
+        res.send(user_groups)
+        
+    })
+
+    app.post("/getUserGroupCh", function(req, res){
+        if(!req.body){
+            return res.sendStatus(400)
+        }
+        var dat = fs.readFileSync("data.json", 'utf8')
+        var data = JSON.parse(dat)
+        var channels_name = []
+        console.log(data.users[0].groups[0].name)
+        for(i=0; i<data.users.length; i++){
+            if(user === data.users[i].username){
+                for(j = 0; j<data.users[i].groups.length; j++){
+                    if(req.body.group === data.users[i].groups[j].name){
+                        console.log(data.users[i].groups[j].name)
+                        for(k =0; k<data.users[i].groups[j].channels.length; k++){
+                            channels_name.push(data.users[i].groups[j].channels[k])
+                        }
+                    }
+                }
+            }
+        }
+        console.log(channels_name)
+        res.send(channels_name)
+    })
 }

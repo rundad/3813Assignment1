@@ -21,6 +21,9 @@
       <li class="nav-item">
         <a class="nav-link" *ngIf="!isNormalUser" (click)="goGroups()">Groups</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" (click)="goChat()">Chat</a>
+      </li>
     </ul>
     <span class="navbar-text">
       <button class="nav-link" *ngIf="!isUserLoggedIn" routerLink="/login">Login</button> 

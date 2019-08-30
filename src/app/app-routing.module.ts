@@ -6,6 +6,7 @@ import { ManagementComponent } from './management/management.component';
 import { UsersComponent } from './users/users.component';
 import { GroupsComponent } from './groups/groups.component';
 import { ChannelsComponent } from './channels/channels.component';
+import { ChatComponent } from './chat/chat.component';
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -13,7 +14,8 @@ const routes: Routes = [
   {path: 'management', component: ManagementComponent},
   {path: "users", component: UsersComponent},
   {path: "groups", component: GroupsComponent},
-  {path: "channels/:group", component: ChannelsComponent}
+  {path: "channels/:group", component: ChannelsComponent},
+  {path: "chat", component: ChatComponent}
 ];
 
 @NgModule({

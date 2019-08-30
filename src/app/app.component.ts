@@ -86,4 +86,12 @@ export class AppComponent {
       this.router.navigateByUrl("/groups")
     }
   }
+
+  goChat(){
+    if(JSON.parse(localStorage.getItem("currentUsername")) === null){
+      this.router.navigateByUrl("/login")
+    }else{
+      this.router.navigateByUrl("/chat")
+    }
+  }
 }

@@ -13,6 +13,7 @@ import { UsersComponent } from './users/users.component';
 import { GroupsComponent } from './groups/groups.component';
 import { DataSharingService } from "./services/data-sharing.service";
 import { ChannelsComponent } from './channels/channels.component';
+import { ChatComponent } from './chat/chat.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { ChannelsComponent } from './channels/channels.component';
     ManagementComponent,
     UsersComponent,
     GroupsComponent,
-    ChannelsComponent
+    ChannelsComponent,
+    ChatComponent
   ],
   imports: [
     BrowserModule,

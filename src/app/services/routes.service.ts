@@ -134,4 +134,12 @@ export class RoutesService {
   getChannels(group: string){
     return this.http.post(this.url + "/getChannels", {group: group})
   }
+
+  getUserGroups(){
+    return this.http.get(this.url + "/getUserGroups")
+  }
+
+  getUserGroupChannels(group:string){
+    return this.http.post(this.url + "/getUserGroupCh", {group: group})
+  }
 }
