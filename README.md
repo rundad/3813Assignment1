@@ -12,7 +12,132 @@ In Angular, components control a patch of screen called a view. The components a
 
 ## REST API
 
+In the project, I used http request to access the routes at the server side to get the details I want, to create items and delete items. The http method I have used are get and post, all the routes in the project used these two http method. And the routes that the project has are:
 
+1. login route - post request route
+    Parameters: email - string; the email is the only paramter that the route will take and it is also the data that will sent to the servide in the request body. The value of the paremater is the value the user have entered in the login form
+    Return value: The login route will return a user object depends on whos the user have logged in
+    Purpose: To check that is the user exist in the data by checking the email is exist in server side. If the email does exist, send the user object back to client side with a valid property of value true, if the email does not exist, send the user object back to client side but the valid property of value false.
+
+2. getUsers route - get request route
+    Parameters: This route does not have parameters
+    Return Value: This route returns all the user objects in the data
+    Purpose: To get all the users details and display them on the page
+
+3. createUser route -post request route
+    Parameter: username - string, email - string, the value of parameters are get from the values that the user have entered in the create user form
+    Return Value: This route returns a boolean, if the username is already exist, return false to the client side, if the username and email does not exist, created a new user object in the data and return true to client side
+    Purpose: To create a new user by using the details in the form
+
+4. removeUser route - post request route
+    Parameter: username - string; used to determine which user to be removed
+    Return Value: This route returns a boolean value, if the user in remove action is a super admin, return false because they cannot be deleted and if a user is not a super admin, remove the user
+    Purpose: To remove a user from the data
+
+5. getGroups route - get request route
+    Parameter: This route does not have parameters
+    Return Value: This routes returns the groups details that the user have control with, if the user is a super admin returns all the groups
+    Purpose: To get the details of the groups and display them on the page
+
+6. createGroup route - post request route
+    Parameter: name - string, username - string; the name parameter is the name of the group that the user want to create and the username is the name of the user who created the group
+    Return Value: This route returns a boolean value, if the group already exist return false, and if the group does not exist, create the group and return true
+    Purpose: To create a new group
+
+7. removeGroup route - post request route
+    Parameter: name - string; the name of the group that is going to be removed
+    Return Value: This route returns a boolean value of true
+    Purpose: To remove a group in data
+
+8. createChannel route - post request route
+    Parameter: group - string, channel - string; group is the name of the group that the channel want to be created in, and channel is the name of the channel that the user want to create. 
+    Return Value: This route returns a boolean value, if the channel is already exist in the group, return false, if the channel does not exist in the group return true.
+    Purpose: To create a new channel in the group
+
+9. getChannel route - post request route
+    Parameter: group - string; the name of the group
+    Return Value: This route returns an array of channels that in the group
+    Purpose: To get the channels in the group
+
+10. removeChannel route - post request route
+    Parameter: group - string, channel - string; group is the name of the group that the channel belongs to and the channel is the name of the channel
+    Return Value: This route returns a boolean value of true
+    Purpose: To remove a channel in a group
+
+11. getCurrentUser route - get request route
+    Parameter: This route does not have parameters
+    Return Value: This route returns a user object depends on whos the user have logged in
+    Purpose: To get the details of the logged in user
+
+12. inviteUser route - post request route
+    Parameter: group - string, username - string; the group is the name of the group that the user want to invite user to, and the username is the name of the user
+    Return Value: This route return a boolean value, return false if the user already in the group, return true if the user does not in the group
+    Purpose: To invite a user to a group
+
+13. getGroupUsers route - post request route
+    Parameter: group - string; the name of the group
+    Return Value: This route returns an array of user objects that in the group
+    Purpose: To all the users that in the group
+
+14. kickUser route - post request route
+    Parameter: group: string, username - string; group is the group that the user is in and the username is the name of the user who is going to be removed from the group
+    Return Value: This route returns a boolean value of true
+    Purpose: To kick a user out of the group
+
+15. gGroupUsers route - post request route
+    Parameter: group: string
+    Return Value: This route returns a list of user objects that in the group
+    Purpose: To get all the user details of the users who in the group
+
+16. getGroupChannel route - post request route
+    Parameter: group - string; the name of the group
+    Return Value: This route returns a list of channels that in the group
+    Purpose: To get all the channels in the group
+
+17. addUserChannel route - post request route
+    Parameter: group - string, username - string, channel - string; group is the name of the group, username is the name of the user and the channel is the name of the channel
+    Return Value: This route returns a boolean value, return false if the user already in the channel of the group, else return true
+    Purpose: To invite a user into the channel of the group
+
+18. getChannelUsers route - post request route
+    Parameter: group - string, channel - string; group is the name of the group and the channel is the name of the channel
+    Return Value: This route returns a list of users that in the channel of the group
+    Purpose: To get all the users that in the selected channel in the selected group
+
+19. rmUserFromChannel route - post request route
+    Parameter: group - string, username: string, channel - string; group is the name of the group that the remove action is going occured in, the username if the user who will be going to be removed from the channel and the channel is the channel that the user is going to removed off
+    Return Value: This route returns a boolean value of true
+    Purpose: To remove a user from a channel
+
+21. createWithSuper route - post request route
+    Parameter: username - string, email - string, role - string; the value username, email and role are get from the create user form which entered by admins. 
+    Return Value: This route returns a boolean value, return true if the user does not already exist in the data, else return false
+    Purpose: To create a user with different roles
+
+22. giveAssis route - post request route
+    Parameter: group - string, username - string; group is the name of the group and username is the name of the user
+    Return Value: This route returns a boolean value, return false is the user is a super or a group admin so we cannot provide them group assis role, else return true 
+    Purpose: To provide a user in the group Group Assis role
+
+23. giveSuper route - post request route
+    Parameter: name - string; the username of the user
+    Return Value: This route returns a boolean value, returns true if the user is not a super admin, else returns false
+    Purpose: To provied a user super admin role
+
+24. getChannels route - post request route
+    Parameter: group - string; the name of the group
+    Return Value: This route returns a list of channel objects of the group
+    Purpose: To get all the channels details of the group by getting the channel objects in server side
+
+25. getUserGroups route - get request route
+    Parameter: This route does not have parameters
+    Return Value: This route returns a list of groups that the user belongs to
+    Purpose: To get all the groups that the user have joined
+
+26. getUserGroupChannels route - post request route
+    Parameter: group - string; the name of the group
+    Return Value: This route returns a list of channels of the group that the user joined
+    Purpose: To get all the user's channels of the group
 
 ## Data Structure
 
