@@ -15,9 +15,9 @@ In Angular, components control a patch of screen called a view. The components a
 In the project, I used http request to access the routes at the server side to get the details I want, to create items and delete items. The http method I have used are get and post, all the routes in the project used these two http method. And the routes that the project has are:
 
 1. login route - post request route
-    -Parameters: email - string; the email is the only paramter that the route will take and it is also the data that will sent to the servide in the request body. The value of the paremater is the value the user have entered in the login form
-    -Return value: The login route will return a user object depends on whos the user have logged in
-    -Purpose: To check that is the user exist in the data by checking the email is exist in server side. If the email does exist, send the user object back to client side with a valid property of value true, if the email does not exist, send the user object back to client side but the valid property of value false.
+    ---Parameters: email - string; the email is the only paramter that the route will take and it is also the data that will sent to the servide in the request body. The value of the paremater is the value the user have entered in the login form
+    ---Return value: The login route will return a user object depends on whos the user have logged in
+    ---Purpose: To check that is the user exist in the data by checking the email is exist in server side. If the email does exist, send the user object back to client side with a valid property of value true, if the email does not exist, send the user object back to client side but the valid property of value false.
 
 2. getUsers route - get request route
     Parameters: This route does not have parameters
