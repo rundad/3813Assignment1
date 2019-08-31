@@ -87,6 +87,8 @@ export class AppComponent {
     }
   }
 
+  //The function that will be called when the Chat button on the nav bar have been clicked
+  //Take the user to the chat component
   goChat(){
     if(JSON.parse(localStorage.getItem("currentUsername")) === null){
       this.router.navigateByUrl("/login")

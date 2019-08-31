@@ -13,6 +13,8 @@ export class ChatRoomComponent implements OnInit {
   channel_name:string
   constructor(private activatedRoute: ActivatedRoute, private router:Router, private routeService:RoutesService) { }
 
+  //The function that will be called when the component loads
+  //Get the group name and channel name from the url parameters
   ngOnInit() {
     this.activatedRoute.paramMap.subscribe(
          params => {this.group_name = params.get('group');}

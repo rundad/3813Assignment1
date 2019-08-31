@@ -17,6 +17,8 @@ export class CreateUserComponent implements OnInit {
   isGroupAdmin:boolean
   constructor(private routeService: RoutesService, private router:Router, private dataSharingService: DataSharingService) { }
 
+  //The function that will be called when the componnet loads
+  //Get the data status through the data sharing service
   ngOnInit() {
     this.dataSharingService.isSuperAdmin.subscribe(value =>{
       this.isSuperAdmin = value
@@ -26,6 +28,8 @@ export class CreateUserComponent implements OnInit {
     })
   }
 
+  //The function that will be called when the create user button have been clicked in the created user form
+  //Send a request to the server side to create a new user by calling the method in route service
   createUser(){
     if(this.username !== "" && this.email !== ""){
       this.routeService.createUser(this.username, this.email).subscribe(data=>{
@@ -42,6 +46,9 @@ export class CreateUserComponent implements OnInit {
   
   }
 
+  //The function that will be called when the create user button have been clicked in the create user form
+  //only the super admin have clicked the button can access to the this form and function
+  //Send a request to server side to create a user by calling the method through route service
   createWithSuper(){
     this.routeService.createWithSuper(this.username, this.email, this.create_role).subscribe(data=>{
       if(data === true){

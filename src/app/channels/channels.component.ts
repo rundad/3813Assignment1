@@ -16,6 +16,9 @@ export class ChannelsComponent implements OnInit {
   channel_name:string = ""
   constructor(private activatedRoute: ActivatedRoute, private router:Router, private routeService:RoutesService) { }
 
+  //The function that will be called when the component loads
+  //Get the group parameter from the url and store into a variable
+  //Make http request to server side to get the group channels and group users
   ngOnInit() {
     this.activatedRoute.paramMap.subscribe(
          params => {this.group_name = params.get('group');}
@@ -31,6 +34,8 @@ export class ChannelsComponent implements OnInit {
 
   }
 
+  //The function that will be called when the remove channel button have been clicked
+  //Call the removeChannel method to request remove channel to server side and remove a channel
   removeChannel(channel:string){
     if(confirm("Are you sure to remove Channel: " + channel +  " from " + "Group: " + this.group_name + "?")){
       this.routeService.removeChannel(this.group_name, channel).subscribe(data=>{
@@ -43,6 +48,8 @@ export class ChannelsComponent implements OnInit {
     
   }
 
+  //The function that will be called when the remove user button have been clicked inside a channel
+  //Call the emUserFromChannel method to request remove user from channel to server side to remove user from channel
   rmUserFromChannel(username:string, channel:string){
     this.routeService.rmUserFromChannel(this.group_name, username, channel).subscribe(data=>{
       if(data === true){
@@ -52,6 +59,8 @@ export class ChannelsComponent implements OnInit {
     })
   }
 
+  //The function that will be called when the Add user button have been clicked inside a channel
+  //Call the addUserChannel method to request add user to channel to server side to add user to a channel
   addUserToChannel(){
     this.routeService.addUserChannel(this.group_name, this.channel_username, this.channel_name).subscribe(data=>{
       if(data === true){
