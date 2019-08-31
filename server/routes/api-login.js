@@ -594,7 +594,7 @@ module.exports = function(app, path){
         }
         var dat = fs.readFileSync("data.json", 'utf8')
         var data = JSON.parse(dat)
-
+        var user_position =0
         for(i=0; i<data.users.length; i++){
             if(req.body.username === data.users[i].username){
                 for(j = 0; j<data.users[i].groups.length; j++){
@@ -630,6 +630,25 @@ module.exports = function(app, path){
                 for(j = 0; j<data.Groups[i].group_admin.length; j++){
                     if(req.body.username === data.Groups[i].group_admin[j]){
                         data.Groups[i].group_admin.splice(j, 1)
+                    }
+                }
+            }
+        }
+
+        for(i=0; i<data.users.length; i++){
+            if(req.body.username === data.users[i].username){
+                user_position = i
+            }
+        }
+
+        if(data.users[user_position].role === "Group Assis"){
+            data.users[user_position].role = "user"
+            for(i=0; i<data.Groups.length; i++){
+                if(req.body.group === data.Groups[i].name){
+                    for(j = 0; j<data.Groups[i].group_assis.length; j++){
+                        if(req.body.username === data.Groups[i].group_assis[j]){
+                            data.Groups[i].group_assis.splice(j, 1)
+                        }
                     }
                 }
             }
