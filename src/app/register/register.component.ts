@@ -4,21 +4,22 @@ import { Router } from '@angular/router';
 import { DataSharingService } from "../services/data-sharing.service";
 
 @Component({
-  selector: 'app-create-user',
-  templateUrl: './create-user.component.html',
-  styleUrls: ['./create-user.component.css']
+  selector: 'app-register',
+  templateUrl: './register.component.html',
+  styleUrls: ['./register.component.css']
 })
-export class CreateUserComponent implements OnInit {
+export class RegisterComponent implements OnInit {
 
   username:string = ""
   email:string = ""
-  create_role:string
-  isSuperAdmin:boolean
-  isGroupAdmin:boolean
+  role: string = "user"
+  password: string = ""
+  create_role:string = ""
+  isSuperAdmin;
+  isGroupAdmin;
+
   constructor(private routeService: RoutesService, private router:Router, private dataSharingService: DataSharingService) { }
 
-  //The function that will be called when the componnet loads
-  //Get the data status through the data sharing service
   ngOnInit() {
     this.dataSharingService.isSuperAdmin.subscribe(value =>{
       this.isSuperAdmin = value
@@ -28,7 +29,7 @@ export class CreateUserComponent implements OnInit {
     })
   }
 
-  //The function that will be called when the create user button have been clicked in the created user form
+   //The function that will be called when the create user button have been clicked in the created user form
   //Send a request to the server side to create a new user by calling the method in route service
   createUser(){
     if(this.username !== "" && this.email !== ""){
@@ -58,5 +59,4 @@ export class CreateUserComponent implements OnInit {
       }
     })
   }
-
 }

@@ -26,6 +26,7 @@ body h2{
 }
 
 .add_user_group_form{
+    text-align: center;
     border-bottom: solid;
     border-color: lightgrey;
     padding:2%;

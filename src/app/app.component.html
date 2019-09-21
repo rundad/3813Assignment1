@@ -13,9 +13,6 @@
         <a class="nav-link" (click)="goProfile()">Profile</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" *ngIf="!isNormalUser" (click)="goManage()">Management</a>
-      </li>
-      <li class="nav-item">
         <a class="nav-link" *ngIf="!isNormalUser" (click)="goUsers()">Users</a>
       </li>
       <li class="nav-item">
@@ -26,8 +23,9 @@
       </li>
     </ul>
     <span class="navbar-text">
-      <button class="nav-link" *ngIf="!isUserLoggedIn" routerLink="/login">Login</button> 
-      <button class="nav-link" *ngIf="isUserLoggedIn" (click)="logout()">Sign Out</button>
+      <button type="button" class="btn btn-info" routerLink="/register">Register</button> 
+      <button type="button" class="btn btn-outline-primary" *ngIf="!isUserLoggedIn" routerLink="/login">Login </button> 
+      <button type="button" class="btn btn-outline-danger" *ngIf="isUserLoggedIn" (click)="logout()">Sign Out</button>
     </span>
   </div>
 </nav>

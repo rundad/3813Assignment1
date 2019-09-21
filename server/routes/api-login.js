@@ -599,6 +599,15 @@ module.exports = function(app, path){
             for(i=0; i<data.users.length; i++){
                 if(req.body.username === data.users[i].username){
                     data.users[i].groups.push({name: req.body.group, channels:[]})
+                    if(data.users[i].role === "Group Admin"){
+                        console.log("group admin")
+                        data.users[i].adminGroupList.push(req.body.group)
+                        for(j=0; j<data.Groups.length; j++){
+                            if(req.body.group === data.Groups[j].name){
+                                data.Groups[j].group_admin.push(data.users[i].username)
+                            }
+                        }
+                    }
                 }
             }
             res.send(true)

@@ -4,19 +4,37 @@
 
     </head>
     <body>
-        <h2>Users</h2>
+        <h2>List of Users</h2>
         <br>
-        <div class="cbutton">
-            <button type="button" class="btn btn-outline-primary" routerLink="/CreateUser" *ngIf="!isGroupAssis">Create User</button>
+
+        <div class="conatiner" style="padding-left: 20px;">
+
+            <table class="table">
+                <tr>
+                    <th>
+                        Username
+                    </th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th *ngIf="isSuperAdmin">Manage</th>
+                    <th>Groups</th>
+  
+                </tr>
+                <tr style="padding-top:20px;" *ngFor = "let user of users; let i = index"> 
+                    <td>{{user.username}}</td> 
+                    <td>{{user.email}}</td>  
+                    <td>{{user.role}}</td>  
+                    
+                    <td *ngIf="isSuperAdmin">
+                        <span class="btn btn-primary" (click)="giveSuperRole(user.username)" > <i class="fa fa-spinner" ></i>Super Admin</span> 
+                        &nbsp; 
+                        <span class="btn btn-primary" (click)="removeUser(user.username)"><i class="fa fa-trash"></i> Delete</span>
+                    </td> 
+                    <td *ngFor = "let group of user.groups">{{group.name}}, </td>  
+                    
+                </tr>
+            </table>
         </div>
-        <h5 *ngFor = "let user of users">Username: {{user.username}}
-            <br> Email: {{user.email}}
-            <br> Role: {{user.role}}
-            <br>Groups: <div style="display: inline-block;"><p *ngFor = "let group of user.groups" style="display: inline;">{{group.name}}, </p></div>
-            <br>
-            <button (click)="removeUser(user.username)" type="button" class="btn btn-primary" *ngIf="isSuperAdmin">Remove User</button> 
-            <button (click)="giveSuperRole(user.username)" type="button" class="btn btn-dark" *ngIf="isSuperAdmin" >Super Admin</button>
-        </h5>
 
         <br><br>
   

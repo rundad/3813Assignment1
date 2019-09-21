@@ -8,7 +8,6 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { ProfileComponent } from './profile/profile.component';
-import { ManagementComponent } from './management/management.component';
 import { UsersComponent } from './users/users.component';
 import { GroupsComponent } from './groups/groups.component';
 import { DataSharingService } from "./services/data-sharing.service";
@@ -16,21 +15,21 @@ import { ChannelsComponent } from './channels/channels.component';
 import { ChatComponent } from './chat/chat.component';
 import { ChatRoomComponent } from './chat-room/chat-room.component';
 import { CreateChannelComponent } from './create-channel/create-channel.component';
-import { CreateUserComponent } from './create-user/create-user.component';
+import { SocketService } from './services/socket.service';
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     ProfileComponent,
-    ManagementComponent,
     UsersComponent,
     GroupsComponent,
     ChannelsComponent,
     ChatComponent,
     ChatRoomComponent,
     CreateChannelComponent,
-    CreateUserComponent
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
@@ -39,7 +38,7 @@ import { CreateUserComponent } from './create-user/create-user.component';
     CommonModule,
     HttpClientModule
   ],
-  providers: [DataSharingService],
+  providers: [DataSharingService, SocketService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

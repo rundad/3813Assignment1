@@ -31,6 +31,7 @@ export class UsersComponent implements OnInit {
   isSuperAdmin: boolean;
   isGroupAdmin:boolean;
   isGroupAssis:boolean;
+
   constructor(private routeService: RoutesService, private router: Router, private dataSharingService: DataSharingService) { }
 
   //The function will be called when the components loads
@@ -53,7 +54,8 @@ export class UsersComponent implements OnInit {
     })
     this.dataSharingService.isGroupAssis.subscribe(value =>{
       this.isGroupAssis = value
-    })
+    });
+
   }
 
   //The function used to remove a user

@@ -4,36 +4,38 @@
 	
 	</head>
 	<body>
-
 		<h2>{{channel_name}} in {{group_name}}</h2>
 		<div class="messaging">
-		<div class="inbox_msg">
-			<div class="inbox_people">
-			<div class="headind_srch">
+			<div class="inbox_msg">
+				<div class="inbox_people">
+					<div class="headind_srch">
 
-				<div class="recent_heading">
-				<h4>Chat History</h4>
+						<div class="recent_heading">
+							<h4>Chat History</h4>
+						</div>
+
+					</div>
+					<div class="inbox_chat scroll">
+
+
+					</div>
 				</div>
+				<div class="mesgs">
+					<ul>
+						<li *ngFor = 'let message of messages'>{{message}}</li>	
+					</ul>
 
-			</div>
-			<div class="inbox_chat scroll">
+					<div class="msg_history">
 				
-
-			</div>
-			</div>
-			<div class="mesgs">
-			<div class="msg_history">
-				
-
-			</div>
-			<div class="type_msg">
-				<div class="input_msg_write">
-				<input type="text" class="write_msg" placeholder="Type a message" />
-				<button class="msg_send_btn" type="button"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+					</div>
+					<div class="type_msg">
+						<div class="input_msg_write">
+							<input type="text" class="write_msg" placeholder="Type a message" [(ngModel)]="messagecontent" id="messagecontent">
+							<button class="btn btn-primary" type="button" (click)="chat()">Send</button>
+						</div>
+					</div>
 				</div>
 			</div>
-			</div>
-		</div>
 		</div>
 
 	</body>
