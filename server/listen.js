@@ -1,10 +1,8 @@
-module.exports = {
-    listen: function(app, PORT){
-        app.listen(PORT, () =>{
-            let d = new Date();
-            let h = d.getHours();
-            let m = d.getMinutes();
-            console.log("Server has been started on port " + PORT + " at " + h + " : " + m);
-        })
-    }
+module.exports = function(http){
+    http.listen(3000,()=>{
+        var d = new Date();
+        var n = d.getHours();
+        var m = d.getMinutes();
+        console.log('Server has been started at : ' + n + ':' +m);
+      });
 }

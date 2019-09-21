@@ -25,17 +25,17 @@ export class LoginComponent implements OnInit {
   //Store the data into the local storage
   //Check the valid property, if true navigate to the profile page, if not pop message
   login(){
-    this.routeService.login(this.email).subscribe(data=>{
-      if(data.valid === true){
+    this.routeService.login(this.email, this.password).subscribe(data=>{
+      if(data[0].valid === false){
         this.dataSharingService.isUserLoggedIn.next(true);
-        if(data.role === "user"){
+        if(data[0].role === "user"){
           this.dataSharingService.isNormalUser.next(true);
-        }else if(data.role === "Super"){
+        }else if(data[0].role === "Super"){
           
           this.dataSharingService.isSuperAdmin.next(true);
-        }else if(data.role === "Group Admin"){
+        }else if(data[0].role === "Group Admin"){
           this.dataSharingService.isGroupAdmin.next(true);
-        }else if(data.role === "Group Assis"){
+        }else if(data[0].role === "Group Assis"){
           this.dataSharingService.isGroupAssis.next(true);
         }
         localStorage.setItem("currentUsername", JSON.stringify(data.username));

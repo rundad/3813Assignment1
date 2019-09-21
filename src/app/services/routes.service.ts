@@ -19,8 +19,8 @@ export class RoutesService {
   constructor(private http: HttpClient) { }
 
   //The login method which sends the login request to the server
-  login(email:string){
-    return this.http.post<user>(this.url + '/api/auth', {email: email});
+  login(email:string, password:string){
+    return this.http.post<user>(this.url + '/api/auth', {email: email, password:password});
   }
 
   //The method that sends the get users request to the server to get all the users
@@ -29,13 +29,13 @@ export class RoutesService {
   }
 
   //The method that sends the createuser request to the server for creating a user
-  createUser(username: string, email: string){
-    return this.http.post(this.url + "/createUser", {username: username, email: email});
+  createUser(user:any){
+    return this.http.post(this.url + "/createUser", user);
   }
 
   //The method that sends the remove user request to the server for removing a user
-  removeUser(username: string){
-    return this.http.post(this.url + "/removeUser", {username:username});
+  removeUser(objID: string){
+    return this.http.post(this.url + "/removeUser", {objID:objID});
   }
 
   //The method that sends the get groups request to the server for get all the groups
@@ -115,8 +115,8 @@ export class RoutesService {
   }
 
   //The method used to send the create with super request to the server for creating a user with super admin role
-  createWithSuper(username: string, email: string, role:string){
-    return this.http.post(this.url + "/createWithSuper", {username: username, email: email, role: role})
+  createWithSuper(user: any){
+    return this.http.post(this.url + "/createWithSuper", user)
   }
 
   //The method used to send the giveAssis request to the server for giving group assis role to a user

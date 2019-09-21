@@ -33,7 +33,7 @@ export class RegisterComponent implements OnInit {
   //Send a request to the server side to create a new user by calling the method in route service
   createUser(){
     if(this.username !== "" && this.email !== ""){
-      this.routeService.createUser(this.username, this.email).subscribe(data=>{
+      this.routeService.createUser({username: this.username, email:this.email, password: this.password, role: this.role, groups: [], adminGroupList:[], valid:false}).subscribe(data=>{
         console.log(data)
         if(data === true){
           alert("Successfully created a user")
@@ -51,7 +51,7 @@ export class RegisterComponent implements OnInit {
   //only the super admin have clicked the button can access to the this form and function
   //Send a request to server side to create a user by calling the method through route service
   createWithSuper(){
-    this.routeService.createWithSuper(this.username, this.email, this.create_role).subscribe(data=>{
+    this.routeService.createWithSuper({username: this.username, email: this.email, password: this.password, role: this.create_role, groups: [], adminGroupList:[], valid:false}).subscribe(data=>{
       if(data === true){
         alert("Create user with role: " + this.create_role)
       }else{

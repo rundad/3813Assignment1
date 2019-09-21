@@ -5,6 +5,7 @@
     </head>
     <body>
         <h2>Channels in {{group_name}}</h2>
+        <button type="button" class="btn btn-outline-primary" routerLink="/CreateChannel">Create Channel</button>
         <h5 *ngFor = "let channel of group_channels">Channel Name: {{channel.name}}
             <br>
             Users:

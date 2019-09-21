@@ -17,9 +17,9 @@ export class AppComponent {
     this.dataSharingService.isUserLoggedIn.subscribe( value => {
       this.isUserLoggedIn = value;
   });
-    this.dataSharingService.isNormalUser.subscribe(value =>{
-      this.isNormalUser = value
-    })
+  this.dataSharingService.isNormalUser.subscribe(value =>{
+    this.isNormalUser = value
+  })
   }
 
   //The function which will be called when the components loads, update user login status
@@ -29,15 +29,16 @@ export class AppComponent {
     }else{
       console.log("No Storage Support");
     }
-    if(JSON.parse(localStorage.getItem("currentUsername")) !== null){
+    if((localStorage.getItem("currentUsername")) !== null){
       this.dataSharingService.isUserLoggedIn.next(true);
     }
+
   }
 
   //The function will be called when user want to go to the profile
   //Check if user have logged in or not, if logged in go to profile, else go to login
   goProfile(){
-    if(JSON.parse(localStorage.getItem("currentUsername")) === null){
+    if((localStorage.getItem("currentUsername")) === null){
       this.router.navigateByUrl("/login")
     }else{
       this.router.navigateByUrl("/profile")
@@ -56,21 +57,11 @@ export class AppComponent {
     this.router.navigateByUrl("/login")
   }
 
-  //The function that navigate to the manage componnet if user data is not empty, else go to login
-  goManage(){
-    if(JSON.parse(localStorage.getItem("userData")) === null){
-      this.router.navigateByUrl("/login")
-    }else if((JSON.parse(localStorage.getItem("userData")).role === "Super") || (JSON.parse(localStorage.getItem("userData")).role === "Group Admin")){
-      this.router.navigateByUrl("/management")
-    }else{
-      alert("You don't have permission to manage")
-    }
-  }
-
   //The function will be called when the user click the users tab
   //Navigate to users if the user is logged in, else go to login componenet 
   goUsers(){
-    if(JSON.parse(localStorage.getItem("currentUsername")) === null){
+    console.log()
+    if((localStorage.getItem("currentUsername")) === null){
       this.router.navigateByUrl("/login")
     }else{
       this.router.navigateByUrl("/users")
@@ -80,7 +71,7 @@ export class AppComponent {
   //The function will be called when the user clicked the groups tab
   //Navigate to groups component if user logged in, else go to login component 
   goGroups(){
-    if(JSON.parse(localStorage.getItem("currentUsername")) === null){
+    if((localStorage.getItem("currentUsername")) === null){
       this.router.navigateByUrl("/login")
     }else{
       this.router.navigateByUrl("/groups")
@@ -90,7 +81,7 @@ export class AppComponent {
   //The function that will be called when the Chat button on the nav bar have been clicked
   //Take the user to the chat component
   goChat(){
-    if(JSON.parse(localStorage.getItem("currentUsername")) === null){
+    if((localStorage.getItem("currentUsername")) === null){
       this.router.navigateByUrl("/login")
     }else{
       this.router.navigateByUrl("/chat")

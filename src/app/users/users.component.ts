@@ -62,12 +62,12 @@ export class UsersComponent implements OnInit {
   //parameter: username - the name of user
   //Pop confirmation message for removing a user
   //If the send back data is true, reload component and pop message, else display message
-  removeUser(username:string){
+  removeUser(objID:string){
 
-    if(confirm("Are you sure to remove User: " + username + "?")) {
-      this.routeService.removeUser(username).subscribe(data =>{
+    if(confirm("Are you sure to remove this user ?")) {
+      this.routeService.removeUser(objID).subscribe(data =>{
         if(data === true){
-          alert("Removed User: " + username)
+          alert("Successfully removed user")
           this.ngOnInit();
         }else{
           alert("This user is Super Admin, Super Admin cannot be removed")

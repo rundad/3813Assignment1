@@ -28,7 +28,7 @@
                     <td *ngIf="isSuperAdmin">
                         <span class="btn btn-primary" (click)="giveSuperRole(user.username)" > <i class="fa fa-spinner" ></i>Super Admin</span> 
                         &nbsp; 
-                        <span class="btn btn-primary" (click)="removeUser(user.username)"><i class="fa fa-trash"></i> Delete</span>
+                        <span class="btn btn-primary" (click)="removeUser(user._id)"><i class="fa fa-trash"></i> Delete</span>
                     </td> 
                     <td *ngFor = "let group of user.groups">{{group.name}}, </td>  
                     
