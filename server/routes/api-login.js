@@ -92,6 +92,13 @@ module.exports = function(app, path, db, ObjectID){
         var objectid = new ObjectID(user_id)
         console.log(objectid)
         const collection = db.collection('users');
+        const groupCollection = db.collection('groups')
+        collection.findOne({_id: objectid}, (err, data)=>{
+            console.log(objectid)
+            groupCollection.updateMany({}, {$pull: {'group_admin': data.username}})
+            groupCollection.updateMany({}, {$pull: {'users': data.username}})
+        })
+
         collection.find({_id:objectid}).toArray((err, docs)=>{
             if(docs[0].role === "Super"){
                 res.send(false)
@@ -102,6 +109,14 @@ module.exports = function(app, path, db, ObjectID){
             }
         })
 
+   
+
+        // collection.findOne({_id: objectid}, (data)=>{
+        //     groupCollection.updateMany({}, {$pull: {'users': data.username}})
+        // })
+        // collection.find({"group_admin": {$in: [user]}} ).toArray((err, docs)=>{
+        //     res.send(docs)
+        // })
         // //remove user from group admin array
         // for(i = 0; i<data.Groups.length; i++){
         //     for(j = 0; j<data.Groups[i].group_admin.length; j++){
@@ -164,7 +179,9 @@ module.exports = function(app, path, db, ObjectID){
         const collection = db.collection('groups')
         const userCollection = db.collection('users')
         groups = []
+        new_groups = []
         superUsers =[]
+        new_superUsers = []
         collection.find({'name': req.body.name}).count((err, count)=>{
             if(count == 0){
                 collection.insertOne(new_group, (err, dbres)=>{
@@ -177,20 +194,26 @@ module.exports = function(app, path, db, ObjectID){
         })
 
         //add the group to the user's adminGroupList who created the group
-        userCollection.updateOne({'username': user}, {$push :{'adminGroupList': req.body.name}})
+        // userCollection.updateOne({'username': user}, {$addToSet :{"adminGroupList": req.body.name}}, ()=>{
+        //     console.log(user)
+        //     console.log(req.body.name)
+        //     console.log("updated")
+        // })
 
-        //Get all the group names
-        collection.find({}, {'name': 1, _id:0}).toArray((err, docs)=>{
-            groups = docs
-        })
-        console.log(groups)
-        //update Super users' adminGroupList to have control with all the groups
-        userCollection.update({'role': 'Super'}, {$set: {'adminGroupList': groups}})
-        userCollection.find({'role': "Super"}, {'name': 1, _id:0}, (data)=>{
-            superUsers = data
-        })
-
-        //push super user to group admin array
+        // //Get all the group names
+        // collection.find({}, {'name':true}).toArray((err, docs)=>{
+        //     console.log(docs)
+        // })
+        // console.log(new_groups)
+        // //update Super users' adminGroupList to have control with all the groups
+        // userCollection.updateMany({'role': 'Super'}, {$set: {'adminGroupList': new_groups}})
+        // userCollection.find({'role': "Super"}, {'username':1}).toArray((err, data)=>{
+        //     console.log(data)
+        // })
+        // for(i = 0; i<superUsers.length; i++){
+        //     new_superUsers.push(superUsers[i].name)
+        // }
+        // //push super user to group admin array
         // for(i=0; i<superUsers.length; i++){
         //     collection.find({'group_admin': {$in: [superUsers[i]]}}).count((err, count)=>{
         //         if(count ==0){
@@ -200,7 +223,13 @@ module.exports = function(app, path, db, ObjectID){
         //         }
         //     })
         // }
-     
+        userCollection.find({'role': 'Super'}).forEach(data =>{
+            console.log(data.username)
+ 
+            collection.updateMany({}, {$addToSet: {'group_admin': data.username}})
+
+ 
+        })
         
 
         // //check if the group is not exist, then push it to the Groups list
@@ -245,9 +274,11 @@ module.exports = function(app, path, db, ObjectID){
         }
 
         const collection = db.collection('groups')
+
         collection.deleteOne({'name': req.body.name}, (err,docs)=>{
             res.send(true)
         })
+
         
         // //for loop to remove the group in group array
         // for(i = 0; i <data.Groups.length; i++){
