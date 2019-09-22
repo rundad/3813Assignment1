@@ -23,7 +23,10 @@ module.exports = function(app, path, db, ObjectID){
                 if(err) throw err;
                 collection.find({'email': login_user.email, 'password': login_user.password}).limit(1).toArray((err, docs)=>{
                     res.send(docs)
+                    user = docs[0].username
                 })
+            }else{
+                res.send([{valid:true}])
             }
         })
 
@@ -140,35 +143,12 @@ module.exports = function(app, path, db, ObjectID){
         if(!req.body){
             return res.sendStatus(400)
         }
-        //read file data
-        var dat = fs.readFileSync("data.json", 'utf8')
-        var data = JSON.parse(dat)
-        
-        //an array for storing the groups that user belongs to
-        var current_user_group = []
-        //an array for storing the group's details 
-        var group_details = []
-        //for loop to find out the groups that the user can access
-        for(i =0; i<data.users.length; i++){
-            if(user === data.users[i].username){
 
-                for(j=0; j<data.users[i].adminGroupList.length; j++){
-                    current_user_group.push(data.users[i].adminGroupList[j])
-                }
-            }
-        }
+        const collection = db.collection('groups')
+        collection.find({"group_admin": {$in: [user]}} ).toArray((err, docs)=>{
+            res.send(docs)
+        })
 
-        //for loop to get the details of the group and push them into the array
-        for(i=0; i<data.Groups.length; i++){
-            for(j=0; j<current_user_group.length; j++){
-                if(data.Groups[i].name === current_user_group[j]){
-                    group_details.push(data.Groups[i])
-                }
-            }
-        }
-  
-        //send the details back to client side
-        res.send(group_details);
     })
 
     //request endpoint for creating group
@@ -179,71 +159,78 @@ module.exports = function(app, path, db, ObjectID){
         if(!req.body){
             return res.sendStatus(400)
         }
-        //read file data
-        var dat = fs.readFileSync("data.json", 'utf8')
-        var data = JSON.parse(dat)
-        //array for storing the names for groups
-        var group_names = []
-        //the current user index
-        var currentUser_index;
-        //for loop to push the names of the groups into the array
-        for(i = 0; i <data.Groups.length; i++){
-            group_names.push(data.Groups[i].name)
-        }
 
-        //group object
-        group = {}
-        group.name = ""
-        group.channels = []
-        group.group_admin = []
-        group.group_assis = []
-        group.users = []
-
-        //for loop to get the user index
-        for(i = 0; i <data.users.length; i++){
-            if(req.body.username === data.users[i].username){
-                currentUser_index = i
+        new_group = {name: req.body.name, channels: [], group_admin: [user], group_assis: [], users: [user]}
+        const collection = db.collection('groups')
+        const userCollection = db.collection('users')
+        groups = []
+        superUsers =[]
+        collection.find({'name': req.body.name}).count((err, count)=>{
+            if(count == 0){
+                collection.insertOne(new_group, (err, dbres)=>{
+                    if(err) throw err;
+                    res.send(true)
+                })
+            }else{
+                res.send(false)
             }
-        }
+        })
 
+        //add the group to the user's adminGroupList who created the group
+        userCollection.updateOne({'username': user}, {$push :{'adminGroupList': req.body.name}})
 
-        //check if the group is not exist, then push it to the Groups list
-        if(group_names.indexOf(req.body.name) == -1){
-            group.name = req.body.name
-            group.channels = []
-            group.group_admin.push(data.users[currentUser_index].username)
-            group.group_assis = []
-            group.users.push(data.users[currentUser_index].username)
-            data.Groups.push(group)
-            data.users[currentUser_index].adminGroupList.push(req.body.name)
-            data.users[currentUser_index].groups.push({name: req.body.name, channels: []})
-            res.send(true)
-        }else{
-            res.send(false)
-        }
+        //Get all the group names
+        collection.find({}, {'name': 1, _id:0}).toArray((err, docs)=>{
+            groups = docs
+        })
+        console.log(groups)
+        //update Super users' adminGroupList to have control with all the groups
+        userCollection.update({'role': 'Super'}, {$set: {'adminGroupList': groups}})
+        userCollection.find({'role': "Super"}, {'name': 1, _id:0}, (data)=>{
+            superUsers = data
+        })
 
-        //for loop to push the user who created the group to admin group list
-        for(i = 0; i <data.users.length; i++){
-            if(data.users[i].role === "Super"){
-                // if(data.users[i].adminGroupList.indexOf(req.body.name) == -1){
-                //     data.users[i].adminGroupList.push(req.body.name)
-                // }
-                data.users[i].adminGroupList = []
-                for(j =0; j<data.Groups.length; j++){
-                    data.users[i].adminGroupList.push(data.Groups[j].name)
-                }
-            }
-        }
+        //push super user to group admin array
+        // for(i=0; i<superUsers.length; i++){
+        //     collection.find({'group_admin': {$in: [superUsers[i]]}}).count((err, count)=>{
+        //         if(count ==0){
+        //             collection.update({}, {$push: {'group_admin': superUsers[i]}})
+        //         }else{
+        //             console.log("super user is already the group admin of the group ")
+        //         }
+        //     })
+        // }
+     
         
-        //write the data back to the data file
-        var JSON_data = JSON.stringify(data)
-        fs.writeFile("data.json", JSON_data, function(err){
-            if(err)
-                console.log(err);
-            else
-                console.log("Created new group")
-        });
-        //res.send(data.Groups);
+
+        // //check if the group is not exist, then push it to the Groups list
+        // if(group_names.indexOf(req.body.name) == -1){
+        //     group.name = req.body.name
+        //     group.channels = []
+        //     group.group_admin.push(data.users[currentUser_index].username)
+        //     group.group_assis = []
+        //     group.users.push(data.users[currentUser_index].username)
+        //     data.Groups.push(group)
+        //     data.users[currentUser_index].adminGroupList.push(req.body.name)
+        //     data.users[currentUser_index].groups.push({name: req.body.name, channels: []})
+        //     res.send(true)
+        // }else{
+        //     res.send(false)
+        // }
+
+        // //for loop to push the user who created the group to admin group list
+        // for(i = 0; i <data.users.length; i++){
+        //     if(data.users[i].role === "Super"){
+        //         // if(data.users[i].adminGroupList.indexOf(req.body.name) == -1){
+        //         //     data.users[i].adminGroupList.push(req.body.name)
+        //         // }
+        //         data.users[i].adminGroupList = []
+        //         for(j =0; j<data.Groups.length; j++){
+        //             data.users[i].adminGroupList.push(data.Groups[j].name)
+        //         }
+        //     }
+        // }
+        
     })
 
     //request endpoint for removing group
@@ -256,59 +243,50 @@ module.exports = function(app, path, db, ObjectID){
         if(!req.body){
             return res.sendStatus(400)
         }
-        //read file data
-        var dat = fs.readFileSync("data.json", 'utf8')
-        var data = JSON.parse(dat)
+
+        const collection = db.collection('groups')
+        collection.deleteOne({'name': req.body.name}, (err,docs)=>{
+            res.send(true)
+        })
         
-        //for loop to remove the group in group array
-        for(i = 0; i <data.Groups.length; i++){
-            if(req.body.name === data.Groups[i].name){
-                data.Groups.splice(i, 1)
+        // //for loop to remove the group in group array
+        // for(i = 0; i <data.Groups.length; i++){
+        //     if(req.body.name === data.Groups[i].name){
+        //         data.Groups.splice(i, 1)
                 
-            }
-        }
+        //     }
+        // }
 
-        //for loop to remove the group in users array
-        for(i = 0; i <data.users.length; i++){
-            for(j = 0; j<data.users[i].groups.length; j++){
-                if(req.body.name === data.users[i].groups[j].name){
-                    data.users[i].groups.splice(j, 1)
+        // //for loop to remove the group in users array
+        // for(i = 0; i <data.users.length; i++){
+        //     for(j = 0; j<data.users[i].groups.length; j++){
+        //         if(req.body.name === data.users[i].groups[j].name){
+        //             data.users[i].groups.splice(j, 1)
                     
-                }
-            }
+        //         }
+        //     }
 
-        }
-        //for loop to remove the group in admin group list
-        for(i = 0; i <data.users.length; i++){
-            for(j = 0; j<data.users[i].adminGroupList.length; j++){
-                if(req.body.name === data.users[i].adminGroupList[j]){
-                    data.users[i].adminGroupList.splice(j, 1)
+        // }
+        // //for loop to remove the group in admin group list
+        // for(i = 0; i <data.users.length; i++){
+        //     for(j = 0; j<data.users[i].adminGroupList.length; j++){
+        //         if(req.body.name === data.users[i].adminGroupList[j]){
+        //             data.users[i].adminGroupList.splice(j, 1)
                     
-                }
-            }
+        //         }
+        //     }
 
-        }
+        // }
 
-        //for loop to remove all the channels object that belongs to the group
-        for(var k = data.Channels.length; k > 0 ; k -= 1){
-            console.log(k)
-            if(data.Channels[k-1].group === req.body.name){
-                console.log(k)
-                data.Channels.splice(k-1, 1)
-            }
+        // //for loop to remove all the channels object that belongs to the group
+        // for(var k = data.Channels.length; k > 0 ; k -= 1){
+        //     console.log(k)
+        //     if(data.Channels[k-1].group === req.body.name){
+        //         console.log(k)
+        //         data.Channels.splice(k-1, 1)
+        //     }
             
-        }
-
-        //write the data back to data file
-        var JSON_data = JSON.stringify(data)
-        fs.writeFile("data.json", JSON_data, function(err){
-            if(err)
-                console.log(err);
-            else
-                console.log("Removed a group")
-        });
-        //send data back to client side
-        res.send(true)
+        // }
 
     })
 

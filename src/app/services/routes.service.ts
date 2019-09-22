@@ -44,8 +44,8 @@ export class RoutesService {
   }
 
   //The method that sends the create group request to the server for creating a group
-  createGroup(name: string, username:string){
-    return this.http.post(this.url + "/createGroup", {name: name, username:username})
+  createGroup(name: string){
+    return this.http.post(this.url + "/createGroup", {name: name})
   }
 
   //The method that sends the remove group request to the server for remove a group

@@ -25,29 +25,35 @@ export class LoginComponent implements OnInit {
   //Store the data into the local storage
   //Check the valid property, if true navigate to the profile page, if not pop message
   login(){
-    this.routeService.login(this.email, this.password).subscribe(data=>{
-      if(data[0].valid === false){
-        this.dataSharingService.isUserLoggedIn.next(true);
-        if(data[0].role === "user"){
-          this.dataSharingService.isNormalUser.next(true);
-        }else if(data[0].role === "Super"){
-          
-          this.dataSharingService.isSuperAdmin.next(true);
-        }else if(data[0].role === "Group Admin"){
-          this.dataSharingService.isGroupAdmin.next(true);
-        }else if(data[0].role === "Group Assis"){
-          this.dataSharingService.isGroupAssis.next(true);
+    if(this.email !== "" && this.password !== ""){
+      this.routeService.login(this.email, this.password).subscribe(data=>{
+        console.log(data)
+        if(data[0].valid === false){
+          this.dataSharingService.isUserLoggedIn.next(true);
+          if(data[0].role === "user"){
+            this.dataSharingService.isNormalUser.next(true);
+          }else if(data[0].role === "Super"){
+            
+            this.dataSharingService.isSuperAdmin.next(true);
+          }else if(data[0].role === "Group Admin"){
+            this.dataSharingService.isGroupAdmin.next(true);
+          }else if(data[0].role === "Group Assis"){
+            this.dataSharingService.isGroupAssis.next(true);
+          }
+          localStorage.setItem("currentUsername", JSON.stringify(data.username));
+          localStorage.setItem("userData", JSON.stringify(data));
+          this.router.navigateByUrl("/profile")
+        }else if(data[0].valid === true){
+          alert("Email and password were incorrect")
         }
-        localStorage.setItem("currentUsername", JSON.stringify(data.username));
-        localStorage.setItem("userData", JSON.stringify(data));
-        this.router.navigateByUrl("/profile")
-      }else{
-        alert("Email and password were incorrect")
-      }
-  
-    }, (err: HttpErrorResponse) => {
-      alert("Error: " + err)
-    })
+    
+      }, (err: HttpErrorResponse) => {
+        alert("Error: " + err)
+      })
+    }else{
+      alert("Login details are missing")
+    }
+
 
   }
 

@@ -41,7 +41,7 @@ export class GroupsComponent implements OnInit {
   //The function used to create group by sending a request to the server
   createGroup(){
     if(this.group_name !== ""){
-      this.routeService.createGroup(this.group_name, JSON.parse(localStorage.getItem("currentUsername"))).subscribe(data =>{
+      this.routeService.createGroup(this.group_name).subscribe(data =>{
         console.log(data)
         if(data === true){
           this.ngOnInit();
