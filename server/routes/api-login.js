@@ -627,6 +627,17 @@ module.exports = function(app, path, db, ObjectID){
         }
 
 
+        const collection = db.collection('channels')
+        const userCollection = db.collection('users')
+        collection.find({'name': req.body.channel, 'group': req.body.group, 'users': {$in: [req.body.username]}}).count((err, count)=>{
+            if(count == 0){
+                userCollection.updateOne({'username': req.body.username, 'groups.name': req.body.group}, {$addToSet: {'groups.$.channels': req.body.channel}})
+                collection.updateOne({'name': req.body.channel, 'group': req.body.group}, {$addToSet: {'users': req.body.username}})
+                res.send(true)
+            }else{
+                res.send(false)
+            }
+        })
 
         // for(i=0; i<data.users.length; i++){
         //     if(req.body.username === data.users[i].username){
@@ -695,49 +706,39 @@ module.exports = function(app, path, db, ObjectID){
         if(!req.body){
             return res.sendStatus(400)
         }
-        var dat = fs.readFileSync("data.json", 'utf8')
-        var data = JSON.parse(dat)
-        var user_index;
-        var group_index;
-        var channel_index;
 
-        for(i=0; i<data.users.length; i ++){
-            if(req.body.username === data.users[i].username){
-                user_index = i
-                for(k=0; k<data.users[i].groups.length; k++){
-                    if(req.body.group === data.users[i].groups[k].name){
-                        group_index = k
-                        for(j = 0; j<data.users[i].groups[k].channels.length; j++){
-                            if(req.body.channel === data.users[i].groups[k].channels[j]){
-                                channel_index = j
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        for(i = 0; i<data.Channels.length; i++){
-            if(req.body.group === data.Channels[i].group && req.body.channel === data.Channels[i].name){
-                for(j = 0; j<data.Channels[i].users.length; j++){
-                    if(req.body.username === data.Channels[i].users[j]){
-                        data.Channels[i].users.splice(j, 1)
-                    }
-                }
-            }
-        }
-
-        data.users[user_index].groups[group_index].channels.splice(channel_index, 1)
-
-        var JSON_data = JSON.stringify(data)
-        fs.writeFile("data.json", JSON_data, function(err){
-            if(err)
-                console.log(err);
-            else
-                console.log("Removed a user from channel" + req.body.channel + " in group:" + req.body.group)
-        });
-
+        const collection = db.collection('channels')
+        const userCollection = db.collection('users')
+        userCollection.updateOne({'username': req.body.username, 'groups.name': req.body.group}, {$pull: {'groups.$.channels': req.body.channel}})
+        collection.updateOne({'name': req.body.channel, 'group': req.body.group}, {$pull: {'users': req.body.username}})
         res.send(true)
+        // for(i=0; i<data.users.length; i ++){
+        //     if(req.body.username === data.users[i].username){
+        //         user_index = i
+        //         for(k=0; k<data.users[i].groups.length; k++){
+        //             if(req.body.group === data.users[i].groups[k].name){
+        //                 group_index = k
+        //                 for(j = 0; j<data.users[i].groups[k].channels.length; j++){
+        //                     if(req.body.channel === data.users[i].groups[k].channels[j]){
+        //                         channel_index = j
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
+
+        // for(i = 0; i<data.Channels.length; i++){
+        //     if(req.body.group === data.Channels[i].group && req.body.channel === data.Channels[i].name){
+        //         for(j = 0; j<data.Channels[i].users.length; j++){
+        //             if(req.body.username === data.Channels[i].users[j]){
+        //                 data.Channels[i].users.splice(j, 1)
+        //             }
+        //         }
+        //     }
+        // }
+
+        // data.users[user_index].groups[group_index].channels.splice(channel_index, 1)
     })
 
     //The request used to create user by using super admin role
