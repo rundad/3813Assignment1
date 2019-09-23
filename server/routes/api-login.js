@@ -278,30 +278,17 @@ module.exports = function(app, path, db, ObjectID){
         const collection = db.collection('groups')
         const userCollection = db.collection('users')
         const channelCollection = db.collection('channels')
+        //delete the group in groups
         collection.deleteOne({'name': req.body.name}, (err,docs)=>{
             res.send(true)
         })
 
  
+        //delete the group in users
+        //delete the channels that the group has
         userCollection.updateMany({}, {$pull: {'groups': {'name': req.body.name}}})
         channelCollection.deleteMany({'group': req.body.name})
-        // //for loop to remove the group in group array
-        // for(i = 0; i <data.Groups.length; i++){
-        //     if(req.body.name === data.Groups[i].name){
-        //         data.Groups.splice(i, 1)
-                
-        //     }
-        // }
-
-        // //for loop to remove the group in users array
-        // for(i = 0; i <data.users.length; i++){
-        //     for(j = 0; j<data.users[i].groups.length; j++){
-        //         if(req.body.name === data.users[i].groups[j].name){
-        //             data.users[i].groups.splice(j, 1)
-                    
-        //         }
-        //     }
-
+   
         // }
         // //for loop to remove the group in admin group list
         // for(i = 0; i <data.users.length; i++){
@@ -314,15 +301,8 @@ module.exports = function(app, path, db, ObjectID){
 
         // }
 
-        // //for loop to remove all the channels object that belongs to the group
-        // for(var k = data.Channels.length; k > 0 ; k -= 1){
-        //     console.log(k)
-        //     if(data.Channels[k-1].group === req.body.name){
-        //         console.log(k)
-        //         data.Channels.splice(k-1, 1)
-        //     }
-            
-        // }
+
+    
 
     })
 
@@ -338,15 +318,10 @@ module.exports = function(app, path, db, ObjectID){
         const collection = db.collection('groups')
         const channelCollection = db.collection('channels')
         const userCollection = db.collection('users')
-        // for(i = 0; i <data.Groups.length; i++){
-        //     if(req.body.group === data.Groups[i].name){
-        //         selected_group = req.body.group
-        //         index = i
-        //         for(j = 0; j<data.Groups[i].channels.length; j++){
-        //             selected_group_channels.push(data.Groups[i].channels[j])
-        //         }
-        //     }
-        // }
+
+        //craete a new channel if the group doesnt have the channel
+        //add the channel to group array
+        //add the channel to the user's channel array who have created the channel
         new_channel = {name: req.body.channel, group: req.body.group, users: [user]}
         channelCollection.find({'name': req.body.channel, 'group': req.body.group}).count((err, count)=>{
             if(count == 0){
@@ -360,36 +335,7 @@ module.exports = function(app, path, db, ObjectID){
                 res.send(false)
             }
         })
-        // console.log(selected_group_channels)
-        // console.log(selected_group)
-        // for(i = 0; i <data.Groups.length; i++){
-        //     if(selected_group === data.Groups[i].name && selected_group_channels.indexOf(req.body.channel) == -1){
-        //         console.log(selected_group_channels)
-        //         data.Groups[i].channels.push(req.body.channel)
-        //         valid = true
-        //     }else{
-        //         valid = false
-        //     }
-        // }
 
-        // if(selected_group_channels.indexOf(req.body.channel) == -1){
-        //     data.Groups[index].channels.push(req.body.channel)
-        //     valid=true
-        // }else{
-        //     valid = false
-        // }
-
-        // var channel = {}
-        // channel.name = ""
-        // channel.group = ""
-        // channel.users = []
-
-        // if(selected_group_channels.indexOf(req.body.channel) == -1){
-        //     channel.name = req.body.channel
-        //     channel.group = req.body.group
-        //     channel.users = []
-        //     data.Channels.push(channel)
-        // }
 
 
     })
