@@ -492,87 +492,79 @@ module.exports = function(app, path, db, ObjectID){
         if(!req.body){
             return res.sendStatus(400)
         }
-        var dat = fs.readFileSync("data.json", 'utf8')
-        var data = JSON.parse(dat)
-        var user_position =0
-        for(i=0; i<data.users.length; i++){
-            if(req.body.username === data.users[i].username){
-                for(j = 0; j<data.users[i].groups.length; j++){
-                    if(req.body.group === data.users[i].groups[j].name){
-                        data.users[i].groups.splice(j, 1)
-                    }
-                }
-            }
-        }
 
-        for(i=0; i<data.Groups.length; i++){
-            if(req.body.group === data.Groups[i].name){
-                for(j=0; j<data.Groups[i].users.length; j ++){
-                    if(req.body.username === data.Groups[i].users[j]){
-                        data.Groups[i].users.splice(j, 1)
-                    }
-                }
-            }
-        }
+        //remove the group in user's groups array
+        //remove user from group's users array
+        //remove user from group_admin array if user is a group admin
+        //remove user from group_assis array if user is a group assis, change user's role to normal user
+        //remoev user from all the channels that in the group
+        const collection = db.collection('groups')
+        const userCollection = db.collection('users')
+        const channelCollection = db.collection('channels')
 
-        for(i=0; i<data.users.length; i++){
-            if(req.body.username === data.users[i].username){
-                for(j = 0; j<data.users[i].adminGroupList.length; j++){
-                    if(req.body.group === data.users[i].adminGroupList[j]){
-                        data.users[i].adminGroupList.splice(j, 1)
-                    }
-                }
-            }
-        }
+        userCollection.updateOne({'username': req.body.username}, {$pull: {'groups': {'name': req.body.group}}})
+        collection.updateOne({'name': req.body.group}, {$pull: {'users': req.body.username}})
+        collection.updateOne({'name': req.body.group}, {$pull: {'group_admin': req.body.username}})
+        userCollection.find({'username': req.body.username, 'role': 'Group Assis'}, ()=>{
+            userCollection.updateOne({'username': req.body.username}, {$set: {'role': 'user'}})
+            collection.updateOne({'name': req.body.group}, {$pull: {'group_assis': req.body.username}})
+        })
+        channelCollection.updateMany({'group': req.body.group}, {$pull: {'users': req.body.username}})
+        res.send(true)
+        // for(i=0; i<data.users.length; i++){
+        //     if(req.body.username === data.users[i].username){
+        //         for(j = 0; j<data.users[i].groups.length; j++){
+        //             if(req.body.group === data.users[i].groups[j].name){
+        //                 data.users[i].groups.splice(j, 1)
+        //             }
+        //         }
+        //     }
+        // }
 
-        for(i=0; i<data.Groups.length; i++){
-            if(req.body.group === data.Groups[i].name){
-                for(j = 0; j<data.Groups[i].group_admin.length; j++){
-                    if(req.body.username === data.Groups[i].group_admin[j]){
-                        data.Groups[i].group_admin.splice(j, 1)
-                    }
-                }
-            }
-        }
+        // for(i=0; i<data.Groups.length; i++){
+        //     if(req.body.group === data.Groups[i].name){
+        //         for(j=0; j<data.Groups[i].users.length; j ++){
+        //             if(req.body.username === data.Groups[i].users[j]){
+        //                 data.Groups[i].users.splice(j, 1)
+        //             }
+        //         }
+        //     }
+        // }
 
-        for(i=0; i<data.users.length; i++){
-            if(req.body.username === data.users[i].username){
-                user_position = i
-            }
-        }
 
-        if(data.users[user_position].role === "Group Assis"){
-            data.users[user_position].role = "user"
-            for(i=0; i<data.Groups.length; i++){
-                if(req.body.group === data.Groups[i].name){
-                    for(j = 0; j<data.Groups[i].group_assis.length; j++){
-                        if(req.body.username === data.Groups[i].group_assis[j]){
-                            data.Groups[i].group_assis.splice(j, 1)
-                        }
-                    }
-                }
-            }
-        }
+        // for(i=0; i<data.Groups.length; i++){
+        //     if(req.body.group === data.Groups[i].name){
+        //         for(j = 0; j<data.Groups[i].group_admin.length; j++){
+        //             if(req.body.username === data.Groups[i].group_admin[j]){
+        //                 data.Groups[i].group_admin.splice(j, 1)
+        //             }
+        //         }
+        //     }
+        // }
 
-        for(i =0 ; i<data.Channels.length; i++){
-            if(req.body.group === data.Channels[i].group){
-                for(j = 0; j<data.Channels[i].users.length; j++){
-                    if(req.body.username === data.Channels[i].users[j]){
-                        data.Channels[i].users.splice(j, 1)
-                    }
-                }
-            }
-        }
+        // if(data.users[user_position].role === "Group Assis"){
+        //     data.users[user_position].role = "user"
+        //     for(i=0; i<data.Groups.length; i++){
+        //         if(req.body.group === data.Groups[i].name){
+        //             for(j = 0; j<data.Groups[i].group_assis.length; j++){
+        //                 if(req.body.username === data.Groups[i].group_assis[j]){
+        //                     data.Groups[i].group_assis.splice(j, 1)
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
 
-        var JSON_data = JSON.stringify(data)
-        fs.writeFile("data.json", JSON_data, function(err){
-            if(err)
-                console.log(err);
-            else
-                console.log("Removed a user from a group")
-        });
+        // for(i =0 ; i<data.Channels.length; i++){
+        //     if(req.body.group === data.Channels[i].group){
+        //         for(j = 0; j<data.Channels[i].users.length; j++){
+        //             if(req.body.username === data.Channels[i].users[j]){
+        //                 data.Channels[i].users.splice(j, 1)
+        //             }
+        //         }
+        //     }
+        // }
 
-        res.send(true);
 
     })
 
