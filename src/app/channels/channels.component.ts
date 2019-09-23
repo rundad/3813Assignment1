@@ -10,8 +10,14 @@ import { RoutesService } from '../services/routes.service';
 export class ChannelsComponent implements OnInit {
 
   group_name: string = ""
-  group_channels;
-  channel_group_users;
+  group_channels:any;
+  channel_group_users:Object = {
+    name: "",
+    channels: [],
+    group_admin: [],
+    group_assis: [],
+    users: []
+  }
   channel_username:string = ""
   channel_name:string = ""
   constructor(private activatedRoute: ActivatedRoute, private router:Router, private routeService:RoutesService) { }
@@ -30,6 +36,7 @@ export class ChannelsComponent implements OnInit {
     })
 
     this.routeService.gGroupUsers(this.group_name).subscribe(data=>{
+      console.log(data)
       this.channel_group_users = data
     })
 

@@ -27,7 +27,7 @@
                 Users: 
                 <select [(ngModel)] = "channel_username" name="channel_username">
                     <option [ngValue] ="null">Select User</option>
-                    <option *ngFor="let user of channel_group_users">
+                    <option *ngFor="let user of channel_group_users.users">
                         {{user}}
                     </option>
                 </select>
