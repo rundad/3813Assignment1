@@ -93,19 +93,19 @@ module.exports = function(app, path, db, ObjectID){
         console.log(objectid)
         const collection = db.collection('users');
         const groupCollection = db.collection('groups')
-        collection.findOne({_id: objectid}, (err, data)=>{
-            console.log(objectid)
-            groupCollection.updateMany({}, {$pull: {'group_admin': data.username}})
-            groupCollection.updateMany({}, {$pull: {'users': data.username}})
-        })
 
         collection.find({_id:objectid}).toArray((err, docs)=>{
-            if(docs[0].role === "Super"){
+            if(docs[0].role === "Super" && docs[0].username === "super"){
                 res.send(false)
             }else{
-                collection.deleteOne({_id:objectid}, (err, docs)=>{
-                    res.send(true)
+                collection.findOne({_id: objectid}, (err, data)=>{
+                    console.log(objectid)
+                    groupCollection.updateMany({}, {$pull: {'group_admin': data.username}})
+                    groupCollection.updateMany({}, {$pull: {'users': data.username}})
                 })
+                collection.deleteOne({_id:objectid})
+                res.send(true)
+
             }
         })
 
@@ -425,8 +425,10 @@ module.exports = function(app, path, db, ObjectID){
             if(count == 0){
                 collection.updateOne({'name': req.body.group},{$addToSet: {'users': req.body.username}})
                 userCollection.updateOne({'username': req.body.username}, {$addToSet: {'groups': {'name': req.body.group, 'channels': []}}})
-                userCollection.find({'username': req.body.username, 'role': 'Group Admin'}, ()=>{
-                    collection.updateOne({'name': req.body.group}, {$addToSet: {'group_admin': req.body.username}})
+                userCollection.find({'username': req.body.username, 'role': 'Group Admin'}).count((err, count)=>{
+                    if(count == 1){
+                        collection.updateOne({'name': req.body.group}, {$addToSet: {'group_admin': req.body.username}})
+                    }
                 })
                 res.send(true)
             }else{
@@ -815,53 +817,58 @@ module.exports = function(app, path, db, ObjectID){
         if(!req.body){
             return res.sendStatus(400)
         }
-        var dat = fs.readFileSync("data.json", 'utf8')
-        var data = JSON.parse(dat)
-        var super_admins = []
-        var message;
-        var current_groups = []
-        for(i=0; i<data.users.length; i++){
-            if(data.users[i].role === "Super"){
-                super_admins.push(data.users[i].username)
-            }
-        }
 
-        if(super_admins.length < 2){
-            for(i =0; i<data.users.length; i++){
-                if(req.body.name === data.users[i].username){
-                    if(data.users[i].role !== "Super"){
-                        data.users[i].role = "Super"
-                        message = true
-                        break
-                    }
-                }
+        const collection = db.collection('groups')
+        const userCollection = db.collection('users')
+        userCollection.find({'username': req.body.name, 'role': "Super"}).count((err, count)=>{
+            if(count == 0){
+                userCollection.updateOne({'username': req.body.name}, {$set: {'role': "Super"}})
+                res.send(true)
+            }else{
+                res.send(false)
             }
-        }else{
-            message = false
-        }
+        })
+        collection.find({}).forEach(data =>{
+            userCollection.updateOne({'username': req.body.name}, {$addToSet: {'groups': {'name': data.name, 'channels': []}}})
+            collection.updateOne({'name': data.name}, {$addToSet: {'group_admin': req.body.name}})
 
-        if(message === true){
-            for(i = 0; i<data.Groups.length; i++){
-                data.Groups[i].group_admin.push(req.body.name)
-                current_groups.push(data.Groups[i].name)
-            }
-            for(i =0; i<data.users.length; i++){
-                if(req.body.name === data.users[i].username){
-                    for(j =0; j<current_groups.length; j++){
-                        data.users[i].adminGroupList.push(current_groups[j])
-                    }
-                }
-            }
-        }
-        var JSON_data = JSON.stringify(data)
-        fs.writeFile("data.json", JSON_data, function(err){
-            if(err)
-                console.log(err);
-            else
-                console.log("Provided a user with super admin role")
-        });
+ 
+        })
+        
+        // for(i=0; i<data.users.length; i++){
+        //     if(data.users[i].role === "Super"){
+        //         super_admins.push(data.users[i].username)
+        //     }
+        // }
 
-        res.send(message)
+        // if(super_admins.length < 2){
+        //     for(i =0; i<data.users.length; i++){
+        //         if(req.body.name === data.users[i].username){
+        //             if(data.users[i].role !== "Super"){
+        //                 data.users[i].role = "Super"
+        //                 message = true
+        //                 break
+        //             }
+        //         }
+        //     }
+        // }else{
+        //     message = false
+        // }
+
+        // if(message === true){
+        //     for(i = 0; i<data.Groups.length; i++){
+        //         data.Groups[i].group_admin.push(req.body.name)
+        //         current_groups.push(data.Groups[i].name)
+        //     }
+        //     for(i =0; i<data.users.length; i++){
+        //         if(req.body.name === data.users[i].username){
+        //             for(j =0; j<current_groups.length; j++){
+        //                 data.users[i].adminGroupList.push(current_groups[j])
+        //             }
+        //         }
+        //     }
+        // }
+
     })
 
     //The request used to get group channels

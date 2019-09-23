@@ -107,7 +107,7 @@ export class UsersComponent implements OnInit {
           alert("User: " + name + " has became a Super Admin")
           this.ngOnInit();
         }else if(data === false){
-          alert("Cannot have more than 2 Super Admins")
+          alert("User is already a super admin")
         }
       })
     }
