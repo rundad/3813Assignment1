@@ -413,51 +413,53 @@ module.exports = function(app, path, db, ObjectID){
         if(!req.body){
             return res.sendStatus(400)
         }
-        var dat = fs.readFileSync("data.json", 'utf8')
-        var data = JSON.parse(dat)
-        var users_in_group;
-        var selected_group_index;
-        console.log()
-        for(i=0; i<data.Groups.length; i++){
-            if(req.body.group === data.Groups[i].name){
-                selected_group_index = i
-                users_in_group = data.Groups[i].users
-                console.log(data.Groups[i].users)
-            }
-        }
 
-        console.log(users_in_group)
-        if(users_in_group.indexOf(req.body.username) == -1){
+        const collection = db.collection('groups')
+        const userCollection = db.collection('users')
+        //add user to group's users array
+        //add group to user's groups array
+        //add user to group's group_admin array is the user is a group admin
+        console.log("invite user: ",req.body.username)
+        collection.find({'name': req.body.group, 'users': {$in: [req.body.username]}}).count((err, count) =>{
+            console.log(count)
+            if(count == 0){
+                collection.updateOne({'name': req.body.group},{$addToSet: {'users': req.body.username}})
+                userCollection.updateOne({'username': req.body.username}, {$addToSet: {'groups': {'name': req.body.group, 'channels': []}}})
+                userCollection.find({'username': req.body.username, 'role': 'Group Admin'}, ()=>{
+                    collection.updateOne({'name': req.body.group}, {$addToSet: {'group_admin': req.body.username}})
+                })
+                res.send(true)
+            }else{
+                res.send(false)
+            }
+        })
+  
+     
+ 
+        // if(users_in_group.indexOf(req.body.username) == -1){
             
-            data.Groups[selected_group_index].users.push(req.body.username)
-            for(i=0; i<data.users.length; i++){
-                if(req.body.username === data.users[i].username){
-                    data.users[i].groups.push({name: req.body.group, channels:[]})
-                    if(data.users[i].role === "Group Admin"){
-                        console.log("group admin")
-                        data.users[i].adminGroupList.push(req.body.group)
-                        for(j=0; j<data.Groups.length; j++){
-                            if(req.body.group === data.Groups[j].name){
-                                data.Groups[j].group_admin.push(data.users[i].username)
-                            }
-                        }
-                    }
-                }
-            }
-            res.send(true)
-        }else{
-            res.send(false)
-        }
+        //     data.Groups[selected_group_index].users.push(req.body.username)
+        //     for(i=0; i<data.users.length; i++){
+        //         if(req.body.username === data.users[i].username){
+        //             data.users[i].groups.push({name: req.body.group, channels:[]})
+        //             if(data.users[i].role === "Group Admin"){
+        //                 console.log("group admin")
+        //                 data.users[i].adminGroupList.push(req.body.group)
+        //                 for(j=0; j<data.Groups.length; j++){
+        //                     if(req.body.group === data.Groups[j].name){
+        //                         data.Groups[j].group_admin.push(data.users[i].username)
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
+        //     res.send(true)
+        // }else{
+        //     res.send(false)
+        // }
 
 
 
-        var JSON_data = JSON.stringify(data)
-        fs.writeFile("data.json", JSON_data, function(err){
-            if(err)
-                console.log(err);
-            else
-                console.log("Invited a user")
-        });
 
     })
 
