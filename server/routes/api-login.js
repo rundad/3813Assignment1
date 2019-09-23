@@ -186,6 +186,7 @@ module.exports = function(app, path, db, ObjectID){
             if(count == 0){
                 collection.insertOne(new_group, (err, dbres)=>{
                     if(err) throw err;
+                    userCollection.updateOne({'username': user}, {$addToSet: {'groups': {'name': req.body.name, 'channels': []}}})
                     res.send(true)
                 })
             }else{
@@ -231,6 +232,7 @@ module.exports = function(app, path, db, ObjectID){
  
         })
         
+        
 
         // //check if the group is not exist, then push it to the Groups list
         // if(group_names.indexOf(req.body.name) == -1){
@@ -274,12 +276,15 @@ module.exports = function(app, path, db, ObjectID){
         }
 
         const collection = db.collection('groups')
-
+        const userCollection = db.collection('users')
+        const channelCollection = db.collection('channels')
         collection.deleteOne({'name': req.body.name}, (err,docs)=>{
             res.send(true)
         })
 
-        
+ 
+        userCollection.updateMany({}, {$pull: {'groups': {'name': req.body.name}}})
+        channelCollection.deleteMany({'group': req.body.name})
         // //for loop to remove the group in group array
         // for(i = 0; i <data.Groups.length; i++){
         //     if(req.body.name === data.Groups[i].name){
@@ -329,24 +334,34 @@ module.exports = function(app, path, db, ObjectID){
         if(!req.body){
             return res.sendStatus(400)
         }
-        var dat = fs.readFileSync("data.json", 'utf8')
-        var data = JSON.parse(dat)
-        var selected_group_channels = []
-        var selected_group = ""
-        var valid = false
-        var index = 0
-        for(i = 0; i <data.Groups.length; i++){
-            if(req.body.group === data.Groups[i].name){
-                selected_group = req.body.group
-                index = i
-                for(j = 0; j<data.Groups[i].channels.length; j++){
-                    selected_group_channels.push(data.Groups[i].channels[j])
-                }
-            }
-        }
 
-        console.log(selected_group_channels)
-        console.log(selected_group)
+        const collection = db.collection('groups')
+        const channelCollection = db.collection('channels')
+        const userCollection = db.collection('users')
+        // for(i = 0; i <data.Groups.length; i++){
+        //     if(req.body.group === data.Groups[i].name){
+        //         selected_group = req.body.group
+        //         index = i
+        //         for(j = 0; j<data.Groups[i].channels.length; j++){
+        //             selected_group_channels.push(data.Groups[i].channels[j])
+        //         }
+        //     }
+        // }
+        new_channel = {name: req.body.channel, group: req.body.group, users: [user]}
+        channelCollection.find({'name': req.body.channel, 'group': req.body.group}).count((err, count)=>{
+            if(count == 0){
+                channelCollection.insertOne(new_channel, (err, dbres)=>{
+                    if(err) throw err;
+                    collection.updateOne({'name': req.body.group}, {$addToSet: {'channels': req.body.channel}})
+                    userCollection.updateOne({'username': user, 'groups.name': req.body.group}, {$addToSet: {'groups.$.channels': req.body.channel}})
+                    res.send(true)
+                })
+            }else{
+                res.send(false)
+            }
+        })
+        // console.log(selected_group_channels)
+        // console.log(selected_group)
         // for(i = 0; i <data.Groups.length; i++){
         //     if(selected_group === data.Groups[i].name && selected_group_channels.indexOf(req.body.channel) == -1){
         //         console.log(selected_group_channels)
@@ -356,33 +371,26 @@ module.exports = function(app, path, db, ObjectID){
         //         valid = false
         //     }
         // }
-        if(selected_group_channels.indexOf(req.body.channel) == -1){
-            data.Groups[index].channels.push(req.body.channel)
-            valid=true
-        }else{
-            valid = false
-        }
 
-        var channel = {}
-        channel.name = ""
-        channel.group = ""
-        channel.users = []
+        // if(selected_group_channels.indexOf(req.body.channel) == -1){
+        //     data.Groups[index].channels.push(req.body.channel)
+        //     valid=true
+        // }else{
+        //     valid = false
+        // }
 
-        if(selected_group_channels.indexOf(req.body.channel) == -1){
-            channel.name = req.body.channel
-            channel.group = req.body.group
-            channel.users = []
-            data.Channels.push(channel)
-        }
+        // var channel = {}
+        // channel.name = ""
+        // channel.group = ""
+        // channel.users = []
 
-        res.send(valid)
-        var JSON_data = JSON.stringify(data)
-        fs.writeFile("data.json", JSON_data, function(err){
-            if(err)
-                console.log(err);
-            else
-                console.log("Created a channel")
-        });
+        // if(selected_group_channels.indexOf(req.body.channel) == -1){
+        //     channel.name = req.body.channel
+        //     channel.group = req.body.group
+        //     channel.users = []
+        //     data.Channels.push(channel)
+        // }
+
 
     })
 
@@ -418,57 +426,19 @@ module.exports = function(app, path, db, ObjectID){
         if(!req.body){
             return res.sendStatus(400)
         }
-        var dat = fs.readFileSync("data.json", 'utf8')
-        var data = JSON.parse(dat)
-        var channels = []
-        var selected_group = ""
-        var group_index = 0
-        var channel_index = 0
-        var selected_user_group_index = ""
-        for(i = 0; i <data.Groups.length; i++){
-            if(req.body.group === data.Groups[i].name){
-                selected_group = data.Groups[i].name
-                group_index = i
-                for(j = 0; j<data.Groups[i].channels.length; j++){
-                    if(req.body.channel === data.Groups[i].channels[j]){
-                        channel_index = j
-                    }
-                }
-            }
-        }
+        const collection = db.collection('groups')
+        const channelCollection = db.collection('channels')
+        const userCollection = db.collection('users')
 
-        for(i = 0; i <data.users.length; i++){
-            for(j = 0; j<data.users[i].groups.length; j++){
-                if(selected_group === data.users[i].groups[j].name){
-                    selected_user_group_index = j
-                    for(k = 0; k<data.users[i].groups[j].channels.length; k++){
-                        if(req.body.channel === data.users[i].groups[j].channels[k]){
-                            data.users[i].groups[j].channels.splice(k, 1)
-                        }
-                    }
-                    
-                }
-            }
-
-        }
-
-        for(i = 0; i<data.Channels.length; i++){
-            if(req.body.group === data.Channels[i].group && req.body.channel === data.Channels[i].name){
-                data.Channels.splice(i, 1)
-            }
-        }
-
-        data.Groups[group_index].channels.splice(channel_index, 1)
-    
-        var JSON_data = JSON.stringify(data)
-        fs.writeFile("data.json", JSON_data, function(err){
-            if(err)
-                console.log(err);
-            else
-                console.log("Removed a channel")
-        });
-
+        //delete channel in channels
+        //delete channel in groups
+        //delete channel in users who has/in the channel
+        channelCollection.deleteOne({'group': req.body.group, 'name': req.body.channel})
+        collection.updateOne({'name': req.body.group}, {$pull: {'channels': req.body.channel}})
+        userCollection.updateMany({'groups.name': req.body.group}, {$pull: {'groups.$.channels': req.body.channel}})
         res.send(true)
+    
+ 
     })
 
     //The request used to get currnet user details
@@ -959,17 +929,13 @@ module.exports = function(app, path, db, ObjectID){
         if(!req.body){
             return res.sendStatus(400)
         }
-        var dat = fs.readFileSync("data.json", 'utf8')
-        var data = JSON.parse(dat)
-        var group_channels = []
-        for(i =0; i<data.Channels.length; i++){
-            if(req.body.group === data.Channels[i].group){
-                group_channels.push(data.Channels[i])
-            }
-        }
-
-        console.log(group_channels)
-        res.send(group_channels)
+  
+        const collection = db.collection('channels')
+        collection.find({'group': req.body.group}).toArray((err, data)=>{
+            console.log(data)
+            res.send(data)
+        })
+  
     })
 
     //The request used to get the groups that user have joined

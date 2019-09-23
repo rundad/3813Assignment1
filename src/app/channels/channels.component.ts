@@ -26,6 +26,7 @@ export class ChannelsComponent implements OnInit {
 
     this.routeService.getChannels(this.group_name).subscribe(data =>{
       this.group_channels = data;
+      console.log(data)
     })
 
     this.routeService.gGroupUsers(this.group_name).subscribe(data=>{
