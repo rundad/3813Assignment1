@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RoutesService } from '../services/routes.service';
 import { Router } from '@angular/router';
+import { SocketService } from '../services/socket.service';
 
 @Component({
   selector: 'app-chat',
@@ -13,11 +14,13 @@ export class ChatComponent implements OnInit {
   channel:string = ""
   group_names;
   channel_names;
-  constructor(private router:Router, private routeService: RoutesService) { }
+  currentroom:string = ""
+  constructor(private router:Router, private routeService: RoutesService, private socketService: SocketService) { }
 
   //The function that will be called when the componnet loads
   //Get all the groups that user have joined by send a getUserGroups request
   ngOnInit() {
+    this.socketService.initSocket();
     this.routeService.getUserGroups().subscribe(data=>{
       console.log(data)
       this.group_names = data
@@ -35,8 +38,14 @@ export class ChatComponent implements OnInit {
 
   //The function that will be called when the user have clicked the join room button
   //Take the user to the chat room
-  joinRoom(){
-    this.router.navigateByUrl("/chat-room/" + this.group + "/" + this.channel)
-  }
+  // joinRoom(){
+  //   this.router.navigateByUrl("/chat-room/" + this.group + "/" + this.channel)
+  // }
 
+  joinroom(){
+    this.socketService.joinroom(this.group + this.channel)
+    this.socketService.joined((msg)=>{this.currentroom = msg})
+    this.router.navigateByUrl("/chat-room/" + this.group + "/" + this.channel)
+
+  }
 }

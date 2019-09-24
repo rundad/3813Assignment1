@@ -911,21 +911,22 @@ module.exports = function(app, path, db, ObjectID){
         if(!req.body){
             return res.sendStatus(400)
         }
-        var dat = fs.readFileSync("data.json", 'utf8')
-        var data = JSON.parse(dat)
+ 
+        const collection = db.collection('groups')
+        collection.find({'users': {$in: [user]}}).toArray((err, docs)=>{
+            res.send(docs)
+        })
 
-        var user_groups = []
-        for(i=0; i<data.users.length; i++){
-            if(user === data.users[i].username){
-                for(j = 0; j<data.users[i].groups.length; j++){
-                    user_groups.push(data.users[i].groups[j].name)
-                }
+        // var user_groups = []
+        // for(i=0; i<data.users.length; i++){
+        //     if(user === data.users[i].username){
+        //         for(j = 0; j<data.users[i].groups.length; j++){
+        //             user_groups.push(data.users[i].groups[j].name)
+        //         }
 
-            }
-        }
-        console.log(user_groups)
+        //     }
+        // }
 
-        res.send(user_groups)
         
     })
 
@@ -937,23 +938,24 @@ module.exports = function(app, path, db, ObjectID){
         if(!req.body){
             return res.sendStatus(400)
         }
-        var dat = fs.readFileSync("data.json", 'utf8')
-        var data = JSON.parse(dat)
-        var channels_name = []
-        console.log(data.users[0].groups[0].name)
-        for(i=0; i<data.users.length; i++){
-            if(user === data.users[i].username){
-                for(j = 0; j<data.users[i].groups.length; j++){
-                        if(req.body.group === data.users[i].groups[j].name){
-                            console.log(data.users[i].groups[j].name)
-                            for(k =0; k<data.users[i].groups[j].channels.length; k++){
-                                channels_name.push(data.users[i].groups[j].channels[k])
-                            }
-                        }
-                    }
-            }
-        }
-        console.log(channels_name)
-        res.send(channels_name)
+
+        const collection = db.collection('channels')
+        collection.find({'group': req.body.group, 'users': {$in: [user]}}).toArray((err, docs)=>{
+            res.send(docs)
+        })
+        // console.log(data.users[0].groups[0].name)
+        // for(i=0; i<data.users.length; i++){
+        //     if(user === data.users[i].username){
+        //         for(j = 0; j<data.users[i].groups.length; j++){
+        //                 if(req.body.group === data.users[i].groups[j].name){
+        //                     console.log(data.users[i].groups[j].name)
+        //                     for(k =0; k<data.users[i].groups[j].channels.length; k++){
+        //                         channels_name.push(data.users[i].groups[j].channels[k])
+        //                     }
+        //                 }
+        //             }
+        //     }
+        // }
+
     })
 }

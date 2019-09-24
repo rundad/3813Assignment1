@@ -10,17 +10,18 @@
             <select [(ngModel)] = "group" name="group" (change)="gUserGrChannel()">
                 <option [ngValue] ="null">Select Group</option>
                 <option *ngFor="let group of group_names">
-                    {{group}}
+                    {{group.name}}
                 </option>
             </select>
             Channel:
             <select [(ngModel)] = "channel" name="channel">
                 <option [ngValue] ="null">Select Channel</option>
                 <option *ngFor="let channel of channel_names">
-                    {{channel}}
+                    {{channel.name}}
                 </option>
             </select>
-            <input type="submit" value="Join Room" (click)="joinRoom()">
+            <input type="submit" value="Join Room" (click)="joinroom()">
         </form>
+        {{currentroom}}
     </body>
 </html>
