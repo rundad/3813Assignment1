@@ -44,7 +44,7 @@ module.exports = {
                             //track who is in each room
                             if(socketRoom[i][0] == socket.id){
                                 socketRoom[i][1] = room;
-                                inroom = true
+                                inroomSocketarray = true
                             }
                         }
 
