@@ -93,7 +93,7 @@ module.exports = function(app, path, db, ObjectID){
         console.log(objectid)
         const collection = db.collection('users');
         const groupCollection = db.collection('groups')
-
+        const channelCollection = db.collection('channels')
         collection.find({_id:objectid}).toArray((err, docs)=>{
             if(docs[0].role === "Super" && docs[0].username === "super"){
                 res.send(false)
@@ -102,6 +102,7 @@ module.exports = function(app, path, db, ObjectID){
                     console.log(objectid)
                     groupCollection.updateMany({}, {$pull: {'group_admin': data.username}})
                     groupCollection.updateMany({}, {$pull: {'users': data.username}})
+                    channelCollection.updateMany({}, {$pull: {'users': data.username}})
                 })
                 collection.deleteOne({_id:objectid})
                 res.send(true)
@@ -329,6 +330,10 @@ module.exports = function(app, path, db, ObjectID){
                     if(err) throw err;
                     collection.updateOne({'name': req.body.group}, {$addToSet: {'channels': req.body.channel}})
                     userCollection.updateOne({'username': user, 'groups.name': req.body.group}, {$addToSet: {'groups.$.channels': req.body.channel}})
+                    userCollection.find({$or: [{'role': 'Super'}, {'role': 'Group Admin'}, {'role': 'Group Assis'}]}).forEach(data=>{
+                        userCollection.updateOne({'username': data.username, 'groups.name': req.body.group}, {$addToSet: {'groups.$.channels': req.body.channel}})
+                        channelCollection.updateOne({'name': req.body.channel, 'group': req.body.group}, {$addToSet: {'users': data.username}})
+                    })
                     res.send(true)
                 })
             }else{
@@ -776,33 +781,41 @@ module.exports = function(app, path, db, ObjectID){
         if(!req.body){
             return res.sendStatus(400)
         }
-        var dat = fs.readFileSync("data.json", 'utf8')
-        var data = JSON.parse(dat)
 
-        for(i=0; i<data.users.length; i++){
-            if(req.body.username === data.users[i].username){
-                if(data.users[i].role !== "Super" && data.users[i].role !== "Group Admin"){
-                    res.send(true)
-                    data.users[i].role = "Group Assis"
-                    data.users[i].adminGroupList.push(req.body.group)
-                    for(j =0; j<data.Groups.length; j++){
-                        if(req.body.group === data.Groups[j].name){
-                            data.Groups[j].group_assis.push(req.body.username)
-                        }
-                    }
-                }else{
-                    res.send(false)
-                }
+        const collection = db.collection('groups')
+        const userCollection = db.collection('users')
+        const channelCollection = db.collection('channels')
+        userCollection.find({'username': req.body.username, 'role': 'user'}).count((err, count)=>{
+            if(count == 1){
+                userCollection.updateOne({'username': req.body.username}, {$set: {'role': 'Group Assis'}})
+                
+                collection.updateOne({'name': req.body.group}, {$addToSet: {'group_admin': req.body.username}})
+                channelCollection.updateMany({'group': req.body.group}, {$addToSet: {'users': req.body.username}})
+                channelCollection.find({'group': req.body.group}).forEach(data =>{
+                    userCollection.updateOne({'username': req.body.username, 'groups.name': req.body.group}, {$addToSet: {'groups.$.channels': data.name}})
+                })
+                res.send(true)
+            }else{
+                res.send(false)
             }
-        }
+        })
+        // for(i=0; i<data.users.length; i++){
+        //     if(req.body.username === data.users[i].username){
+        //         if(data.users[i].role !== "Super" && data.users[i].role !== "Group Admin"){
+        //             res.send(true)
+        //             data.users[i].role = "Group Assis"
+        //             data.users[i].adminGroupList.push(req.body.group)
+        //             for(j =0; j<data.Groups.length; j++){
+        //                 if(req.body.group === data.Groups[j].name){
+        //                     data.Groups[j].group_assis.push(req.body.username)
+        //                 }
+        //             }
+        //         }else{
+        //             res.send(false)
+        //         }
+        //     }
+        // }
 
-        var JSON_data = JSON.stringify(data)
-        fs.writeFile("data.json", JSON_data, function(err){
-            if(err)
-                console.log(err);
-            else
-                console.log("Provided a user with group assis role")
-        });
         
 
     })
@@ -823,17 +836,20 @@ module.exports = function(app, path, db, ObjectID){
         userCollection.find({'username': req.body.name, 'role': "Super"}).count((err, count)=>{
             if(count == 0){
                 userCollection.updateOne({'username': req.body.name}, {$set: {'role': "Super"}})
+                collection.find({}).forEach(data =>{
+                    userCollection.updateOne({'username': req.body.name}, {$addToSet: {'groups': {'name': data.name, 'channels': []}}})
+                    collection.updateOne({'name': data.name}, {$addToSet: {'group_admin': req.body.name}})
+                    collection.updateOne({'name': data.name}, {$addToSet: {'users': req.body.name}})
+        
+         
+                })
+                
                 res.send(true)
             }else{
                 res.send(false)
             }
         })
-        collection.find({}).forEach(data =>{
-            userCollection.updateOne({'username': req.body.name}, {$addToSet: {'groups': {'name': data.name, 'channels': []}}})
-            collection.updateOne({'name': data.name}, {$addToSet: {'group_admin': req.body.name}})
 
- 
-        })
         
         // for(i=0; i<data.users.length; i++){
         //     if(data.users[i].role === "Super"){

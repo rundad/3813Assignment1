@@ -99,7 +99,7 @@ export class GroupsComponent implements OnInit {
         alert("Provided group assis role to user: " + username)
         this.ngOnInit();
       }else{
-        alert("You cannot assign group assis role to Super and Group Admin")
+        alert("You cannot assign group assis role admin users")
       }
     })
   }
