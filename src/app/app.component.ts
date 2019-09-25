@@ -38,7 +38,7 @@ export class AppComponent {
   //The function will be called when user want to go to the profile
   //Check if user have logged in or not, if logged in go to profile, else go to login
   goProfile(){
-    if((localStorage.getItem("currentUsername")) === null){
+    if(JSON.parse(sessionStorage.getItem("currentUsername")) === null){
       this.router.navigateByUrl("/login")
     }else{
       this.router.navigateByUrl("/profile")
@@ -61,7 +61,7 @@ export class AppComponent {
   //Navigate to users if the user is logged in, else go to login componenet 
   goUsers(){
     console.log()
-    if((localStorage.getItem("currentUsername")) === null){
+    if(JSON.parse(sessionStorage.getItem("currentUsername")) === null){
       this.router.navigateByUrl("/login")
     }else{
       this.router.navigateByUrl("/users")
@@ -71,7 +71,7 @@ export class AppComponent {
   //The function will be called when the user clicked the groups tab
   //Navigate to groups component if user logged in, else go to login component 
   goGroups(){
-    if((localStorage.getItem("currentUsername")) === null){
+    if(JSON.parse(sessionStorage.getItem("currentUsername")) === null){
       this.router.navigateByUrl("/login")
     }else{
       this.router.navigateByUrl("/groups")
@@ -81,7 +81,7 @@ export class AppComponent {
   //The function that will be called when the Chat button on the nav bar have been clicked
   //Take the user to the chat component
   goChat(){
-    if((localStorage.getItem("currentUsername")) === null){
+    if(JSON.parse(sessionStorage.getItem("currentUsername")) === null){
       this.router.navigateByUrl("/login")
     }else{
       this.router.navigateByUrl("/chat")

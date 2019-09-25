@@ -25,7 +25,7 @@ export class ProfileComponent implements OnInit {
   //The function which will be called when the component loads
   //Get the user data by sending the get current user request to the server
   ngOnInit() {
-    this.routeService.getCurrentUser().subscribe(data =>{
+    this.routeService.getCurrentUser(JSON.parse(sessionStorage.getItem("currentUsername"))).subscribe(data =>{
       this.userData = data[0]
       console.log(this.userData)
     })

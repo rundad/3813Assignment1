@@ -44,7 +44,7 @@ module.exports = {
                             //track who is in each room
                             if(socketRoom[i][0] == socket.id){
                                 socketRoom[i][1] = room;
-                                inroomSocketarray = true
+                                inroom = true
                             }
                         }
 
@@ -74,13 +74,17 @@ module.exports = {
 
             //leave a room
             socket.on("leaveroom", (room)=>{
-                for(let i =0; i<socketRoom; i++){
+                //chat.to(room).emit("notice", "A user has left")
+                console.log(socket.id)
+                for(i =0; i< socketRoom.length; i++){
                     if(socketRoom[i][0] == socket.id){
+                        chat.to(room).emit("notice", "A user has left")
                         socketRoom.splice(i, 1);
                         socket.leave(room);
-                        chat.to(room).emit("notice", "A user has left")
+                        
                     }
                 }
+
 
                 for(let j=0; j<socketRoomnum.length; j++){
                     if(socketRoomnum[j][0] == room){

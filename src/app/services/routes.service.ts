@@ -69,8 +69,8 @@ export class RoutesService {
   }
 
   //The method that sends the get current user request to the server for getting the current user details
-  getCurrentUser(){
-    return this.http.get(this.url + "/getCurrentUser")
+  getCurrentUser(username: string){
+    return this.http.post(this.url + "/getCurrentUser", {username: username})
   }
 
   //The method that sends the invite user request to the server for inivting a user to a group

@@ -395,13 +395,18 @@ module.exports = function(app, path, db, ObjectID){
     //The request used to get currnet user details
     //Check which user is logged in
     //Get detail and send it back
-    app.get("/getCurrentUser", function(req, res){
+    app.post("/getCurrentUser", function(req, res){
         if(!req.body){
             return res.sendStatus(400)
         }
         console.log(user_email)
         const collection = db.collection('users');
-        collection.find({'email':user_email}).limit(1).toArray((err,docs)=>{
+        // collection.find({'email':user_email}).limit(1).toArray((err,docs)=>{
+        //     //send to client and array of items limited to 1.
+        //     console.log(docs);
+        //       res.send(docs);
+        // })
+        collection.find({'username':req.body.username}).limit(1).toArray((err,docs)=>{
             //send to client and array of items limited to 1.
             console.log(docs);
               res.send(docs);

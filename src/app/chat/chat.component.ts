@@ -70,7 +70,7 @@ export class ChatComponent implements OnInit {
   }
 
   leaveroom(){
-    this.socketService.leaveroom(this.group + this.channel)
+    this.socketService.leaveroom(this.currentroom)
     this.socketService.reqnumusers(this.currentroom)
     this.socketService.getnumusers((res)=>{this.numusers = res})
     this.currentroom = ""

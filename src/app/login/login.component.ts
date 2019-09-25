@@ -40,8 +40,8 @@ export class LoginComponent implements OnInit {
           }else if(data[0].role === "Group Assis"){
             this.dataSharingService.isGroupAssis.next(true);
           }
-          localStorage.setItem("currentUsername", JSON.stringify(data.username));
-          localStorage.setItem("userData", JSON.stringify(data));
+          sessionStorage.setItem("currentUsername", JSON.stringify(data[0].username));
+          sessionStorage.setItem("userData", JSON.stringify(data));
           this.router.navigateByUrl("/profile")
         }else if(data[0].valid === true){
           alert("Email and password were incorrect")

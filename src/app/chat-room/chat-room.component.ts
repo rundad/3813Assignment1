@@ -43,6 +43,7 @@ export class ChatRoomComponent implements OnInit {
     );
     this.socketService.reqnumusers(this.group_name + this.channel_name)
     this.socketService.getnumusers((res)=>{ this.numuser = res})
+    console.log(this.roomnotice)
   }
 
   // private initIoConnection(){
