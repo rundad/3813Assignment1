@@ -42,7 +42,7 @@ export class UsersComponent implements OnInit {
       this.users = data
       console.log(this.users)
     })
-    this.routeService.getGroups().subscribe(data =>{
+    this.routeService.getGroups(JSON.parse(sessionStorage.getItem("currentUsername"))).subscribe(data =>{
       this.groups = data
       console.log(this.groups)
     })

@@ -155,13 +155,13 @@ module.exports = function(app, path, db, ObjectID){
     //Find the groups that the user have control with using for loop in adminGroupList
     //Get groups details
     //send data back
-    app.get('/getGroups', function(req, res){
+    app.post('/getGroups', function(req, res){
         if(!req.body){
             return res.sendStatus(400)
         }
 
         const collection = db.collection('groups')
-        collection.find({"group_admin": {$in: [user]}} ).toArray((err, docs)=>{
+        collection.find({"group_admin": {$in: [req.body.username]}} ).toArray((err, docs)=>{
             res.send(docs)
         })
 
@@ -176,7 +176,7 @@ module.exports = function(app, path, db, ObjectID){
             return res.sendStatus(400)
         }
 
-        new_group = {name: req.body.name, channels: [], group_admin: [user], group_assis: [], users: [user]}
+        new_group = {name: req.body.name, channels: [], group_admin: [req.body.username], group_assis: [], users: [req.body.username]}
         const collection = db.collection('groups')
         const userCollection = db.collection('users')
         groups = []
@@ -187,7 +187,7 @@ module.exports = function(app, path, db, ObjectID){
             if(count == 0){
                 collection.insertOne(new_group, (err, dbres)=>{
                     if(err) throw err;
-                    userCollection.updateOne({'username': user}, {$addToSet: {'groups': {'name': req.body.name, 'channels': []}}})
+                    userCollection.updateOne({'username': req.body.username}, {$addToSet: {'groups': {'name': req.body.name, 'channels': []}}})
                     res.send(true)
                 })
             }else{
@@ -323,13 +323,13 @@ module.exports = function(app, path, db, ObjectID){
         //craete a new channel if the group doesnt have the channel
         //add the channel to group array
         //add the channel to the user's channel array who have created the channel
-        new_channel = {name: req.body.channel, group: req.body.group, users: [user]}
+        new_channel = {name: req.body.channel, group: req.body.group, users: [req.body.username]}
         channelCollection.find({'name': req.body.channel, 'group': req.body.group}).count((err, count)=>{
             if(count == 0){
                 channelCollection.insertOne(new_channel, (err, dbres)=>{
                     if(err) throw err;
                     collection.updateOne({'name': req.body.group}, {$addToSet: {'channels': req.body.channel}})
-                    userCollection.updateOne({'username': user, 'groups.name': req.body.group}, {$addToSet: {'groups.$.channels': req.body.channel}})
+                    userCollection.updateOne({'username': req.body.username, 'groups.name': req.body.group}, {$addToSet: {'groups.$.channels': req.body.channel}})
                     userCollection.find({$or: [{'role': 'Super'}, {'role': 'Group Admin'}, {'role': 'Group Assis'}]}).forEach(data=>{
                         userCollection.updateOne({'username': data.username, 'groups.name': req.body.group}, {$addToSet: {'groups.$.channels': req.body.channel}})
                         channelCollection.updateOne({'name': req.body.channel, 'group': req.body.group}, {$addToSet: {'users': data.username}})
@@ -912,13 +912,13 @@ module.exports = function(app, path, db, ObjectID){
     //Check which user is in action
     //Get the groups in users using for loop
     //send data back
-    app.get("/getUserGroups", function(req, res){
+    app.post("/getUserGroups", function(req, res){
         if(!req.body){
             return res.sendStatus(400)
         }
  
         const collection = db.collection('groups')
-        collection.find({'users': {$in: [user]}}).toArray((err, docs)=>{
+        collection.find({'users': {$in: [req.body.username]}}).toArray((err, docs)=>{
             res.send(docs)
         })
 
@@ -945,7 +945,7 @@ module.exports = function(app, path, db, ObjectID){
         }
 
         const collection = db.collection('channels')
-        collection.find({'group': req.body.group, 'users': {$in: [user]}}).toArray((err, docs)=>{
+        collection.find({'group': req.body.group, 'users': {$in: [req.body.username]}}).toArray((err, docs)=>{
             res.send(docs)
         })
         // console.log(data.users[0].groups[0].name)

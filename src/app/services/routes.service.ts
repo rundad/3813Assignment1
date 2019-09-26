@@ -39,13 +39,13 @@ export class RoutesService {
   }
 
   //The method that sends the get groups request to the server for get all the groups
-  getGroups(){
-    return this.http.get(this.url + "/getGroups")
+  getGroups(username: string){
+    return this.http.post(this.url + "/getGroups", {username:username})
   }
 
   //The method that sends the create group request to the server for creating a group
-  createGroup(name: string){
-    return this.http.post(this.url + "/createGroup", {name: name})
+  createGroup(name: string, username:string){
+    return this.http.post(this.url + "/createGroup", {name: name, username:username})
   }
 
   //The method that sends the remove group request to the server for remove a group
@@ -54,8 +54,8 @@ export class RoutesService {
   }
 
   //The method that sends the create channel request to the server for creating a channel
-  createChannel(group:string, channel:string){
-    return this.http.post(this.url + "/createChannel", {group: group, channel: channel})
+  createChannel(group:string, channel:string, username: string){
+    return this.http.post(this.url + "/createChannel", {group: group, channel: channel, username: username})
   }
 
   //The method that sends the get channel request to the server for get all the channels in the group
@@ -136,12 +136,12 @@ export class RoutesService {
   }
 
   //The method that used to send the request to server side for getting all the groups that the user have joined
-  getUserGroups(){
-    return this.http.get(this.url + "/getUserGroups")
+  getUserGroups(username: string){
+    return this.http.post(this.url + "/getUserGroups", {username: username})
   }
   
   //The method that used to send the request to server side for getting all the channels of the group
-  getUserGroupChannels(group:string){
-    return this.http.post(this.url + "/getUserGroupCh", {group: group})
+  getUserGroupChannels(group:string, username:string){
+    return this.http.post(this.url + "/getUserGroupCh", {group: group, username:username})
   }
 }

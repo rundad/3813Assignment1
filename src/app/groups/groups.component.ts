@@ -26,7 +26,7 @@ export class GroupsComponent implements OnInit {
   //Get the groups by sending the getGroups request to the server side
   //Get the data status using the data sharing service and store them into variables
   ngOnInit() {
-    this.routeService.getGroups().subscribe(data =>{
+    this.routeService.getGroups(JSON.parse(sessionStorage.getItem("currentUsername"))).subscribe(data =>{
       this.groups = data
       console.log(this.groups)
     })
@@ -41,7 +41,7 @@ export class GroupsComponent implements OnInit {
   //The function used to create group by sending a request to the server
   createGroup(){
     if(this.group_name !== ""){
-      this.routeService.createGroup(this.group_name).subscribe(data =>{
+      this.routeService.createGroup(this.group_name, JSON.parse(sessionStorage.getItem("currentUsername"))).subscribe(data =>{
         console.log(data)
         if(data === true){
           this.ngOnInit();

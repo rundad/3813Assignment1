@@ -28,7 +28,7 @@ export class ChatComponent implements OnInit {
   //The function that will be called when the componnet loads
   //Get all the groups that user have joined by send a getUserGroups request
   ngOnInit() {
-    this.routeService.getUserGroups().subscribe(data=>{
+    this.routeService.getUserGroups(JSON.parse(sessionStorage.getItem("currentUsername"))).subscribe(data=>{
       console.log(data)
       this.group_names = data
     })
@@ -47,7 +47,7 @@ export class ChatComponent implements OnInit {
   //The function that will be called when a group have been selected
   //Get the channels of the selected group by calling the method in route service to send a request to the server side
   gUserGrChannel(){
-    this.routeService.getUserGroupChannels(this.group).subscribe(data =>{
+    this.routeService.getUserGroupChannels(this.group, JSON.parse(sessionStorage.getItem("currentUsername"))).subscribe(data =>{
       console.log(data)
       this.channel_names = data
     })
