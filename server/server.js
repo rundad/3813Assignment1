@@ -18,6 +18,7 @@ const url = 'mongodb://localhost:27017';
 
 //Apply express middleware
 app.use(express.static(path.join(__dirname, '../dist/assignment1')));
+app.use('/image',express.static(path.join(__dirname, './images')));
 app.use(bodyParser.json());
 
 app.use(cors());
@@ -28,7 +29,7 @@ MongoClient.connect(url, {poolSize:10,useNewUrlParser: true,useUnifiedTopology: 
         const dbName = 'assignment2';
         const db = client.db(dbName);
 
-        require('./routes/api-login.js')(app, path, db, ObjectID);
+        require('./routes/api-login.js')(app, path, db, ObjectID, formidable);
         require('./routes/upload.js')(app, formidable);
         // require('./routes/add.js')(db, app);
         // require('./routes/read.js')(db,app);

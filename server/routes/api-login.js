@@ -1,4 +1,4 @@
-module.exports = function(app, path, db, ObjectID){
+module.exports = function(app, path, db, ObjectID, formidable){
     var fs = require('fs');
 
     console.log("hello")
@@ -48,6 +48,37 @@ module.exports = function(app, path, db, ObjectID){
         })
         //send data back to client side
     })
+
+
+    app.post('/api/upload', function(req, res){
+        var form = new formidable.IncomingForm({uploadDir: './images'})
+        form.keepExtensions = true;
+
+        form.on('error', function(err){
+            throw err;
+            res.send({
+                result:"failed",
+                data: {},
+                message: "cannot upload"
+            })
+        })
+
+        form.on('fileBegin', function(name, file){
+            file.path = form.uploadDir + "/" + file.name
+            console.log("file path:" + file.path)
+        })
+
+        form.on('file', function(field, file){
+            res.send({
+                result: 'OK',
+                data: {'filename': file.name},
+                message: "upload successful"
+            })
+        })
+        
+        form.parse(req)
+    })
+
 
     //request endpoint for creating user
     //Check if user already exist or not

@@ -145,7 +145,7 @@ export class RoutesService {
     return this.http.post(this.url + "/getUserGroupCh", {group: group, username:username})
   }
 
-  imgupload(fd){
-    return this.http.post<any>('/api/upload', fd)
+  imageupload(fd){
+    return this.http.post<any>(this.url + '/api/upload', fd)
   }
 }

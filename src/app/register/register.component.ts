@@ -54,17 +54,34 @@ export class RegisterComponent implements OnInit {
   //only the super admin have clicked the button can access to the this form and function
   //Send a request to server side to create a user by calling the method through route service
   createWithSuper(){
-    this.routeService.createWithSuper({username: this.username, email: this.email, password: this.password, role: this.create_role, groups: [], adminGroupList:[], valid:false}).subscribe(data=>{
-      if(data === true){
-        alert("Create user with role: " + this.create_role)
-      }else{
-        alert("This user is already exist!")
-      }
-    })
+    if(this.username == "" || this.password == "" || this.create_role == "" || this.email == ""){
+      alert("Missing details")
+    }else{
+      this.onUpload()
+      this.routeService.createWithSuper({username: this.username, email: this.email, password: this.password, role: this.create_role, groups: [], adminGroupList:[], image:this.selectedfile.name, valid:false}).subscribe(data=>{
+        if(data === true){
+          alert("Create user with role: " + this.create_role)
+        }else{
+          alert("This user is already exist!")
+        }
+      })
+    }
   }
 
   onFileSelected(event){
     console.log(event.target.files[0])
-    this.selectedfilename = event.target.files[0];
+    this.selectedfile = event.target.files[0];
+  }
+
+  onUpload(){
+      const fd = new FormData();
+      fd.append('image', this.selectedfile, this.selectedfile.name)
+      this.routeService.imageupload(fd).subscribe(res=>{
+        this.imagepath = res.data.filename
+        console.log(this.imagepath)
+        console.log(res.result)
+      })
+
+
   }
 }
