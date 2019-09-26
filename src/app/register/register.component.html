@@ -7,6 +7,10 @@
         <h4 style="text-align: center">Register Form</h4>
         <div class="container">
             <form>
+                <div class="form-group">
+                    <input type="file" class="form-control" (change)="onFileSelected($event)" name="uploadfile" id="uploadfile">
+                </div>
+                <img src="">
             <div class="form-group">
               <label for="username">Username</label>
               <input type="text" class="form-control" id="username" [(ngModel)]= "username" name="username" placeholder="Username" >

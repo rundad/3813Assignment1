@@ -10,6 +10,7 @@ const path = require('path');
 var bodyParser = require('body-parser');
 const MongoClient = require('mongodb').MongoClient;  // require MongoClient functionality
 var  ObjectID = require('mongodb').ObjectID; //require ObjectID functionality
+const formidable = require('formidable');
 
 //Define port used for the server
 const PORT = 3000;
@@ -28,6 +29,7 @@ MongoClient.connect(url, {poolSize:10,useNewUrlParser: true,useUnifiedTopology: 
         const db = client.db(dbName);
 
         require('./routes/api-login.js')(app, path, db, ObjectID);
+        require('./routes/upload.js')(app, formidable);
         // require('./routes/add.js')(db, app);
         // require('./routes/read.js')(db,app);
         // require('./routes/update.js')(db,app, ObjectID);

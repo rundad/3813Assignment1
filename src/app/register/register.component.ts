@@ -17,6 +17,9 @@ export class RegisterComponent implements OnInit {
   create_role:string = ""
   isSuperAdmin;
   isGroupAdmin;
+  selectedfile = null;
+  selectedfilename = null;
+  imagepath = ""
 
   constructor(private routeService: RoutesService, private router:Router, private dataSharingService: DataSharingService) { }
 
@@ -58,5 +61,10 @@ export class RegisterComponent implements OnInit {
         alert("This user is already exist!")
       }
     })
+  }
+
+  onFileSelected(event){
+    console.log(event.target.files[0])
+    this.selectedfilename = event.target.files[0];
   }
 }

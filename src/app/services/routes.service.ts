@@ -144,4 +144,8 @@ export class RoutesService {
   getUserGroupChannels(group:string, username:string){
     return this.http.post(this.url + "/getUserGroupCh", {group: group, username:username})
   }
+
+  imgupload(fd){
+    return this.http.post<any>('/api/upload', fd)
+  }
 }
