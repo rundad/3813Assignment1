@@ -1,6 +1,6 @@
 module.exports = {
 
-    connect: function(io, PORT){
+    connect: function(io, PORT, db){
 
         var socketRoom = []
         var socketRoomnum = []
@@ -10,15 +10,27 @@ module.exports = {
         chat.on('connection', (socket)=>{
 
             //Event to send message back to the clients
-            socket.on('message', (message)=>{
-                console.log(message)
-                for(i=0; i<socketRoom.length; i++){
-                    //check each if current socket id has joined a room
-                    if(socketRoom[i][0] == socket.id){
-                        //emit back to the room
-                        chat.to(socketRoom[i][1]).emit('message', message)
+            socket.on('message', (data)=>{
+                const collection = db.collection("channels")
+                collection.updateOne({'group': data.group, 'name': data.channel}, {$addToSet: {'messages': {user: data.username, message: data.message, image: data.userimage}}})
+                collection.findOne({'group': data.group, 'name': data.channel}, (err, doc)=>{
+                    console.log(doc.messages)
+                    for(i=0; i<socketRoom.length; i++){
+                        //check each if current socket id has joined a room
+                        if(socketRoom[i][0] == socket.id){
+                            //emit back to the room
+                            chat.to(socketRoom[i][1]).emit('message', doc.messages)
+                        }
                     }
-                }
+                })
+                // for(i=0; i<socketRoom.length; i++){
+                //     //check each if current socket id has joined a room
+                //     if(socketRoom[i][0] == socket.id){
+                //         //emit back to the room
+                //         console.log(messages)
+                //         chat.to(socketRoom[i][1]).emit('message', data)
+                //     }
+                // }
             });
 
             socket.on('numusers', (room)=>{

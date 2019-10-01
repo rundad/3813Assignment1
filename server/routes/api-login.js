@@ -141,43 +141,11 @@ module.exports = function(app, path, db, ObjectID, formidable){
             }
         })
 
-   
-
-        // collection.findOne({_id: objectid}, (data)=>{
-        //     groupCollection.updateMany({}, {$pull: {'users': data.username}})
-        // })
-        // collection.find({"group_admin": {$in: [user]}} ).toArray((err, docs)=>{
-        //     res.send(docs)
-        // })
         // //remove user from group admin array
-        // for(i = 0; i<data.Groups.length; i++){
-        //     for(j = 0; j<data.Groups[i].group_admin.length; j++){
-        //         if(req.body.username === data.Groups[i].group_admin[j]){
-        //             data.Groups[i].group_admin.splice(j, 1)
-        //         }
-        //     }
-        // }
 
         // //remove user from users array in Groups
-        // for(i = 0; i<data.Groups.length; i++){
-        //     for(j = 0; j<data.Groups[i].users.length; j++){
-        //         if(req.body.username === data.Groups[i].users[j]){
-        //             data.Groups[i].users.splice(j, 1)
-        //         }
-        //     }
-        // }
 
         // //remove user from group assis array
-        // for(i = 0; i<data.Groups.length; i++){
-        //     for(j = 0; j<data.Groups[i].group_assis.length; j++){
-        //         if(req.body.username === data.Groups[i].group_assis[j]){
-        //             data.Groups[i].group_assis.splice(j, 1)
-        //         }
-        //     }
-        // }
-
-
-
 
     })
 
@@ -227,35 +195,9 @@ module.exports = function(app, path, db, ObjectID, formidable){
         })
 
         //add the group to the user's adminGroupList who created the group
-        // userCollection.updateOne({'username': user}, {$addToSet :{"adminGroupList": req.body.name}}, ()=>{
-        //     console.log(user)
-        //     console.log(req.body.name)
-        //     console.log("updated")
-        // })
 
-        // //Get all the group names
-        // collection.find({}, {'name':true}).toArray((err, docs)=>{
-        //     console.log(docs)
-        // })
-        // console.log(new_groups)
-        // //update Super users' adminGroupList to have control with all the groups
-        // userCollection.updateMany({'role': 'Super'}, {$set: {'adminGroupList': new_groups}})
-        // userCollection.find({'role': "Super"}, {'username':1}).toArray((err, data)=>{
-        //     console.log(data)
-        // })
-        // for(i = 0; i<superUsers.length; i++){
-        //     new_superUsers.push(superUsers[i].name)
-        // }
         // //push super user to group admin array
-        // for(i=0; i<superUsers.length; i++){
-        //     collection.find({'group_admin': {$in: [superUsers[i]]}}).count((err, count)=>{
-        //         if(count ==0){
-        //             collection.update({}, {$push: {'group_admin': superUsers[i]}})
-        //         }else{
-        //             console.log("super user is already the group admin of the group ")
-        //         }
-        //     })
-        // }
+
         userCollection.find({'role': 'Super'}).forEach(data =>{
             console.log(data.username)
  
@@ -263,36 +205,10 @@ module.exports = function(app, path, db, ObjectID, formidable){
 
  
         })
-        
-        
 
         // //check if the group is not exist, then push it to the Groups list
-        // if(group_names.indexOf(req.body.name) == -1){
-        //     group.name = req.body.name
-        //     group.channels = []
-        //     group.group_admin.push(data.users[currentUser_index].username)
-        //     group.group_assis = []
-        //     group.users.push(data.users[currentUser_index].username)
-        //     data.Groups.push(group)
-        //     data.users[currentUser_index].adminGroupList.push(req.body.name)
-        //     data.users[currentUser_index].groups.push({name: req.body.name, channels: []})
-        //     res.send(true)
-        // }else{
-        //     res.send(false)
-        // }
 
         // //for loop to push the user who created the group to admin group list
-        // for(i = 0; i <data.users.length; i++){
-        //     if(data.users[i].role === "Super"){
-        //         // if(data.users[i].adminGroupList.indexOf(req.body.name) == -1){
-        //         //     data.users[i].adminGroupList.push(req.body.name)
-        //         // }
-        //         data.users[i].adminGroupList = []
-        //         for(j =0; j<data.Groups.length; j++){
-        //             data.users[i].adminGroupList.push(data.Groups[j].name)
-        //         }
-        //     }
-        // }
         
     })
 
@@ -323,18 +239,6 @@ module.exports = function(app, path, db, ObjectID, formidable){
    
         // }
         // //for loop to remove the group in admin group list
-        // for(i = 0; i <data.users.length; i++){
-        //     for(j = 0; j<data.users[i].adminGroupList.length; j++){
-        //         if(req.body.name === data.users[i].adminGroupList[j]){
-        //             data.users[i].adminGroupList.splice(j, 1)
-                    
-        //         }
-        //     }
-
-        // }
-
-
-    
 
     })
 
@@ -354,7 +258,7 @@ module.exports = function(app, path, db, ObjectID, formidable){
         //craete a new channel if the group doesnt have the channel
         //add the channel to group array
         //add the channel to the user's channel array who have created the channel
-        new_channel = {name: req.body.channel, group: req.body.group, users: [req.body.username]}
+        new_channel = {name: req.body.channel, group: req.body.group, users: [req.body.username], messages: []}
         channelCollection.find({'name': req.body.channel, 'group': req.body.group}).count((err, count)=>{
             if(count == 0){
                 channelCollection.insertOne(new_channel, (err, dbres)=>{
@@ -376,27 +280,7 @@ module.exports = function(app, path, db, ObjectID, formidable){
 
     })
 
-    //The request used to get channels of the group
-    //Check the group and get all the channels then send back to client side
-    app.post("/getChannel", function(req, res){
-        if(!req.body){
-            return res.sendStatus(400)
-        }
-        var dat = fs.readFileSync("data.json", 'utf8')
-        var data = JSON.parse(dat)
-        var channels = []
-
-        for(i = 0; i <data.Groups.length; i++){
-            if(req.body.group === data.Groups[i].name){
-                for(j = 0; j<data.Groups[i].channels.length; j++){
-                    channels.push(data.Groups[i].channels[j])
-                }
-            }
-        }
-    
-        res.send(channels)
-        
-    })
+   
 
     //The request to remove channel
     //Check the group of the channel that in remove action
@@ -477,53 +361,9 @@ module.exports = function(app, path, db, ObjectID, formidable){
             }
         })
   
-     
- 
-        // if(users_in_group.indexOf(req.body.username) == -1){
-            
-        //     data.Groups[selected_group_index].users.push(req.body.username)
-        //     for(i=0; i<data.users.length; i++){
-        //         if(req.body.username === data.users[i].username){
-        //             data.users[i].groups.push({name: req.body.group, channels:[]})
-        //             if(data.users[i].role === "Group Admin"){
-        //                 console.log("group admin")
-        //                 data.users[i].adminGroupList.push(req.body.group)
-        //                 for(j=0; j<data.Groups.length; j++){
-        //                     if(req.body.group === data.Groups[j].name){
-        //                         data.Groups[j].group_admin.push(data.users[i].username)
-        //                     }
-        //                 }
-        //             }
-        //         }
-        //     }
-        //     res.send(true)
-        // }else{
-        //     res.send(false)
-        // }
-
-
-
 
     })
 
-    //The request used to get group users
-    //Check which group
-    //Get the users in the group and send them back
-    app.post("/getGroupUsers", function(req, res){
-        if(!req.body){
-            return res.sendStatus(400)
-        }
-        var dat = fs.readFileSync("data.json", 'utf8')
-        var data = JSON.parse(dat)
-        var current_group_users;
-        for(i=0; i<data.Groups.length; i++){
-            if(req.body.group === data.Groups[i].name){
-                current_group_users = data.Groups[i].users
-            }
-        }
-
-        res.send(current_group_users)
-    })
 
     //The request used to kick user out of group
     //check which group and user is in action
@@ -562,59 +402,7 @@ module.exports = function(app, path, db, ObjectID, formidable){
         })
         channelCollection.updateMany({'group': req.body.group}, {$pull: {'users': req.body.username}})
         res.send(true)
-        // for(i=0; i<data.users.length; i++){
-        //     if(req.body.username === data.users[i].username){
-        //         for(j = 0; j<data.users[i].groups.length; j++){
-        //             if(req.body.group === data.users[i].groups[j].name){
-        //                 data.users[i].groups.splice(j, 1)
-        //             }
-        //         }
-        //     }
-        // }
-
-        // for(i=0; i<data.Groups.length; i++){
-        //     if(req.body.group === data.Groups[i].name){
-        //         for(j=0; j<data.Groups[i].users.length; j ++){
-        //             if(req.body.username === data.Groups[i].users[j]){
-        //                 data.Groups[i].users.splice(j, 1)
-        //             }
-        //         }
-        //     }
-        // }
-
-
-        // for(i=0; i<data.Groups.length; i++){
-        //     if(req.body.group === data.Groups[i].name){
-        //         for(j = 0; j<data.Groups[i].group_admin.length; j++){
-        //             if(req.body.username === data.Groups[i].group_admin[j]){
-        //                 data.Groups[i].group_admin.splice(j, 1)
-        //             }
-        //         }
-        //     }
-        // }
-
-        // if(data.users[user_position].role === "Group Assis"){
-        //     data.users[user_position].role = "user"
-        //     for(i=0; i<data.Groups.length; i++){
-        //         if(req.body.group === data.Groups[i].name){
-        //             for(j = 0; j<data.Groups[i].group_assis.length; j++){
-        //                 if(req.body.username === data.Groups[i].group_assis[j]){
-        //                     data.Groups[i].group_assis.splice(j, 1)
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
-
-        // for(i =0 ; i<data.Channels.length; i++){
-        //     if(req.body.group === data.Channels[i].group){
-        //         for(j = 0; j<data.Channels[i].users.length; j++){
-        //             if(req.body.username === data.Channels[i].users[j]){
-        //                 data.Channels[i].users.splice(j, 1)
-        //             }
-        //         }
-        //     }
-        // }
+       
 
 
     })
@@ -639,24 +427,6 @@ module.exports = function(app, path, db, ObjectID, formidable){
 
     })
 
-    //The request used to get the channels in the group
-    //Check which group and get all the channels of the group and send back
-    app.post("/getGroupChannel", function(req, res){
-        if(!req.body){
-            return res.sendStatus(400)
-        }
-        var dat = fs.readFileSync("data.json", 'utf8')
-        var data = JSON.parse(dat)
-
-        var current_group_channels;
-        for(i=0; i<data.Groups.length; i++){
-            if(req.body.group === data.Groups[i].name){
-                current_group_channels = data.Groups[i].channels
-            }
-        }
-
-        res.send(current_group_channels)
-    })
 
     //The request used to add user to channel
     //Check which user, group and channel is in action
@@ -682,63 +452,9 @@ module.exports = function(app, path, db, ObjectID, formidable){
             }
         })
 
-        // for(i=0; i<data.users.length; i++){
-        //     if(req.body.username === data.users[i].username){
-        //         user_index = i
-        //         for(j=0; j<data.users[i].groups.length; j++){
-        //             if(req.body.group === data.users[i].groups[j].name){
-        //                 group_index = j
-        //                 for(k=0; k<data.users[i].groups[j].channels.length; k++){
-        //                     user_group_channels.push(data.users[i].groups[j].channels[k])
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
-
-
-        // console.log(user_group_channels)
-        // if(user_group_channels.indexOf(req.body.channel) == -1){
-        //     data.users[user_index].groups[group_index].channels.push(req.body.channel)
-        //     for(i = 0; i<data.Channels.length; i++) {
-        //         if(req.body.channel === data.Channels[i].name){
-        //             data.Channels[i].users.push(req.body.username)
-        //         }
-        //     }
-        //     res.send(true)
-        // }else{
-        //     res.send(false)
-        // }
-
-
 
     })
 
-    //The request used to get users in channel
-    //check which group and channel is in action
-    //get the users in the channel and send back
-    app.post("/getChannelUsers", function(req, res){
-        if(!req.body){
-            return res.sendStatus(400)
-        }
-        var dat = fs.readFileSync("data.json", 'utf8')
-        var data = JSON.parse(dat)
-        var channel_users = []
-
-        for(i =0; i<data.users.length; i++){
-            for(j=0; j<data.users[i].groups.length; j++){
-                if(req.body.group === data.users[i].groups[j].name){
-                    for(k=0; k<data.users[i].groups[j].channels.length; k++){
-                        if(req.body.channel === data.users[i].groups[j].channels[k]){
-                            channel_users.push(data.users[i].username)
-                        }
-                    }
-                }
-            }
-        }
-
-        res.send(channel_users)
-    })
 
     //The request used to remove user from channel
     //Check which user, group and channel is in action
@@ -755,33 +471,9 @@ module.exports = function(app, path, db, ObjectID, formidable){
         userCollection.updateOne({'username': req.body.username, 'groups.name': req.body.group}, {$pull: {'groups.$.channels': req.body.channel}})
         collection.updateOne({'name': req.body.channel, 'group': req.body.group}, {$pull: {'users': req.body.username}})
         res.send(true)
-        // for(i=0; i<data.users.length; i ++){
-        //     if(req.body.username === data.users[i].username){
-        //         user_index = i
-        //         for(k=0; k<data.users[i].groups.length; k++){
-        //             if(req.body.group === data.users[i].groups[k].name){
-        //                 group_index = k
-        //                 for(j = 0; j<data.users[i].groups[k].channels.length; j++){
-        //                     if(req.body.channel === data.users[i].groups[k].channels[j]){
-        //                         channel_index = j
-        //                     }
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
+        
 
-        // for(i = 0; i<data.Channels.length; i++){
-        //     if(req.body.group === data.Channels[i].group && req.body.channel === data.Channels[i].name){
-        //         for(j = 0; j<data.Channels[i].users.length; j++){
-        //             if(req.body.username === data.Channels[i].users[j]){
-        //                 data.Channels[i].users.splice(j, 1)
-        //             }
-        //         }
-        //     }
-        // }
-
-        // data.users[user_index].groups[group_index].channels.splice(channel_index, 1)
+        
     })
 
     //The request used to create user by using super admin role
@@ -835,24 +527,6 @@ module.exports = function(app, path, db, ObjectID, formidable){
                 res.send(false)
             }
         })
-        // for(i=0; i<data.users.length; i++){
-        //     if(req.body.username === data.users[i].username){
-        //         if(data.users[i].role !== "Super" && data.users[i].role !== "Group Admin"){
-        //             res.send(true)
-        //             data.users[i].role = "Group Assis"
-        //             data.users[i].adminGroupList.push(req.body.group)
-        //             for(j =0; j<data.Groups.length; j++){
-        //                 if(req.body.group === data.Groups[j].name){
-        //                     data.Groups[j].group_assis.push(req.body.username)
-        //                 }
-        //             }
-        //         }else{
-        //             res.send(false)
-        //         }
-        //     }
-        // }
-
-        
 
     })
 
@@ -887,40 +561,6 @@ module.exports = function(app, path, db, ObjectID, formidable){
         })
 
         
-        // for(i=0; i<data.users.length; i++){
-        //     if(data.users[i].role === "Super"){
-        //         super_admins.push(data.users[i].username)
-        //     }
-        // }
-
-        // if(super_admins.length < 2){
-        //     for(i =0; i<data.users.length; i++){
-        //         if(req.body.name === data.users[i].username){
-        //             if(data.users[i].role !== "Super"){
-        //                 data.users[i].role = "Super"
-        //                 message = true
-        //                 break
-        //             }
-        //         }
-        //     }
-        // }else{
-        //     message = false
-        // }
-
-        // if(message === true){
-        //     for(i = 0; i<data.Groups.length; i++){
-        //         data.Groups[i].group_admin.push(req.body.name)
-        //         current_groups.push(data.Groups[i].name)
-        //     }
-        //     for(i =0; i<data.users.length; i++){
-        //         if(req.body.name === data.users[i].username){
-        //             for(j =0; j<current_groups.length; j++){
-        //                 data.users[i].adminGroupList.push(current_groups[j])
-        //             }
-        //         }
-        //     }
-        // }
-
     })
 
     //The request used to get group channels
@@ -953,15 +593,6 @@ module.exports = function(app, path, db, ObjectID, formidable){
             res.send(docs)
         })
 
-        // var user_groups = []
-        // for(i=0; i<data.users.length; i++){
-        //     if(user === data.users[i].username){
-        //         for(j = 0; j<data.users[i].groups.length; j++){
-        //             user_groups.push(data.users[i].groups[j].name)
-        //         }
-
-        //     }
-        // }
 
         
     })
@@ -979,19 +610,7 @@ module.exports = function(app, path, db, ObjectID, formidable){
         collection.find({'group': req.body.group, 'users': {$in: [req.body.username]}}).toArray((err, docs)=>{
             res.send(docs)
         })
-        // console.log(data.users[0].groups[0].name)
-        // for(i=0; i<data.users.length; i++){
-        //     if(user === data.users[i].username){
-        //         for(j = 0; j<data.users[i].groups.length; j++){
-        //                 if(req.body.group === data.users[i].groups[j].name){
-        //                     console.log(data.users[i].groups[j].name)
-        //                     for(k =0; k<data.users[i].groups[j].channels.length; k++){
-        //                         channels_name.push(data.users[i].groups[j].channels[k])
-        //                     }
-        //                 }
-        //             }
-        //     }
-        // }
+
 
     })
 }

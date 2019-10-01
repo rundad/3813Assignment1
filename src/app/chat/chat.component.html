@@ -44,6 +44,11 @@
                     <div class="mesgs">
                         <ul>
                             <li *ngFor = 'let message of messages'>{{message}}</li>	
+                            <div *ngFor = 'let message of messages'>
+                                <img src="http://localhost:3000/image/{{message.image}}">
+                                {{message.user}}
+                                {{message.message}}
+                            </div>
                         </ul>
     
                         <div class="msg_history">

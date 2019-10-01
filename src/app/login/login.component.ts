@@ -41,6 +41,7 @@ export class LoginComponent implements OnInit {
             this.dataSharingService.isGroupAssis.next(true);
           }
           sessionStorage.setItem("currentUsername", JSON.stringify(data[0].username));
+          sessionStorage.setItem("userImage", JSON.stringify(data[0].image))
           sessionStorage.setItem("userData", JSON.stringify(data));
           this.router.navigateByUrl("/profile")
         }else if(data[0].valid === true){

@@ -41,7 +41,7 @@ MongoClient.connect(url, {poolSize:10,useNewUrlParser: true,useUnifiedTopology: 
         
     //Start the server listening on port 3000. Outputs message to console once server has started.(diagnostic only)
     require('./listen.js')(http);
-    sockets.connect(io, PORT)
+    sockets.connect(io, PORT, db)
 
 });
 

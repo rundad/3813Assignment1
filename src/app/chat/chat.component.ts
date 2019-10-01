@@ -23,6 +23,7 @@ export class ChatComponent implements OnInit {
   currentroom: string = ""
   isinRoom = false;
   numusers: number = 0;
+  userData;
   constructor(private router:Router, private routeService: RoutesService, private socketService: SocketService) { }
 
   //The function that will be called when the componnet loads
@@ -32,8 +33,11 @@ export class ChatComponent implements OnInit {
       console.log(data)
       this.group_names = data
     })
+    this.userData = JSON.parse(sessionStorage.getItem("userData"))
+    console.log(this.userData)
     this.socketService.initSocket();
-    this.socketService.getMessage((m)=>{this.messages.push(m)})
+    this.socketService.getMessage((m)=>{this.messages = m})
+    console.log(this.messages)
     this.socketService.notice((msg)=>{this.roomnotice = msg})
     this.socketService.joined((msg)=>{this.currentroom = msg
       if(this.currentroom !== ""){
@@ -82,7 +86,8 @@ export class ChatComponent implements OnInit {
 
   chat(){
     if(this.messagecontent){
-      this.socketService.send(this.messagecontent)
+      this.socketService.send({message: this.messagecontent, username:JSON.parse(sessionStorage.getItem("currentUsername")), userimage:JSON.parse(sessionStorage.getItem("userImage")), group: this.group, channel: this.channel})
+
       this.messagecontent = ""
     }else{
       console.log("No Message")

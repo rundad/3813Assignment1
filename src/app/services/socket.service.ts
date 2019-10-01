@@ -38,8 +38,8 @@ export class SocketService {
     this.socket.on('notice', res=>next(res))
   }
 
-  send(message: string):void{
-    this.socket.emit('message', message);
+  send(data: any):void{
+    this.socket.emit('message', data);
   }
 
   // onMessage():Observable<any>{
