@@ -125,20 +125,27 @@ module.exports = function(app, path, db, ObjectID, formidable){
         const collection = db.collection('users');
         const groupCollection = db.collection('groups')
         const channelCollection = db.collection('channels')
-        collection.find({_id:objectid}).toArray((err, docs)=>{
-            if(docs[0].role === "Super" && docs[0].username === "super"){
+        collection.find({_id:objectid}).count((err, count)=>{
+            if(count == 0){
                 res.send(false)
             }else{
-                collection.findOne({_id: objectid}, (err, data)=>{
-                    console.log(objectid)
-                    groupCollection.updateMany({}, {$pull: {'group_admin': data.username}})
-                    groupCollection.updateMany({}, {$pull: {'users': data.username}})
-                    channelCollection.updateMany({}, {$pull: {'users': data.username}})
+                collection.find({_id:objectid}).toArray((err, docs)=>{
+                    if(docs[0].role === "Super" && docs[0].username === "super"){
+                        console.log("user is super")
+                    }else{
+                        collection.findOne({_id: objectid}, (err, data)=>{
+                            console.log(objectid)
+                            groupCollection.updateMany({}, {$pull: {'group_admin': data.username}})
+                            groupCollection.updateMany({}, {$pull: {'users': data.username}})
+                            channelCollection.updateMany({}, {$pull: {'users': data.username}})
+                        })
+                        collection.deleteOne({_id:objectid})
+                        res.send(true)
+        
+                    }
                 })
-                collection.deleteOne({_id:objectid})
-                res.send(true)
-
             }
+
         })
 
         // //remove user from group admin array

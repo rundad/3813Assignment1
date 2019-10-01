@@ -33,10 +33,8 @@ export class ChatComponent implements OnInit {
       console.log(data)
       this.group_names = data
     })
-    this.userData = JSON.parse(sessionStorage.getItem("userData"))
-    console.log(this.userData)
     this.socketService.initSocket();
-    this.socketService.getMessage((m)=>{this.messages = m})
+    this.socketService.getMessage((m)=>{this.messages.push(m)})
     console.log(this.messages)
     this.socketService.notice((msg)=>{this.roomnotice = msg})
     this.socketService.joined((msg)=>{this.currentroom = msg
