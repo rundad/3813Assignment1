@@ -59,12 +59,10 @@ export class ChatComponent implements OnInit {
    
   }
 
-  //The function that will be called when the user have clicked the join room button
-  //Take the user to the chat room
-  // joinRoom(){
-  //   this.router.navigateByUrl("/chat-room/" + this.group + "/" + this.channel)
-  // }
-
+  
+  //The function that will be called when user clicked join room button
+  //join the room with group and channel combine as the room id
+  //request for number of users in the room and get the number
   joinroom(){
     this.socketService.joinroom(this.group + this.channel)
     this.socketService.reqnumusers(this.group + this.channel)
@@ -74,6 +72,9 @@ export class ChatComponent implements OnInit {
 
   }
 
+  //The function that will be called when the user clicked the leave room button
+  //Call the leave room method to leave the room
+  //request number of users in the room and get the number
   leaveroom(){
     this.socketService.leaveroom(this.currentroom)
     this.socketService.reqnumusers(this.currentroom)
@@ -85,6 +86,10 @@ export class ChatComponent implements OnInit {
     this.messages = []
   }
 
+  //The function that will be called when the user clicked send to send message
+  //check mesasge content is empty
+  //check is there a image
+  //call send method to send message
   chat(){
     if(this.messagecontent){
       console.log(this.selectedfilename)
@@ -102,11 +107,14 @@ export class ChatComponent implements OnInit {
     this.selectedfilename = undefined
   }
 
+  //get upload image and store the value to variables
   onFileSelected(event){
       this.selectedfile = event.target.files[0];
       this.selectedfilename = event.target.files[0].name
   }
 
+  //create new form data and append the data to form data object
+  //call imageupload method to upload the image
   onUpload(){
     const fd = new FormData();
     fd.append('image', this.selectedfile, this.selectedfile.name)

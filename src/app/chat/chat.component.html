@@ -5,7 +5,6 @@
     </head>
     <body>
         <h2>Join Room</h2>
-        {{roomnotice}}
         <form *ngIf="!isinRoom">
             Group: 
             <select [(ngModel)] = "group" name="group" (change)="gUserGrChannel()">
@@ -21,7 +20,7 @@
                     {{channel.name}}
                 </option>
             </select>
-            <input type="submit" value="Join Room" (click)="joinroom()">
+            <input type="submit" value="Join Room" (click)="joinroom()" class="btn btn-outline-success">
         </form>
 
         <form>

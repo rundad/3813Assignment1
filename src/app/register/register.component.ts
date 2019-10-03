@@ -68,11 +68,14 @@ export class RegisterComponent implements OnInit {
     }
   }
 
+  //get upload image and store the value to variables
   onFileSelected(event){
     console.log(event.target.files[0])
     this.selectedfile = event.target.files[0];
   }
 
+  //create new form data and append the data to form data object
+  //call imageupload method to upload the image
   onUpload(){
       const fd = new FormData();
       fd.append('image', this.selectedfile, this.selectedfile.name)

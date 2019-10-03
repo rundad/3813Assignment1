@@ -6,18 +6,24 @@
     <body>
         <h2>Channels in {{group_name}}</h2>
         <button type="button" class="btn btn-outline-primary" routerLink="/CreateChannel">Create Channel</button>
-        <h5 *ngFor = "let channel of group_channels">Channel Name: {{channel.name}}
-            <br>
-            Users:
-            <div style="display: inline-block;">
-                <p *ngFor = "let user of channel.users">{{user}} 
-                    <button (click) = "rmUserFromChannel(user, channel.name)" type="button" class="btn btn-danger" >Remove User</button>
-                </p>
-                
+        <br>
+        <h5 *ngFor = "let channel of group_channels" style="display: inline-table; padding-left: 5px;">
+            <div class="card">
+                <img height="200px;" src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/full page/img(20).jpg">
+                <br>
+                Channel Name: {{channel.name}}
+                <br>
+                Users:
+                <div style="display: inline-block;">
+                    <p *ngFor = "let user of channel.users">{{user}} 
+                        <button (click) = "rmUserFromChannel(user, channel.name)" type="button" class="btn btn-outline-danger" >Remove User</button>
+                    </p>
+                    
+                </div>
+                <br>
+    
+                <button (click)="removeChannel(channel.name)" type="button" class="btn btn-danger" *ngIf="!isGroupAssis">Remove Channel</button><br>
             </div>
-            <br>
-
-            <button (click)="removeChannel(channel.name)" type="button" class="btn btn-primary" *ngIf="!isGroupAssis">Remove Channel</button><br>
 
         </h5>
 
@@ -40,9 +46,9 @@
                     </option>
                 </select>
 
-                <input type="submit" value="Add User" (click)="addUserToChannel()">
+                <input type="submit" value="Add User" (click)="addUserToChannel()" class="btn btn-outline-success">
             </form>
         </div>
     </body>
-    <footer><button type="button" class="btn btn-outline-primary" routerLink="/groups">Back</button></footer>
+    <footer><button type="button" class="btn btn-outline-primary" routerLink="/groups" style="min-width: 30px;">Back</button></footer>
 </html>
