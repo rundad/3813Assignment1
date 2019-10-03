@@ -24,6 +24,9 @@ export class ChatComponent implements OnInit {
   isinRoom = false;
   numusers: number = 0;
   userData;
+  selectedfile;
+  imagepath = ""
+  selectedfilename
   constructor(private router:Router, private routeService: RoutesService, private socketService: SocketService) { }
 
   //The function that will be called when the componnet loads
@@ -84,11 +87,31 @@ export class ChatComponent implements OnInit {
 
   chat(){
     if(this.messagecontent){
-      this.socketService.send({message: this.messagecontent, username:JSON.parse(sessionStorage.getItem("currentUsername")), userimage:JSON.parse(sessionStorage.getItem("userImage")), group: this.group, channel: this.channel})
+      console.log(this.selectedfilename)
+      if(this.selectedfilename === undefined){
+        this.selectedfilename = ""
+      }else{
+        this.onUpload();
+      }
+      this.socketService.send({message: this.messagecontent, username:JSON.parse(sessionStorage.getItem("currentUsername")), userimage:JSON.parse(sessionStorage.getItem("userImage")), image:this.selectedfilename, group: this.group, channel: this.channel})
 
       this.messagecontent = ""
     }else{
       console.log("No Message")
     }
+    this.selectedfilename = undefined
+  }
+
+  onFileSelected(event){
+      this.selectedfile = event.target.files[0];
+      this.selectedfilename = event.target.files[0].name
+  }
+
+  onUpload(){
+    const fd = new FormData();
+    fd.append('image', this.selectedfile, this.selectedfile.name)
+    this.routeService.imageupload(fd).subscribe(res=>{
+      this.imagepath = res.data.filename
+    })
   }
 }

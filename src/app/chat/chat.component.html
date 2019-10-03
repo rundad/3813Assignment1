@@ -46,6 +46,7 @@
                             <img width="24px" height="24px" src="http://localhost:3000/image/{{message.userimage}}">
                             {{message.username}}: 
                             {{message.message}}
+                            <img width="24px" height="24px" src="http://localhost:3000/image/{{message.image}}">
                         </div>
     
                         <div class="msg_history">
@@ -55,6 +56,9 @@
                             <div class="input_msg_write">
                                 <input type="text" class="write_msg" placeholder="Type a message" [(ngModel)]="messagecontent" id="messagecontent" name="messagecontent">
                                 <button class="btn btn-primary" type="button" (click)="chat()">Send</button>
+                                <div class="form-group">
+                                    <input type="file" class="form-control" (change)="onFileSelected($event)" name="uploadfile" id="uploadfile">
+                                </div>
                             </div>
                         </div>
                     </div>

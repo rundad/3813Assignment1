@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { FormsModule } from '@angular/forms';
 import { GroupsComponent } from './groups.component';
+import { RoutesService } from '../services/routes.service';
+import { Router } from '@angular/router';
 
 describe('GroupsComponent', () => {
   let component: GroupsComponent;
@@ -8,7 +10,8 @@ describe('GroupsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ GroupsComponent ]
+      declarations: [ GroupsComponent ],
+      imports: [FormsModule]
     })
     .compileComponents();
   }));

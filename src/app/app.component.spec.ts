@@ -1,16 +1,26 @@
 import { TestBed, async } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
-
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
+import { AppRoutingModule } from './app-routing.module';
+import { SocketService } from './services/socket.service';
+import { DataSharingService } from "./services/data-sharing.service";
 describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule
+        RouterTestingModule,
+        FormsModule,
+        CommonModule,
+        HttpClientModule,
+        AppRoutingModule
       ],
       declarations: [
         AppComponent
       ],
+      providers: [SocketService, DataSharingService]
     }).compileComponents();
   }));
 
